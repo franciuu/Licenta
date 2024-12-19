@@ -1,0 +1,14 @@
+//Create user
+POST http://localhost:5000/users 
+Content-Type: application/json
+
+{
+    "name": "cineva",
+    "email": "testabc@gmail.com",
+    "password": "pisici",
+    "confPassword": "pisici",
+    "role": "profesor"
+}
+###
+//get all users
+GET http://localhost:5000/users 
