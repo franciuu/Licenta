@@ -3,10 +3,10 @@ POST http://localhost:5000/users
 Content-Type: application/json
 
 {
-    "name": "cineva2",
-    "email": "testabc@gmail.com",
-    "password": "pisici",
-    "confPassword": "pisici",
+    "name": "Gabi",
+    "email": "gabi@gmail.com",
+    "password": "caini",
+    "confPassword": "caini",
     "role": "profesor"
 }
 ###
@@ -29,4 +29,29 @@ Content-Type: application/json
 }
 ###
 //delete user
-DELETE http://localhost:5000/users/dfe85a26-447a-41af-ab61-1e8e079b1bcf 
+DELETE http://localhost:5000/users/82bfe9fd-aa4f-402f-b311-ab6e3bdf2e57
+
+###
+//Login profesor user
+POST http://localhost:5000/login
+Content-Type: application/json
+
+{
+    "email": "gabi@gmail.com",
+    "password": "caini"
+}
+###
+//Login admin user
+POST http://localhost:5000/login
+Content-Type: application/json
+
+{
+    "email": "balintfranceska@gmail.com",
+    "password": "pisici"
+}
+###
+//Get logged user
+GET http://localhost:5000/me
+###
+//Logout admin
+DELETE http://localhost:5000/logout
