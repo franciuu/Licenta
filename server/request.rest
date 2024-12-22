@@ -3,7 +3,7 @@ POST http://localhost:5000/users
 Content-Type: application/json
 
 {
-    "name": "cineva",
+    "name": "cineva2",
     "email": "testabc@gmail.com",
     "password": "pisici",
     "confPassword": "pisici",
@@ -12,3 +12,21 @@ Content-Type: application/json
 ###
 //get all users
 GET http://localhost:5000/users 
+###
+//get single user
+GET http://localhost:5000/users/dfe85a26-447a-41af-ab61-1e8e079b1bcf
+###
+//update user
+PATCH http://localhost:5000/users/dfe85a26-447a-41af-ab61-1e8e079b1bcf 
+Content-Type: application/json
+
+{
+    "name": "Nume nou",
+    "email": "testabc@gmail.com",
+    "password": "",
+    "confPassword": "",
+    "role": "profesor"
+}
+###
+//delete user
+DELETE http://localhost:5000/users/dfe85a26-447a-41af-ab61-1e8e079b1bcf 
