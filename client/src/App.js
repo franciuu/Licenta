@@ -1,26 +1,15 @@
-import './App.css';
-import { useEffect, useState } from 'react'
+import Login from "./pages/Login.js";
+import Register from "./pages/Register.js";
+
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 function App() {
-
-  const [backendData, setBackendData ] = useState({});
-
-  useEffect(() => {
-    fetch("/api").then(
-      response => response.json()
-    ).then(
-      data => setBackendData(data)
-    )
-  }, [])
   return (
-    <div>
-      {(typeof backendData.users === 'undefined') ? (
-        <p>Loading...</p>
-      ) : (
-        backendData.users.map((user, i) => (
-          <p key={i}>{user}</p>
-        ))
-      )}
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Login/>}/>
+        <Route path="/register" element={<Register/>}/>
+      </Routes>
+    </Router>
   );
 }
 
