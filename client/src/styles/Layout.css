@@ -1,0 +1,20 @@
+/* Layout container */
+.layout-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  
+  /* Columns container */
+  .layout-columns {
+    display: flex;
+    flex: 1;
+  }
+  
+  /* Content area styling */
+  .layout-content {
+    flex: 1;
+    background-color: #f4f4f4;
+    padding: 20px;
+  }
+  

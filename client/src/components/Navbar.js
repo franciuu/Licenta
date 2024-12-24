@@ -1,7 +1,12 @@
+import "../styles/Navbar.css"
 const Navbar = () => {
-    return ( 
-        <div>Navbar</div>
-     );
-}
- 
+  return (
+    <header>
+      <nav className="navbar">
+        <button>Log out</button>
+      </nav>
+    </header>
+  );
+};
+
 export default Navbar;

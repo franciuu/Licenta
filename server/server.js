@@ -16,6 +16,9 @@ const store = new sessionStore({
   db: db,
 });
 
+app.use(express.json());  // pentru a parsa corpul cererii JSON
+app.use(express.urlencoded({ extended: true }));  // pentru a parsa formularele urlencoded
+
 app.use(
   session({
     secret: process.env.SESS_SECRET,
@@ -40,17 +43,12 @@ app.use(express.json());
     await db.authenticate();
     console.log("Conexiune reușită la baza de date!");
 
-    // Creează automat tabelele definite în modele
     await db.sync();
     console.log("Toate tabelele au fost sincronizate.");
   } catch (error) {
     console.error("Eroare la conectarea bazei de date:", error.message);
   }
 })();
-
-app.get("/api", (req, res) => {
-  res.json({ users: ["userOne", "userTwo", "userThree"] });
-});
 
 app.use(UserRoute);
 app.use(AuthRoute);
