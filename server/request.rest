@@ -7,7 +7,7 @@ Content-Type: application/json
     "email": "gabi@gmail.com",
     "password": "caini",
     "confPassword": "caini",
-    "role": "profesor"
+    "role": "professor"
 }
 ###
 //get all users
@@ -25,7 +25,7 @@ Content-Type: application/json
     "email": "testabc@gmail.com",
     "password": "",
     "confPassword": "",
-    "role": "profesor"
+    "role": "professor"
 }
 ###
 //delete user

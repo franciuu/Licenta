@@ -37,7 +37,8 @@ export const me = async (req, res) => {
 
 export const logout = (req, res) => {
   req.session.destroy((err) => {
-    if (err) return res.status(400).json({ msg: "Problem logout" });
+    if (err) return res.status(400).json({ msg: "Unable to logout" });
+    res.clearCookie('connect.sid');
     res.status(200).json({ msg: "Succesfull logout" });
   });
 };

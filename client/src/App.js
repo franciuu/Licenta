@@ -1,6 +1,5 @@
 import Dashboard from "./pages/Dashboard.js";
 import Login from "./pages/Login.js";
-import Register from "./pages/Register.js";
 import Users from "./pages/Users.js";
 import AddUser from "./pages/AddUser.js";
 import EditUser from "./pages/EditUser.js";
@@ -11,8 +10,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="/" element={<Login />}></Route>
         <Route path="/dashboard" element={<Dashboard />}></Route>
         <Route path="/users" element={<Users />}></Route>
         <Route path="/users/add" element={<AddUser />}></Route>

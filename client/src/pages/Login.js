@@ -21,13 +21,13 @@ const Login = () => {
   const login = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/login', {
+      const response = await axios.post("http://localhost:5000/login", {
         email,
-        password
+        password,
       });
-  
+
       if (response.data) {
-        navigate('/dashboard');
+        navigate("/dashboard");
       }
     } catch (err) {
       if (err.response) {
@@ -37,7 +37,7 @@ const Login = () => {
       }
     }
   };
-  
+
   return (
     <div className="loginPage">
       <div className="container">
@@ -48,10 +48,7 @@ const Login = () => {
           </div>
 
           <div className="footerDiv">
-            <span>Don't have an account?</span>
-            <Link to={"/register"}>
-              <button className="btn">Sign Up</button>
-            </Link>
+            <button className="btn">Sign Up</button>
           </div>
         </div>
         <div className="right">
