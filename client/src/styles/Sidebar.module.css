@@ -8,12 +8,12 @@ ul {
   padding: 0;
   margin: 0;
 }
-.sidebar-section {
+.sidebarSection {
   margin: 10px 0;
   border-bottom: solid 2px;
 }
 
-.sidebar-section a {
+.sidebarSection a {
   color: rgb(0, 0, 0);
   text-decoration: none;
   padding: 10px;
@@ -22,6 +22,6 @@ ul {
   transition: background-color 0.3s;
 }
 
-.sidebar-section a:hover {
+.sidebarSection a:hover {
   background-color: #1abc9c;
 }

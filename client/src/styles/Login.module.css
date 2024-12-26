@@ -41,6 +41,30 @@
     background: rgba(0, 0, 0, 0.5); /* Overlay for readability */
     z-index: 1;
   }
+
+  .input {
+    display: flex;
+    align-items: center;
+    background: #f1f1f1;
+    padding: 10px 15px; /* Adăugat padding pentru spațiere uniformă */
+    border-radius: 5px;
+    border: 1px solid #ddd; /* Adăugat o bordură pentru delimitare */
+  }
+  
+  .input .icon {
+    margin-right: 10px;
+    color: #4caf50;
+    font-size: 1.2rem; /* Ajustare dimensiune icon */
+  }
+  
+  .input input {
+    border: none;
+    outline: none;
+    flex: 1;
+    background: transparent;
+    font-size: 14px;
+    color: #333;
+  }  
   
   .left .textDiv,
   .left .footerDiv {
@@ -146,7 +170,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #4caf50;
+    background: #4c87af;
     color: white;
     padding: 12px 20px;
     border: none;

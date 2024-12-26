@@ -1,16 +1,16 @@
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
-import "../styles/Layout.css";
+import style from "../styles/Layout.module.css";
 
 const Layout = ({ children }) => {
   return (
-    <div className="layout-container">
+    <div className={style.layoutContainer}>
       <Navbar />
-      <div className="layout-columns">
+      <div className={style.layoutColumns}>
         <div className="layout-sidebar">
           <Sidebar />
         </div>
-        <div className="layout-content">
+        <div className={style.layoutContent}>
           <main>{children}</main>
         </div>
       </div>

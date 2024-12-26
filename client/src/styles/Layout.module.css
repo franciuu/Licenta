@@ -1,18 +1,18 @@
 /* Layout container */
-.layout-container {
+.layoutContainer {
     display: flex;
     flex-direction: column;
     height: 100%;
   }
   
   /* Columns container */
-  .layout-columns {
+  .layoutColumns {
     display: flex;
     flex: 1;
   }
   
   /* Content area styling */
-  .layout-content {
+  .layoutContent {
     flex: 1;
     background-color: #f4f4f4;
     padding: 20px;

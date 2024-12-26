@@ -3,7 +3,7 @@ import Login from "./pages/Login.js";
 import Users from "./pages/Users.js";
 import AddUser from "./pages/AddUser.js";
 import EditUser from "./pages/EditUser.js";
-import General from "./styles/General.css";
+import "./styles/General.css";
 
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 function App() {

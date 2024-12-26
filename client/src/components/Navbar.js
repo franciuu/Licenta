@@ -1,4 +1,4 @@
-import "../styles/Navbar.css"
+import style from "../styles/Navbar.module.css"
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 const Navbar = () => {
@@ -10,7 +10,7 @@ const Navbar = () => {
 
   return (
     <header>
-      <nav className="navbar">
+      <nav className={style.navbar}>
         <button onClick={logout}>Log out</button>
       </nav>
     </header>
