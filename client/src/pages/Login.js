@@ -1,37 +1,26 @@
 import logo from "../assets/logo.png";
+import { useUser } from "../context/UserContext";
 import { FaUserShield } from "react-icons/fa";
 import { BsFillShieldLockFill } from "react-icons/bs";
 import { FaLongArrowAltRight } from "react-icons/fa";
 import style from "../styles/Login.module.css";
-import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(null);
+  const { login, error } = useUser();
   const navigate = useNavigate();
 
-  const login = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.post("http://localhost:5000/login", {
-        email,
-        password,
-      });
+    await login(email, password);
 
-      if (response.data) {
+    if (!error) {
         navigate("/dashboard");
-      }
-    } catch (err) {
-      if (err.response) {
-        setError(err.response.data.msg);
-      } else {
-        setError("An unexpected error occurred");
-      }
     }
-  };
+};
 
   return (
     <div className={style.loginPage}>
@@ -48,7 +37,7 @@ const Login = () => {
             <h2 className={style.welcomeText}>Welcome back!</h2>
           </div>
           {error && <p className={style.errorMessage}>{error}</p>}
-          <form onSubmit={login} className={style.form}>
+          <form onSubmit={handleSubmit} className={style.form}>
             <div className={style.inputDiv}>
               <label htmlFor="email" className={style.label}>
                 Email:

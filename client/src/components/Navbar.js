@@ -1,17 +1,23 @@
-import style from "../styles/Navbar.module.css"
+import style from "../styles/Navbar.module.css";
+import { useUser } from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-const Navbar = () => {
-  const navigate = useNavigate();
-  const logout = async () => {
-    await axios.delete("http://localhost:5000/logout");
-    navigate("/");
-  };
 
+const Navbar = () => {
+  const { logout, error } = useUser();
+  const navigate = useNavigate();
+
+  const handleClick = async (e) => {
+    e.preventDefault();
+    await logout();
+
+    if (!error) {
+      navigate("/");
+    }
+  };
   return (
     <header>
       <nav className={style.navbar}>
-        <button onClick={logout}>Log out</button>
+        <button onClick={handleClick}>Log out</button>
       </nav>
     </header>
   );

@@ -25,6 +25,7 @@ export const me = async (req, res) => {
   if (!req.session.userId) {
     return res.status(401).json({ msg: "Mohon login ke akun Anda!" });
   }
+  console.log("Session ID:", req.session.userId);
   const user = await User.findOne({
     attributes: ["uuid", "name", "email", "role"],
     where: {
@@ -38,7 +39,7 @@ export const me = async (req, res) => {
 export const logout = (req, res) => {
   req.session.destroy((err) => {
     if (err) return res.status(400).json({ msg: "Unable to logout" });
-    res.clearCookie('connect.sid');
+    res.clearCookie("connect.sid");
     res.status(200).json({ msg: "Succesfull logout" });
   });
 };
