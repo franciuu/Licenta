@@ -55,3 +55,6 @@ thead th {
     transform: rotate(1turn);
   }
 }
+a {
+  text-decoration: none;
+}

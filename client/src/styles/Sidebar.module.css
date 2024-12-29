@@ -1,27 +1,103 @@
 .sidebar {
-  width: 250px;
-  height: 100dvh;
+  height: 100vh;
+  width: auto;
+  display: flex;
+  align-items: center;
   flex-direction: column;
+  row-gap: 3rem;
+  background-color: white;
+  border-right: solid 1px #ddd;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: width 0.3s ease;
 }
-ul {
+
+.sidebarHeader {
+  padding: 16px;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.logo {
+  color: red;
+}
+
+.toggleButton {
+  width: 30px;
+  height: 30px;
+  border: none;
+  background-color: #f9fafb;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.toggleButton:hover {
+  background-color: #f3f4f6;
+}
+
+.sidebarMenu {
+  flex-grow: 1;
+  padding: 16px 0;
   list-style: none;
-  padding: 0;
-  margin: 0;
-}
-.sidebarSection {
-  margin: 10px 0;
-  border-bottom: solid 2px;
 }
 
-.sidebarSection a {
-  color: rgb(0, 0, 0);
-  text-decoration: none;
-  padding: 10px;
-  display: block;
-  border-radius: 5px;
-  transition: background-color 0.3s;
+.sidebarItem {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  margin: 4px 0;
+  font-weight: 500;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, padding 0.3s ease;
 }
 
-.sidebarSection a:hover {
-  background-color: #1abc9c;
+.sidebarItem:hover {
+  background-color: #f3f4f6;
+}
+
+.sidebarItem.active {
+  background: linear-gradient(to top right, #c3dafe, #ebf4ff);
+  color: #5a67d8;
+}
+
+.itemText {
+  display: flex;
+  align-items: center;
+}
+
+.icon {
+  font-size: 20px;
+}
+
+.label {
+  overflow: hidden;
+  white-space: nowrap;
+  margin-left: 10px;
+  transition: opacity 0.3s ease, margin-left 0.3s ease;
+}
+
+.sidebarFooter {
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  border-top: 1px solid #ddd;
+  transition: justify-content 0.3s ease;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-left: 8px;
+  overflow: hidden;
+  transition: width 0.3s ease, margin-left 0.3s ease;
 }

@@ -4,6 +4,7 @@ import Users from "./pages/Users.js";
 import AddUser from "./pages/AddUser.js";
 import EditUser from "./pages/EditUser.js";
 import Unauthorized from "./pages/Unauthorized.js";
+import Students from "./pages/Students.js";
 import "./styles/General.css";
 
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
@@ -45,6 +46,14 @@ function App() {
             element={
               <PrivateRoute allowedRoles={["admin"]}>
                 <EditUser />
+              </PrivateRoute>
+            }
+          ></Route>
+          <Route
+            path="/students"
+            element={
+              <PrivateRoute allowedRoles={["admin", "professor"]}>
+                <Students />
               </PrivateRoute>
             }
           ></Route>

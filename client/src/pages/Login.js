@@ -1,5 +1,5 @@
 import logo from "../assets/logo.png";
-import { useUser } from "../context/UserContext";
+import { useUser } from "../context/UserContext.js";
 import { FaUserShield } from "react-icons/fa";
 import { BsFillShieldLockFill } from "react-icons/bs";
 import { FaLongArrowAltRight } from "react-icons/fa";

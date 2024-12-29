@@ -6,7 +6,7 @@ const PrivateRoute = ({ children, allowedRoles }) => {
   if (isLoading) {
     return (
       <div className="loader-container">
-        <div class="loader"></div>
+        <div className="loader"></div>
       </div>
     );
   }
