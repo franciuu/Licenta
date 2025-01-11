@@ -3,15 +3,16 @@ POST http://localhost:5000/users
 Content-Type: application/json
 
 {
-    "name": "Gabi",
-    "email": "gabi@gmail.com",
-    "password": "caini",
-    "confPassword": "caini",
-    "role": "professor"
+    "name": "Ana",
+    "email": "ana123@gmail.com",
+    "password": "hamster",
+    "confPassword": "hamster",
+    "role": "admin"
 }
 ###
 //get all users
 GET http://localhost:5000/users 
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySW5mbyI6eyJ1c2VySWQiOiJjNmJmMjI3OC01Mjk3LTQ0YjItOTU1My01ODhlOGRkNjcwYjYiLCJyb2xlIjoicHJvZmVzc29yIn0sImlhdCI6MTczNjU5NzczOCwiZXhwIjoxNzM2NTk3NzY4fQ.7BoNqrrgE3IhlY_vSk3F8iGbiMhlIMZzg1E-Hybaekw
 ###
 //get single user
 GET http://localhost:5000/users/dfe85a26-447a-41af-ab61-1e8e079b1bcf
@@ -29,7 +30,8 @@ Content-Type: application/json
 }
 ###
 //delete user
-DELETE http://localhost:5000/users/82bfe9fd-aa4f-402f-b311-ab6e3bdf2e57
+DELETE http://localhost:5000/users/3619548c-b42a-4d02-87f2-60f95680895d
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySW5mbyI6eyJ1c2VySWQiOiI1MDAwZjcyMS00NjAxLTQ1YjAtYWQyZi1iOGEzM2ZiMDgzNmMiLCJyb2xlIjoiYWRtaW4ifSwiaWF0IjoxNzM2NTk3NjgwLCJleHAiOjE3MzY1OTc3MTB9.Px5JlQOWuICxD1L3vK1_1CK4uF825yCkhGhWc1QsHSw
 
 ###
 //Login profesor user
@@ -37,7 +39,7 @@ POST http://localhost:5000/login
 Content-Type: application/json
 
 {
-    "email": "gabi@gmail.com",
+    "email": "dascalescugabi03@yahoo.ro",
     "password": "caini"
 }
 ###
@@ -50,8 +52,8 @@ Content-Type: application/json
     "password": "pisici"
 }
 ###
-//Get logged user
-GET http://localhost:5000/me
-###
 //Logout admin
-DELETE http://localhost:5000/logout
+GET http://localhost:5000/logout
+###
+//Refresh token
+GET http://localhost:5000/refresh

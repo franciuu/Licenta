@@ -12,54 +12,17 @@ import { UserProvider } from "./context/UserContext.js";
 import PrivateRoute from "./components/PrivateRoute.js";
 function App() {
   return (
-    <UserProvider>
-      <Router>
-        <Routes>
-          <Route path="/" element={<Login />}></Route>
-          <Route path="/unauthorized" element={<Unauthorized />} />
-          <Route
-            path="/dashboard"
-            element={
-              <PrivateRoute allowedRoles={["admin", "professor"]}>
-                <Dashboard />
-              </PrivateRoute>
-            }
-          ></Route>
-          <Route
-            path="/users"
-            element={
-              <PrivateRoute allowedRoles={["admin"]}>
-                <Users />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/users/add"
-            element={
-              <PrivateRoute allowedRoles={["admin"]}>
-                <AddUser />
-              </PrivateRoute>
-            }
-          ></Route>
-          <Route
-            path="/users/edit/:id"
-            element={
-              <PrivateRoute allowedRoles={["admin"]}>
-                <EditUser />
-              </PrivateRoute>
-            }
-          ></Route>
-          <Route
-            path="/students"
-            element={
-              <PrivateRoute allowedRoles={["admin", "professor"]}>
-                <Students />
-              </PrivateRoute>
-            }
-          ></Route>
-        </Routes>
-      </Router>
-    </UserProvider>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Login />}></Route>
+        <Route path="/unauthorized" element={<Unauthorized />} />
+        <Route path="/dashboard" element={<Dashboard />}></Route>
+        <Route path="/users" element={<Users />} />
+        <Route path="/users/add" element={<AddUser />}></Route>
+        <Route path="/users/edit/:id" element={<EditUser />}></Route>
+        <Route path="/students" element={<Students />}></Route>
+      </Routes>
+    </Router>
   );
 }
 

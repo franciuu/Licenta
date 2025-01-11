@@ -1,26 +1,61 @@
-import logo from "../assets/logo.png";
-import { useUser } from "../context/UserContext.js";
-import { FaUserShield } from "react-icons/fa";
-import { BsFillShieldLockFill } from "react-icons/bs";
-import { FaLongArrowAltRight } from "react-icons/fa";
-import style from "../styles/Login.module.css";
-import { useState } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import UserContext from "../context/UserContext";
+import axios from "axios";
+
+import logo from "../assets/logo.png";
+import style from "../styles/Login.module.css";
+
+import { FaUserShield, FaLongArrowAltRight } from "react-icons/fa";
+import { BsFillShieldLockFill } from "react-icons/bs";
 
 const Login = () => {
+  const { setUser } = useContext(UserContext);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { login, error } = useUser();
+  const [error, setError] = useState("");
+
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setError("");
+  }, [email, password]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await login(email, password);
-
-    if (!error) {
-        navigate("/dashboard");
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/login",
+        {
+          email,
+          password,
+        },
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+      );
+      console.log(response?.data);
+      const accessToken = response?.data?.accessToken;
+      const role = response.data.role;
+      setUser({email, password, role, accessToken});
+      setEmail("");
+      setPassword("");
+      navigate("/dashboard");
+    } catch (error) {
+      if (!error?.response) {
+        console.log(error);
+        setError("Server is not responding. Please try again later.");
+      } else if(error.response?.status === 400) {
+        setError("Missing username or password");
+      } else if (error.response?.status === 404) {
+        setError("Unauthorized");
+      } else {
+        setError("An unexpected error occurred. Please try again later.");
+      }
     }
-};
+  };
 
   return (
     <div className={style.loginPage}>
@@ -48,8 +83,10 @@ const Login = () => {
                   type="email"
                   id="email"
                   value={email}
+                  autoComplete="off"
                   placeholder="Email"
                   onChange={(e) => setEmail(e.target.value)}
+                  required
                   className={style.inputField}
                 />
               </div>
@@ -65,8 +102,9 @@ const Login = () => {
                   type="password"
                   id="password"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
                   placeholder="Password"
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
                   className={style.inputField}
                 />
               </div>
