@@ -1,6 +1,6 @@
-import { useState, useEffect, useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import UserContext from "../context/UserContext";
+import { useState, useEffect } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
 import axios from "axios";
 
 import logo from "../assets/logo.png";
@@ -10,13 +10,14 @@ import { FaUserShield, FaLongArrowAltRight } from "react-icons/fa";
 import { BsFillShieldLockFill } from "react-icons/bs";
 
 const Login = () => {
-  const { setUser } = useContext(UserContext);
+  const { setAuth } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from.pathname || "/dashboard";
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     setError("");
@@ -39,15 +40,15 @@ const Login = () => {
       console.log(response?.data);
       const accessToken = response?.data?.accessToken;
       const role = response.data.role;
-      setUser({email, password, role, accessToken});
+      setAuth({ email, password, role, accessToken });
       setEmail("");
       setPassword("");
-      navigate("/dashboard");
+      navigate(from, { replace: true });
     } catch (error) {
       if (!error?.response) {
         console.log(error);
         setError("Server is not responding. Please try again later.");
-      } else if(error.response?.status === 400) {
+      } else if (error.response?.status === 400) {
         setError("Missing username or password");
       } else if (error.response?.status === 404) {
         setError("Unauthorized");

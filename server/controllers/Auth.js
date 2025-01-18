@@ -51,22 +51,23 @@ export const login = async (req, res) => {
 };
 
 export const logout = async (req, res) => {
-  //On client also delete the accessToken
+  console.log("Cookies received:", req.cookies); // Vezi ce primește backend-ul
+
   const cookies = req.cookies;
   if (!cookies?.jwt) {
-    return res.sendStatus(204); //No content
+    console.log("No JWT found in cookies");
+    return res.sendStatus(204);
   }
-  const rToken = cookies.jwt;
 
-  const user = await User.findOne({
-    where: {
-      refreshToken: rToken,
-    },
-  });
+  const rToken = cookies.jwt;
+  const user = await User.findOne({ where: { refreshToken: rToken } });
+
   if (!user) {
+    console.log("User not found with this refreshToken");
     res.clearCookie("jwt", { httpOnly: true, sameSite: "None", secure: true });
     return res.sendStatus(204);
   }
+
   await User.update({ refreshToken: null }, { where: { uuid: user.uuid } });
   res.clearCookie("jwt", { httpOnly: true, sameSite: "None", secure: true });
   res.sendStatus(204);

@@ -1,3 +1,18 @@
+:root {
+  --background-main: #d0e0f0;
+  --background-card: #b5cfe6;
+  --button-primary: #7d95b0;
+  --button-hover: #5a7898;
+  --text-main: #4a6f91;
+  --text-secondary: #a3b1c6;
+  --border: #90b3d2;
+  --table-header: #7d95b0;
+  --table-background: #ffffff;
+  --table-border: #90b3d2;
+  --table-row-even: #b5cfe6;
+  --loader-color: #5a7898;
+}
+
 *,
 *::before,
 *::after {
@@ -5,34 +20,41 @@
   margin: 0;
   box-sizing: border-box;
 }
+
+body {
+  background-color: var(--background-main);
+  color: var(--text-main);
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
   margin: 20px 0;
   font-size: 16px;
   text-align: left;
-  background-color: white;
-  border: 1px solid #ddd;
+  background-color: var(--table-background);
+  border: 1px solid var(--table-border);
 }
 
 thead {
-  background-color: #333;
+  background-color: var(--table-header);
   color: white;
 }
 
 th,
 td {
   padding: 12px 15px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--table-border);
 }
 
 tr:nth-child(even) {
-  background-color: #f9f9f9;
+  background-color: var(--table-row-even);
 }
 
 thead th {
   font-weight: bold;
 }
+
 .loader-container {
   display: flex;
   justify-content: center;
@@ -40,21 +62,29 @@ thead th {
   height: 100vh; /* Înălțimea întregii ferestre */
   width: 100vw; /* Lățimea întregii ferestre */
 }
+
 .loader {
   width: 100px;
   aspect-ratio: 1;
   border-radius: 50%;
-  background: radial-gradient(farthest-side, #16b5ff 94%, #0000) top/8px 8px
+  background: radial-gradient(farthest-side, var(--loader-color) 94%, #0000) top/8px 8px
       no-repeat,
-    conic-gradient(#0000 30%, #16b5ff);
+    conic-gradient(#0000 30%, var(--loader-color));
   mask: radial-gradient(farthest-side, #0000 calc(100% - 8px), #000 0);
   animation: l13 1s infinite linear;
 }
+
 @keyframes l13 {
   100% {
     transform: rotate(1turn);
   }
 }
+
 a {
   text-decoration: none;
+  color: var(--text-main);
+}
+
+a:hover {
+  color: var(--button-hover);
 }

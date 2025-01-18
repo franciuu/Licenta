@@ -5,7 +5,7 @@
   align-items: center;
   flex-direction: column;
   row-gap: 3rem;
-  background-color: white;
+  background-color: var(--background-card);
   border-right: solid 1px #ddd;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: width 0.3s ease;
@@ -20,7 +20,7 @@
 }
 
 .logo {
-  color: red;
+  color: var(--text-main);
 }
 
 .toggleButton {

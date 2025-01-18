@@ -1,16 +1,38 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import useAuth from "../hooks/useAuth"; // Importă contextul de autentificare
 
 const UserList = () => {
   const [users, setUsers] = useState([]);
+  const { auth } = useAuth(); // Obține token-ul din context
+
   const getUsers = async () => {
-    const response = await axios.get("http://localhost:5000/users");
-    setUsers(response.data);
+    try {
+      const response = await axios.get("http://localhost:5000/users", {
+        headers: {
+          Authorization: `Bearer ${auth.accessToken}`, // Trimite token-ul
+        },
+        withCredentials: true,
+      });
+      setUsers(response.data);
+    } catch (error) {
+      console.error("Error fetching users:", error.response?.data || error.message);
+    }
   };
+
   const deleteUser = async (uuid) => {
-    await axios.delete(`http://localhost:5000/users/${uuid}`);
-    getUsers();
+    try {
+      await axios.delete(`http://localhost:5000/users/${uuid}`, {
+        headers: {
+          Authorization: `Bearer ${auth.accessToken}`, // Trimite token-ul la ștergere
+        },
+        withCredentials: true,
+      });
+      getUsers();
+    } catch (error) {
+      console.error("Error deleting user:", error.response?.data || error.message);
+    }
   };
 
   useEffect(() => {
@@ -39,13 +61,7 @@ const UserList = () => {
               <td>{user.role}</td>
               <td>
                 <Link to={`/users/edit/${user.uuid}`}>Edit</Link>
-                <button
-                  onClick={() => {
-                    deleteUser(user.uuid);
-                  }}
-                >
-                  Delete
-                </button>
+                <button onClick={() => deleteUser(user.uuid)}>Delete</button>
               </td>
             </tr>
           ))}
