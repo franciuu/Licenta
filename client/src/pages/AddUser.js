@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import useAxiosCustom from "../hooks/useAxiosCustom";
 import Layout from "./Layout";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
@@ -15,8 +15,8 @@ const schema = Yup.object().shape({
     "Passwords must match"
   ),
   role: Yup.mixed()
-  .oneOf(["admin", "professor"], "Invalid role") 
-  .required("Role is required"),
+    .oneOf(["admin", "professor"], "Invalid role")
+    .required("Role is required"),
 });
 
 const AddUser = () => {
@@ -34,10 +34,11 @@ const AddUser = () => {
   const [role, setRole] = useState("admin");
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const axiosCustom = useAxiosCustom();
 
   const addUser = async () => {
     try {
-      const response = await axios.post("http://localhost:5000/users", {
+      const response = await axiosCustom.post("/users", {
         name,
         email,
         password,
