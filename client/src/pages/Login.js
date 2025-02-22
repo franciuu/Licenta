@@ -10,7 +10,7 @@ import { FaUserShield, FaLongArrowAltRight } from "react-icons/fa";
 import { BsFillShieldLockFill } from "react-icons/bs";
 
 const Login = () => {
-  const { setAuth } = useAuth();
+  const { setAuth, persist, setPersist } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from.pathname || "/dashboard";
@@ -57,6 +57,14 @@ const Login = () => {
       }
     }
   };
+
+  const handleCheck = () => {
+    setPersist((prev) => !prev);
+  };
+
+  useEffect(() => {
+    localStorage.setItem("persist", persist);
+  }, [persist]);
 
   return (
     <div className={style.loginPage}>
@@ -115,6 +123,15 @@ const Login = () => {
               <span className={style.loginText}>Login</span>
               <FaLongArrowAltRight className={style.btnIcon} />
             </button>
+            <div>
+              <input
+                type="checkbox"
+                id="persist"
+                onChange={handleCheck}
+                checked={persist}
+              />
+              <label htmlFor="persist">Trust this device</label>
+            </div>
 
             <span className={style.forgotPassword}>
               Forgot your password?{" "}

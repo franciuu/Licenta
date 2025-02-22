@@ -1,15 +1,14 @@
 import style from "../styles/Navbar.module.css";
 import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
-import UserContext from "../context/UserContext";
+import useLogout from "../hooks/useLogout";
 
 const Navbar = () => {
-  const { setAuth } = useContext(UserContext);
   const navigate = useNavigate();
+  const logout = useLogout();
 
   const handleLogout = async () => {
     try {
-      setAuth({});
+      await logout();
       navigate("/");
     } catch (error) {
       console.error("Logout failed:", error.response?.data || error.message);

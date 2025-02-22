@@ -23,16 +23,17 @@ export const handleRefreshToken = async (req, res) => {
     if (err || user.uuid !== decoded.userId) {
       return res.sendStatus(403);
     }
+    const role = user.role;
     const accessToken = jwt.sign(
       {
         UserInfo: {
           userId: decoded.userId,
-          role: user.role,
+          role: role,
         },
       },
       process.env.ACCESS_TOKEN_SECRET,
       { expiresIn: "30s" }
     );
-    res.json({ accessToken });
+    res.json({ role, accessToken });
   });
 };
