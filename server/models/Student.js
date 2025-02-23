@@ -20,7 +20,7 @@ const Students = db.define(
         len: [3, 100],
       },
     },
-    data_nastere: {
+    birthDate: {
       type: DataTypes.DATE,
       allowNull: false,
       validate: {
@@ -35,7 +35,7 @@ const Students = db.define(
         isEmail: true,
       },
     },
-    an_studiu: {
+    studyYear: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },

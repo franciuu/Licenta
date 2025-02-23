@@ -5,7 +5,8 @@ import cookieParser from "cookie-parser";
 import db from "./config/database.js";
 import UserRoute from "./routes/UserRoute.js";
 import AuthRoute from "./routes/AuthRoute.js";
-import RefreshRoute from "./routes/RefreshRoute.js"
+import RefreshRoute from "./routes/RefreshRoute.js";
+import StudentRoute from "./routes/StudentRoute.js";
 
 import { verifyJWT } from "./middlewares/verifyJWT.js";
 
@@ -41,6 +42,7 @@ app.use(RefreshRoute);
 
 app.use(verifyJWT);
 app.use(UserRoute);
+app.use(StudentRoute);
 
 app.listen(process.env.PORT, () => {
   console.log("server started on port 5000");

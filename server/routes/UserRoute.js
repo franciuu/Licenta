@@ -5,9 +5,10 @@ import {
   createUser,
   updateUser,
   deleteUser,
-} from "../controllers/Users.js";
-import ROLES_LIST from "../config/rolesList.js";
+} from "../controllers/UsersController.js";
 import { verifyRoles } from "../middlewares/verifyRole.js";
+import ROLES_LIST from "../config/rolesList.js";
+
 const router = express.Router();
 
 router.get("/users", getUsers);
