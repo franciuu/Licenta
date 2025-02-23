@@ -1,8 +1,8 @@
 import { DataTypes } from "sequelize";
 import db from "../config/database.js";
 
-const Users = db.define(
-  "users",
+const Activity = db.define(
+  "activities",
   {
     uuid: {
       type: DataTypes.STRING,
@@ -18,34 +18,28 @@ const Users = db.define(
       allowNull: false,
       validate: {
         notEmpty: true,
-        len: [3, 100],
       },
     },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: true,
-        isEmail: true,
-      },
-    },
-    password: {
-      type: DataTypes.STRING,
+    startTime: {
+      type: DataTypes.TIME,
       allowNull: false,
       validate: {
         notEmpty: true,
       },
     },
-    role: {
-      type: DataTypes.STRING,
+    endTime: {
+      type: DataTypes.TIME,
       allowNull: false,
       validate: {
         notEmpty: true,
       },
     },
-    refreshToken: {
+    room: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
     },
   },
   {
@@ -53,4 +47,4 @@ const Users = db.define(
     timestamps: false,
   }
 );
-export default Users;
+export default Activity;

@@ -1,8 +1,8 @@
 import { DataTypes } from "sequelize";
 import db from "../config/database.js";
 
-const Students = db.define(
-  "students",
+const Attendance = db.define(
+  "attendances",
   {
     uuid: {
       type: DataTypes.STRING,
@@ -13,32 +13,19 @@ const Students = db.define(
         notEmpty: true,
       },
     },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: true,
-        len: [3, 100],
-      },
-    },
-    birthDate: {
-      type: DataTypes.DATE,
+    date: {
+      type: DataTypes.DATEONLY,
       allowNull: false,
       validate: {
         notEmpty: true,
       },
     },
-    email: {
-      type: DataTypes.STRING,
+    arrivalTime: {
+      type: DataTypes.TIME,
       allowNull: false,
       validate: {
         notEmpty: true,
-        isEmail: true,
       },
-    },
-    studyYear: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
     },
   },
   {
@@ -46,4 +33,4 @@ const Students = db.define(
     timestamps: false,
   }
 );
-export default Students;
+export default Attendance;

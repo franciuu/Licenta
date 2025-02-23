@@ -7,7 +7,7 @@ import UserRoute from "./routes/UserRoute.js";
 import AuthRoute from "./routes/AuthRoute.js";
 import RefreshRoute from "./routes/RefreshRoute.js";
 import StudentRoute from "./routes/StudentRoute.js";
-
+import "./models/index.js";
 import { verifyJWT } from "./middlewares/verifyJWT.js";
 
 dotenv.config();
