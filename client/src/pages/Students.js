@@ -1,10 +1,13 @@
 import Layout from "./Layout.js";
+import { Link } from "react-router-dom";
+import StudentList from "../components/StudentList.js";
 const Students = () => {
   return (
     <Layout>
-      <div>
-        <h1>Students</h1>
-      </div>
+      <Link to="/students/add" className="btn">
+        Add new student
+      </Link>
+      <StudentList />
     </Layout>
   );
 };

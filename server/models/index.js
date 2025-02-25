@@ -6,6 +6,7 @@ import Course from "./Course.js";
 import Activity from "./Activity.js";
 import Attendance from "./Attendance.js";
 import SurveillanceCamera from "./SurveillanceCamera.js";
+import Image from "./Image.js";
 
 // Definirea relațiilor între modele
 Student.hasMany(Attendance, { foreignKey: "idStudent" });
@@ -22,5 +23,8 @@ Activity.belongsTo(User, { foreignKey: "idProf" });
 
 SurveillanceCamera.hasMany(Activity, { foreignKey: "idCamera" });
 Activity.belongsTo(SurveillanceCamera, { foreignKey: "idCamera" });
+
+Student.hasMany(Image, { foreignKey: "idStudent" });
+Image.belongsTo(Student, { foreignKey: "idStudent" });
 
 export { db, Student, User, Course, Activity, Attendance, SurveillanceCamera };
