@@ -11,7 +11,7 @@ const router = express.Router();
 
 router.get("/students", verifyRoles(ROLES_LIST[0], ROLES_LIST[1]), getStudents);
 router.get(
-  "/student/:id",
+  "/students/:id",
   verifyRoles(ROLES_LIST[0], ROLES_LIST[1]),
   getStudentById
 );

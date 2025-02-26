@@ -12,10 +12,11 @@ export const getStudents = async (req, res) => {
 };
 export const getStudentById = async (req, res) => {
   try {
-    const response = await User.findOne({
+    const response = await Student.findOne({
       where: {
         uuid: req.params.id,
       },
+      include: { model: Image, attributes: ["imageUrl"] },
     });
     res.status(200).json(response);
   } catch (error) {
@@ -39,6 +40,7 @@ export const createStudent = async (req, res) => {
     }));
 
     await Image.bulkCreate(uploadedImages);
+    res.status(201).json({ msg: "Sucessful" });
   } catch (error) {
     res.status(400).json({ msg: error.message });
   }

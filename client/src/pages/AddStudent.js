@@ -79,7 +79,6 @@ const AddStudent = () => {
     }
   };
 
-  // Funcție pentru a adăuga studentul
   const addStudent = async () => {
     try {
       let imageUrls = [];
@@ -92,7 +91,8 @@ const AddStudent = () => {
         images: imageUrls,
       });
 
-      if (response.data) {
+      if (response?.data) {
+        console.log("Student added successfully!", response.data);
         navigate("/students");
       }
     } catch (err) {

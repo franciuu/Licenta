@@ -6,6 +6,7 @@ import EditUser from "./pages/EditUser.js";
 import Unauthorized from "./pages/Unauthorized.js";
 import Students from "./pages/Students.js";
 import AddStudent from "./pages/AddStudent.js";
+import ViewStudent from "./pages/ViewStudent.js";
 
 import RequireAuth from "./components/RequireAuth.js";
 import PersistLogin from "./components/PersistLogin.js";
@@ -26,6 +27,7 @@ function App() {
           >
             <Route path="/dashboard" element={<Dashboard />}></Route>
             <Route path="/students" element={<Students />}></Route>
+            <Route path="/students/:id" element={<ViewStudent />}></Route>
           </Route>
 
           <Route element={<RequireAuth allowedRoles={["admin"]} />}>

@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
-import React from "react";
 import useAxiosCustom from "../hooks/useAxiosCustom";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 
 const StudentList = () => {
   const [students, setStudents] = useState([]);
@@ -36,7 +35,7 @@ const StudentList = () => {
               <th>Birth Date</th>
               <th>Email</th>
               <th>Study Year</th>
-              <th>Actions</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -48,6 +47,9 @@ const StudentList = () => {
                 <td>{stud.email}</td>
                 <td>{stud.studyYear}</td>
                 <td>
+                  <button>
+                    <Link to={`/students/${stud.uuid}`}>View</Link>
+                  </button>
                   <button>Edit</button>
                   <button>Delete</button>
                 </td>

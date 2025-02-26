@@ -46,7 +46,7 @@ const AddUser = () => {
         role,
       });
 
-      if (response.data) {
+      if (response?.data) {
         navigate("/users");
       }
     } catch (err) {
