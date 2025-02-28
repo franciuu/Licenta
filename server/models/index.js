@@ -24,7 +24,7 @@ Activity.belongsTo(User, { foreignKey: "idProf" });
 SurveillanceCamera.hasMany(Activity, { foreignKey: "idCamera" });
 Activity.belongsTo(SurveillanceCamera, { foreignKey: "idCamera" });
 
-Student.hasMany(Image, { foreignKey: "idStudent" });
+Student.hasMany(Image, { foreignKey: "idStudent", onDelete: "CASCADE" });
 Image.belongsTo(Student, { foreignKey: "idStudent" });
 
 export { db, Student, User, Course, Activity, Attendance, SurveillanceCamera };

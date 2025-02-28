@@ -39,6 +39,12 @@ const Sidebar = () => {
             {expanded && <span className={style.label}>Students</span>}
           </NavLink>
         </li>
+        <li className={style.sidebarItem}>
+          {expanded && <span className={style.label}>Courses</span>}
+        </li>
+        <li className={style.sidebarItem}>
+          {expanded && <span className={style.label}>Activities</span>}
+        </li>
       </ul>
       <div className={style.sidebarFooter}>
         <img

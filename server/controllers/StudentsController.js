@@ -45,3 +45,25 @@ export const createStudent = async (req, res) => {
     res.status(400).json({ msg: error.message });
   }
 };
+export const deleteStudent = async (req, res) => {
+  try {
+    const student = await Student.findOne({
+      where: { uuid: req.params.id },
+    });
+    if (!student) {
+      res.status(404).json({ msg: "Student not found" });
+    }
+
+    const images = await Image.findAll({ where: { idStudent: student.uuid } });
+    for (const img of images) {
+      const urlArray = img.imageUrl.split("/");
+      const image = urlArray[urlArray.length - 1];
+      const imageName = image.split(".")[0];
+      await cloudinary.uploader.destroy(`students/${imageName}`);
+    }
+    await student.destroy();
+    res.status(200).json({ msg: "Student deleted" });
+  } catch (error) {
+    res.status(400).json({ msg: error.message });
+  }
+};

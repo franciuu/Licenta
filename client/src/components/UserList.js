@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import useAxiosCustom from "../hooks/useAxiosCustom";
-import { Link } from "react-router-dom";
-import { useNavigate, useLocation } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const UserList = () => {
   const [users, setUsers] = useState([]);
@@ -22,17 +22,34 @@ const UserList = () => {
     }
   };
 
-  const deleteUser = async (uuid) => {
-    try {
-      await axiosCustom.delete(`/users/${uuid}`);
-      getUsers();
-    } catch (error) {
-      console.error(
-        "Error deleting user:",
-        error.response?.data || error.message
-      );
-      navigate("/", { state: { from: location }, replace: true });
-    }
+  const deleteUser = (uuid) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await axiosCustom.delete(`/users/${uuid}`);
+          getUsers();
+          Swal.fire({
+            title: "Deleted!",
+            text: "User has been deleted.",
+            icon: "success",
+          });
+        } catch (error) {
+          console.error(
+            "Error deleting user:",
+            error.response?.data || error.message
+          );
+          navigate("/", { state: { from: location }, replace: true });
+        }
+      }
+    });
   };
 
   useEffect(() => {
@@ -61,7 +78,9 @@ const UserList = () => {
                 <td>{user.email}</td>
                 <td>{user.role}</td>
                 <td>
-                  <Link to={`/users/edit/${user.uuid}`}>Edit</Link>
+                  <button>
+                    <Link to={`/users/edit/${user.uuid}`}>Edit</Link>
+                  </button>
                   <button onClick={() => deleteUser(user.uuid)}>Delete</button>
                 </td>
               </tr>

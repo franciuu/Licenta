@@ -82,20 +82,16 @@ export const updateUser = async (req, res) => {
   }
 };
 export const deleteUser = async (req, res) => {
-  const user = await User.findOne({
-    where: {
-      uuid: req.params.id,
-    },
-  });
-  if (!user) {
-    res.status(404).json({ msg: "User not found" });
-  }
   try {
-    await User.destroy({
+    const user = await User.findOne({
       where: {
-        id: user.id,
+        uuid: req.params.id,
       },
     });
+    if (!user) {
+      res.status(404).json({ msg: "User not found" });
+    }
+    await user.destroy();
     res.status(200).json({ msg: "User deleted" });
   } catch (error) {
     res.status(400).json({ msg: error.message });

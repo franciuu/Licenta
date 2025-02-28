@@ -3,6 +3,7 @@ import {
   getStudents,
   getStudentById,
   createStudent,
+  deleteStudent,
 } from "../controllers/StudentsController.js";
 import { verifyRoles } from "../middlewares/verifyRole.js";
 import ROLES_LIST from "../config/rolesList.js";
@@ -16,5 +17,6 @@ router.get(
   getStudentById
 );
 router.post("/students", verifyRoles(ROLES_LIST[0]), createStudent);
+router.delete("/students/:id", verifyRoles(ROLES_LIST[0]), deleteStudent);
 
 export default router;

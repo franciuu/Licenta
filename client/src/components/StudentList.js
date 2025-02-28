@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import useAxiosCustom from "../hooks/useAxiosCustom";
 import { useNavigate, useLocation, Link } from "react-router-dom";
+import Swal from "sweetalert2";
+import useAxiosCustom from "../hooks/useAxiosCustom";
 
 const StudentList = () => {
   const [students, setStudents] = useState([]);
@@ -20,6 +21,37 @@ const StudentList = () => {
       navigate("/", { state: { from: location }, replace: true });
     }
   };
+
+  const deleteUser = (uuid) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await axiosCustom.delete(`/students/${uuid}`);
+          getStudents();
+          Swal.fire({
+            title: "Deleted!",
+            text: "Student has been deleted.",
+            icon: "success",
+          });
+        } catch (error) {
+          console.error(
+            "Error deleting student:",
+            error.response?.data || error.message
+          );
+          navigate("/", { state: { from: location }, replace: true });
+        }
+      }
+    });
+  };
+
   useEffect(() => {
     getStudents();
   }, []);
@@ -51,7 +83,7 @@ const StudentList = () => {
                     <Link to={`/students/${stud.uuid}`}>View</Link>
                   </button>
                   <button>Edit</button>
-                  <button>Delete</button>
+                  <button onClick={() => deleteUser(stud.uuid)}>Delete</button>
                 </td>
               </tr>
             ))}
