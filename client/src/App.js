@@ -7,6 +7,8 @@ import Unauthorized from "./pages/Unauthorized.js";
 import Students from "./pages/Students.js";
 import AddStudent from "./pages/AddStudent.js";
 import ViewStudent from "./pages/ViewStudent.js";
+import Activities from "./pages/Activities.js";
+import Courses from "./pages/Courses.js";
 
 import RequireAuth from "./components/RequireAuth.js";
 import PersistLogin from "./components/PersistLogin.js";
@@ -28,6 +30,7 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />}></Route>
             <Route path="/students" element={<Students />}></Route>
             <Route path="/students/:id" element={<ViewStudent />}></Route>
+            <Route path="/activities" element={<Activities />}></Route>
           </Route>
 
           <Route element={<RequireAuth allowedRoles={["admin"]} />}>
@@ -35,6 +38,7 @@ function App() {
             <Route path="/users/add" element={<AddUser />}></Route>
             <Route path="/users/edit/:id" element={<EditUser />}></Route>
             <Route path="/students/add" element={<AddStudent />}></Route>
+            <Route path="/courses" element={<Courses />}></Route>
           </Route>
         </Route>
       </Routes>

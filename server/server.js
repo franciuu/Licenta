@@ -8,6 +8,7 @@ import AuthRoute from "./routes/AuthRoute.js";
 import RefreshRoute from "./routes/RefreshRoute.js";
 import StudentRoute from "./routes/StudentRoute.js";
 import UploadRoute from "./routes/UploadRoute.js";
+import CourseRoute from "./routes/CourseRoute.js";
 
 import "./models/index.js";
 import { verifyJWT } from "./middlewares/verifyJWT.js";
@@ -46,6 +47,7 @@ app.use(verifyJWT);
 app.use(UserRoute);
 app.use(StudentRoute);
 app.use(UploadRoute);
+app.use(CourseRoute);
 
 app.listen(process.env.PORT, () => {
   console.log("server started on port 5000");

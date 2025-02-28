@@ -1,8 +1,13 @@
 import { NavLink } from "react-router-dom";
-import logo from "../assets/logo.png";
 import { useState } from "react";
 import { BsChevronBarRight, BsChevronBarLeft } from "react-icons/bs";
-import { FaHome, FaUserFriends, FaGraduationCap } from "react-icons/fa";
+import {
+  FaHome,
+  FaUserFriends,
+  FaGraduationCap,
+  FaBook,
+  FaChalkboardTeacher,
+} from "react-icons/fa";
 import style from "../styles/Sidebar.module.css";
 
 const Sidebar = () => {
@@ -40,10 +45,16 @@ const Sidebar = () => {
           </NavLink>
         </li>
         <li className={style.sidebarItem}>
-          {expanded && <span className={style.label}>Courses</span>}
+          <NavLink to="/courses" className={style.itemText}>
+            <FaBook className={style.icon} />
+            {expanded && <span className={style.label}>Courses</span>}
+          </NavLink>
         </li>
         <li className={style.sidebarItem}>
-          {expanded && <span className={style.label}>Activities</span>}
+          <NavLink to="/activities" className={style.itemText}>
+            <FaChalkboardTeacher className={style.icon} />
+            {expanded && <span className={style.label}>Activities</span>}
+          </NavLink>
         </li>
       </ul>
       <div className={style.sidebarFooter}>
