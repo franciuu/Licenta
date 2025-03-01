@@ -8,3 +8,15 @@ export const getCourses = async (req, res) => {
     res.status(500).json({ msg: error.message });
   }
 };
+export const createCourse = async (req, res) => {
+  const { name, program } = req.body;
+  try {
+    await Course.create({
+      name: name,
+      programLevel: program,
+    });
+    res.status(201).json({ msg: "Successful" });
+  } catch (error) {
+    res.status(400).json({ msg: error.message });
+  }
+};

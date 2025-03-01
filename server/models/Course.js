@@ -20,6 +20,14 @@ const Course = db.define(
         notEmpty: true,
       },
     },
+    programLevel: {
+      type: DataTypes.ENUM("Bachelor", "Master"),
+      defaultValue: "Bachelor",
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
   },
   {
     freezeTableName: true,

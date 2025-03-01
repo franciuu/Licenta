@@ -107,10 +107,11 @@ const AddStudent = () => {
 
       <form onSubmit={handleSubmit(addStudent)}>
         <div className="inputDiv">
-          <label>Name: </label>
+          <label htmlFor="name">Name: </label>
           <div className="input">
             <input
               {...register("name")}
+              id="name"
               type="text"
               placeholder="Name"
               onChange={(e) =>
@@ -122,10 +123,11 @@ const AddStudent = () => {
         </div>
 
         <div className="inputDiv">
-          <label>Birth Date: </label>
+          <label htmlFor="date">Birth Date: </label>
           <div className="input">
             <input
               {...register("date")}
+              id="date"
               type="date"
               onChange={(e) =>
                 setFormData({ ...formData, date: e.target.value })

@@ -11,7 +11,7 @@ import ROLES_LIST from "../config/rolesList.js";
 
 const router = express.Router();
 
-router.get("/users", getUsers);
+router.get("/users", verifyRoles(ROLES_LIST[0], ROLES_LIST[1]), getUsers);
 router.get("/users/:id", verifyRoles(ROLES_LIST[0]), getUserById);
 router.post("/users", verifyRoles(ROLES_LIST[0]), createUser);
 router.patch("/users/:id", verifyRoles(ROLES_LIST[0]), updateUser);

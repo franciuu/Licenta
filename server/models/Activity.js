@@ -20,6 +20,15 @@ const Activity = db.define(
         notEmpty: true,
       },
     },
+    dayOfWeek: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+        min: 0,
+        max: 6,
+      },
+    },
     startTime: {
       type: DataTypes.TIME,
       allowNull: false,
@@ -32,6 +41,11 @@ const Activity = db.define(
       allowNull: false,
       validate: {
         notEmpty: true,
+        isLaterThanStartTime(value) {
+          if (this.startTime && value <= this.startTime) {
+            throw new Error("End time trebuie să fie după start time!");
+          }
+        },
       },
     },
     room: {

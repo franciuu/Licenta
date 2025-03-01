@@ -9,6 +9,7 @@ import AddStudent from "./pages/AddStudent.js";
 import ViewStudent from "./pages/ViewStudent.js";
 import Activities from "./pages/Activities.js";
 import Courses from "./pages/Courses.js";
+import AddCourse from "./pages/AddCourse.js";
 
 import RequireAuth from "./components/RequireAuth.js";
 import PersistLogin from "./components/PersistLogin.js";
@@ -39,6 +40,7 @@ function App() {
             <Route path="/users/edit/:id" element={<EditUser />}></Route>
             <Route path="/students/add" element={<AddStudent />}></Route>
             <Route path="/courses" element={<Courses />}></Route>
+            <Route path="/courses/add" element={<AddCourse />}></Route>
           </Route>
         </Route>
       </Routes>

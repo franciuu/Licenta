@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { Container, Row, Col } from "react-bootstrap";
 import Layout from "./Layout";
 import CourseCard from "../components/CourseCard.js";
@@ -27,6 +28,7 @@ const Courses = () => {
 
   return (
     <Layout>
+      <Link to="/courses/add">Add Course</Link>
       <Container className="mt-4">
         <Row>
           {courses.map((course) => (

@@ -7,7 +7,6 @@ dotenv.config();
 export const handleRefreshToken = async (req, res) => {
   const cookies = req.cookies;
   if (!cookies?.jwt) {
-    console.log("problmea");
     return res.sendStatus(401);
   }
   const rToken = cookies.jwt;

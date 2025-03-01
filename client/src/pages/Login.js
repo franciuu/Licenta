@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import axios from "axios";
 
@@ -123,7 +123,12 @@ const Login = () => {
               <span className={style.loginText}>Login</span>
               <FaLongArrowAltRight className={style.btnIcon} />
             </button>
-            <div>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+              }}
+            >
               <input
                 type="checkbox"
                 id="persist"
@@ -134,10 +139,10 @@ const Login = () => {
             </div>
 
             <span className={style.forgotPassword}>
-              Forgot your password?{" "}
-              <a href="#" className={style.forgotPasswordLink}>
+              Forgot your password?
+              {/* <a className={style.forgotPasswordLink}>
                 Click Here
-              </a>
+              </a> */}
             </span>
           </form>
         </div>
