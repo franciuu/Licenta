@@ -39,21 +39,6 @@ const ViewStudent = () => {
       ) : (
         <p>No images available</p>
       )}
-
-      {/* <h2>Image Links:</h2>
-      {student.images?.length > 0 ? (
-        <ul>
-          {student.images.map((img, index) => (
-            <li key={index}>
-              <a href={img.imageUrl} target="_blank" rel="noopener noreferrer">
-                {img.imageUrl}
-              </a>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>No images available</p>
-      )} */}
     </Layout>
   );
 };

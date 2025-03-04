@@ -24,16 +24,17 @@ export const getStudentById = async (req, res) => {
   }
 };
 export const createStudent = async (req, res) => {
-  const { name, date, email, year, images } = req.body;
+  const { name, birthDate, email, studyYear, images } = req.body;
 
   try {
     const newStudent = await Student.create({
       name: name,
-      birthDate: date,
+      birthDate: birthDate,
       email: email,
-      studyYear: year,
+      studyYear: studyYear,
     });
 
+    console.log(req.body);
     let uploadedImages = images.map((imageUrl) => ({
       idStudent: newStudent.uuid,
       imageUrl: imageUrl,
@@ -43,6 +44,37 @@ export const createStudent = async (req, res) => {
     res.status(201).json({ msg: "Sucessful" });
   } catch (error) {
     res.status(400).json({ msg: error.message });
+  }
+};
+export const updateStudent = async (req, res) => {
+  const { name, birthDate, email, studyYear, images } = req.body;
+  const student = await Student.findOne({
+    where: {
+      uuid: req.params.id,
+    },
+  });
+  if (!student) {
+    res.status(404).json({ msg: "Student not found" });
+  }
+  try {
+    await student.update({
+      name: name,
+      birthDate: birthDate,
+      email: email,
+      studyYear: studyYear,
+    });
+
+    let uploadedImages = images.map((imageUrl) => ({
+      idStudent: student.uuid,
+      imageUrl: imageUrl,
+    }));
+
+    await Image.bulkCreate(uploadedImages);
+    res.status(200).json({ msg: "Student updated" });
+  } catch (error) {
+    res.status(400).json({
+      msg: error.message,
+    });
   }
 };
 export const deleteStudent = async (req, res) => {

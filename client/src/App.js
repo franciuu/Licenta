@@ -10,6 +10,8 @@ import ViewStudent from "./pages/ViewStudent.js";
 import Activities from "./pages/Activities.js";
 import Courses from "./pages/Courses.js";
 import AddCourse from "./pages/AddCourse.js";
+import ViewActivity from "./pages/ViewActivity.js";
+import EditStudent from "./pages/EditStudent.js";
 
 import RequireAuth from "./components/RequireAuth.js";
 import PersistLogin from "./components/PersistLogin.js";
@@ -32,6 +34,7 @@ function App() {
             <Route path="/students" element={<Students />}></Route>
             <Route path="/students/:id" element={<ViewStudent />}></Route>
             <Route path="/activities" element={<Activities />}></Route>
+            <Route path="/activities/:id" element={<ViewActivity />}></Route>
           </Route>
 
           <Route element={<RequireAuth allowedRoles={["admin"]} />}>
@@ -39,6 +42,7 @@ function App() {
             <Route path="/users/add" element={<AddUser />}></Route>
             <Route path="/users/edit/:id" element={<EditUser />}></Route>
             <Route path="/students/add" element={<AddStudent />}></Route>
+            <Route path="/students/edit/:id" element={<EditStudent />}></Route>
             <Route path="/courses" element={<Courses />}></Route>
             <Route path="/courses/add" element={<AddCourse />}></Route>
           </Route>

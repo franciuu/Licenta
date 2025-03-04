@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import Swal from "sweetalert2";
+import dateFormat from "dateformat";
 import useAxiosCustom from "../hooks/useAxiosCustom";
 
 const StudentList = () => {
@@ -75,14 +76,16 @@ const StudentList = () => {
               <tr key={stud.uuid}>
                 <td>{index + 1}</td>
                 <td>{stud.name}</td>
-                <td>{stud.birthDate}</td>
+                <td>{dateFormat(stud.birthDate, "dd-mmm-yyyy")}</td>
                 <td>{stud.email}</td>
                 <td>{stud.studyYear}</td>
                 <td>
                   <button>
                     <Link to={`/students/${stud.uuid}`}>View</Link>
                   </button>
-                  <button>Edit</button>
+                  <button>
+                    <Link to={`/students/edit/${stud.uuid}`}>Edit</Link>
+                  </button>
                   <button onClick={() => deleteUser(stud.uuid)}>Delete</button>
                 </td>
               </tr>

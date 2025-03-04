@@ -13,7 +13,6 @@ const Courses = () => {
     try {
       const response = await axiosCustom.get("/courses");
       setCourses(response.data);
-      console.log(response.data);
     } catch (error) {
       console.error(
         "Error fetching courses:",

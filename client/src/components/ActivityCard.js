@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import Card from "react-bootstrap/Card";
 import { generatePatternImage } from "../utils/GeneratePattern.js";
 
@@ -57,6 +58,9 @@ const ActivityCard = ({ info }) => {
         <Card.Text>
           {info.startTime} - {info.endTime}
         </Card.Text>
+        <button>
+          <Link to={`/activities/${info.uuid}`}>View</Link>
+        </button>
       </Card.Body>
     </Card>
   );
