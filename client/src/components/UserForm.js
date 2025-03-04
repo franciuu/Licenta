@@ -64,7 +64,6 @@ const UserForm = ({ initialValues = {}, onSubmit, error, isEdit = false }) => {
         <p>{errors.email?.message}</p>
       </div>
 
-      {/* Afișează câmpurile pentru parolă doar dacă e ADD USER */}
       {!isEdit && (
         <>
           <div className="inputDiv">

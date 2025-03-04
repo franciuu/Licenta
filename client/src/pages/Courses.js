@@ -9,19 +9,19 @@ const Courses = () => {
   const [courses, setCourses] = useState([]);
   const axiosCustom = useAxiosCustom();
 
-  const getCourses = async () => {
-    try {
-      const response = await axiosCustom.get("/courses");
-      setCourses(response.data);
-    } catch (error) {
-      console.error(
-        "Error fetching courses:",
-        error.response?.data || error.message
-      );
-    }
-  };
-
   useEffect(() => {
+    const getCourses = async () => {
+      try {
+        const response = await axiosCustom.get("/courses");
+        setCourses(response.data);
+      } catch (error) {
+        console.error(
+          "Error fetching courses:",
+          error.response?.data || error.message
+        );
+      }
+    };
+
     getCourses();
   }, []);
 

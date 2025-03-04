@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Container, Row, Col } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import Layout from "./Layout";
 import ActivityCard from "../components/ActivityCard.js";
 import useAxiosCustom from "../hooks/useAxiosCustom.js";
@@ -27,6 +28,9 @@ const Activities = () => {
 
   return (
     <Layout>
+      <button>
+        <Link to="/activities/add">Add Activity</Link>
+      </button>
       <Container className="mt-4">
         <Row>
           {activities.map((activ) => (

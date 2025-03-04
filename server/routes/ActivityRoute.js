@@ -1,5 +1,8 @@
 import express from "express";
-import { getActivities } from "../controllers/ActivitiesController.js";
+import {
+  getActivities,
+  createActivity,
+} from "../controllers/ActivitiesController.js";
 import { verifyRoles } from "../middlewares/verifyRole.js";
 import ROLES_LIST from "../config/rolesList.js";
 
@@ -10,5 +13,6 @@ router.get(
   verifyRoles(ROLES_LIST[0], ROLES_LIST[1]),
   getActivities
 );
+router.post("/activities", verifyRoles(ROLES_LIST[0]), createActivity);
 
 export default router;
