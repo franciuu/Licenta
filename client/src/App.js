@@ -13,6 +13,7 @@ import AddCourse from "./pages/AddCourse.js";
 import ViewActivity from "./pages/ViewActivity.js";
 import EditStudent from "./pages/EditStudent.js";
 import AddActivity from "./pages/AddActivity.js";
+import PersonalCalendar from "./pages/PersonalCalendar.js";
 
 import RequireAuth from "./components/RequireAuth.js";
 import PersistLogin from "./components/PersistLogin.js";
@@ -37,6 +38,10 @@ function App() {
             <Route path="/activities" element={<Activities />}></Route>
             <Route path="/activities/:id" element={<ViewActivity />}></Route>
             <Route path="/activities/add" element={<AddActivity />}></Route>
+          </Route>
+
+          <Route element={<RequireAuth allowedRoles={["professor"]} />}>
+            <Route path="/calendar" element={<PersonalCalendar />}></Route>
           </Route>
 
           <Route element={<RequireAuth allowedRoles={["admin"]} />}>

@@ -7,10 +7,13 @@ import {
   FaGraduationCap,
   FaBook,
   FaChalkboardTeacher,
+  FaCalendarAlt,
 } from "react-icons/fa";
 import style from "../styles/Sidebar.module.css";
+import useAuth from "../hooks/useAuth";
 
 const Sidebar = () => {
+  const { auth } = useAuth();
   const [expanded, setExpanded] = useState(true);
 
   const toggleSidebar = () => {
@@ -25,6 +28,7 @@ const Sidebar = () => {
           {expanded ? <BsChevronBarRight /> : <BsChevronBarLeft />}
         </button>
       </div>
+      {expanded && <p>MAIN MENU</p>}
       <ul className={style.sidebarMenu}>
         <li className={style.sidebarItem}>
           <NavLink to="/dashboard" className={style.itemText}>
@@ -56,7 +60,14 @@ const Sidebar = () => {
             {expanded && <span className={style.label}>Activities</span>}
           </NavLink>
         </li>
+        <li className={style.sidebarItem}>
+          <NavLink to="/calendar" className={style.itemText}>
+            <FaCalendarAlt className={style.icon} />
+            {expanded && <span className={style.label}>My Schedule</span>}
+          </NavLink>
+        </li>
       </ul>
+      {auth.role === "professor" && expanded && <p>MY ACTIVITIES</p>}
       <div className={style.sidebarFooter}>
         <img
           src="https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&bold=true"
