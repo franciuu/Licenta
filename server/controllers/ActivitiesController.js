@@ -1,8 +1,12 @@
 import Activity from "../models/Activity.js";
 
-export const getActivities = async (req, res) => {
+export const getCourseActivities = async (req, res) => {
   try {
-    const response = await Activity.findAll();
+    const response = await Activity.findAll({
+      where: {
+        idCourse: req.params.id,
+      },
+    });
     res.status(200).json(response);
   } catch (error) {
     res.status(500).json({ msg: error.message });

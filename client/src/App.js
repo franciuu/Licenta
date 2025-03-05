@@ -7,13 +7,13 @@ import Unauthorized from "./pages/Unauthorized.js";
 import Students from "./pages/Students.js";
 import AddStudent from "./pages/AddStudent.js";
 import ViewStudent from "./pages/ViewStudent.js";
-import Activities from "./pages/Activities.js";
 import Courses from "./pages/Courses.js";
 import AddCourse from "./pages/AddCourse.js";
 import ViewActivity from "./pages/ViewActivity.js";
 import EditStudent from "./pages/EditStudent.js";
 import AddActivity from "./pages/AddActivity.js";
 import PersonalCalendar from "./pages/PersonalCalendar.js";
+import ViewCourse from "./pages/ViewCourse.js";
 
 import RequireAuth from "./components/RequireAuth.js";
 import PersistLogin from "./components/PersistLogin.js";
@@ -35,7 +35,6 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />}></Route>
             <Route path="/students" element={<Students />}></Route>
             <Route path="/students/:id" element={<ViewStudent />}></Route>
-            <Route path="/activities" element={<Activities />}></Route>
             <Route path="/activities/:id" element={<ViewActivity />}></Route>
             <Route path="/activities/add" element={<AddActivity />}></Route>
           </Route>
@@ -52,6 +51,7 @@ function App() {
             <Route path="/students/edit/:id" element={<EditStudent />}></Route>
             <Route path="/courses" element={<Courses />}></Route>
             <Route path="/courses/add" element={<AddCourse />}></Route>
+            <Route path="/courses/:id" element={<ViewCourse />}></Route>
           </Route>
         </Route>
       </Routes>

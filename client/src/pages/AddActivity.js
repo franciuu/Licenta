@@ -23,7 +23,7 @@ const AddActivity = () => {
     try {
       const response = await axiosCustom.post("/activities", formData);
       if (response?.data) {
-        navigate("/activities");
+        navigate(`/courses/${formData.idCourse}`);
       }
     } catch (err) {
       console.log(err);

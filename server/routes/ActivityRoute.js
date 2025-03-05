@@ -1,6 +1,6 @@
 import express from "express";
 import {
-  getActivities,
+  getCourseActivities,
   createActivity,
   getPersonalActivities,
 } from "../controllers/ActivitiesController.js";
@@ -10,9 +10,9 @@ import ROLES_LIST from "../config/rolesList.js";
 const router = express.Router();
 
 router.get(
-  "/activities",
+  "/activities/:id",
   verifyRoles(ROLES_LIST[0], ROLES_LIST[1]),
-  getActivities
+  getCourseActivities
 );
 router.get(
   "/activities/personal",

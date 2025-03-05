@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import Card from "react-bootstrap/Card";
 import { generatePatternImage } from "../utils/GeneratePattern.js";
 
@@ -14,6 +15,9 @@ const CourseCard = ({ info }) => {
         <Card.Subtitle className="mb-2 text-muted">
           {info.programLevel}
         </Card.Subtitle>
+        <button>
+          <Link to={`/courses/${info.uuid}`}>View</Link>
+        </button>
       </Card.Body>
     </Card>
   );

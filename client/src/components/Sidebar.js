@@ -55,9 +55,9 @@ const Sidebar = () => {
           </NavLink>
         </li>
         <li className={style.sidebarItem}>
-          <NavLink to="/activities" className={style.itemText}>
+          <NavLink to="/activities/add" className={style.itemText}>
             <FaChalkboardTeacher className={style.icon} />
-            {expanded && <span className={style.label}>Activities</span>}
+            {expanded && <span className={style.label}>Add Activity</span>}
           </NavLink>
         </li>
         <li className={style.sidebarItem}>

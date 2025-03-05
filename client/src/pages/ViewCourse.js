@@ -1,17 +1,33 @@
 import { useState, useEffect } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import useAxiosCustom from "../hooks/useAxiosCustom";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import Layout from "./Layout";
 import ActivityCard from "../components/ActivityCard.js";
-import useAxiosCustom from "../hooks/useAxiosCustom.js";
 
-const Activities = () => {
+const ViewCourse = () => {
+  const [course, setCourse] = useState({});
   const [activities, setActivities] = useState([]);
   const axiosCustom = useAxiosCustom();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { id } = useParams();
+
+  const getCourse = async () => {
+    try {
+      const response = await axiosCustom.get(`/courses/${id}`);
+      setCourse(response.data);
+      console.log(response.data);
+    } catch (err) {
+      console.log(err);
+      navigate("/", { state: { from: location }, replace: true });
+    }
+  };
 
   const getActivities = async () => {
     try {
-      const response = await axiosCustom.get("/activities");
+      const response = await axiosCustom.get(`/activities/${id}`);
       setActivities(response.data);
       console.log(response.data);
     } catch (error) {
@@ -23,14 +39,13 @@ const Activities = () => {
   };
 
   useEffect(() => {
+    getCourse();
     getActivities();
   }, []);
-
   return (
     <Layout>
-      <button>
-        <Link to="/activities/add">Add Activity</Link>
-      </button>
+      <h1>{course.name}</h1>
+      <p>{course.programLevel}</p>
       <Container className="mt-4">
         <Row>
           {activities.map((activ) => (
@@ -43,4 +58,4 @@ const Activities = () => {
     </Layout>
   );
 };
-export default Activities;
+export default ViewCourse;
