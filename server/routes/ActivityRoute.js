@@ -3,6 +3,7 @@ import {
   getCourseActivities,
   createActivity,
   getPersonalActivities,
+  getActivityById,
 } from "../controllers/ActivitiesController.js";
 import { verifyRoles } from "../middlewares/verifyRole.js";
 import ROLES_LIST from "../config/rolesList.js";
@@ -10,14 +11,19 @@ import ROLES_LIST from "../config/rolesList.js";
 const router = express.Router();
 
 router.get(
-  "/activities/:id",
-  verifyRoles(ROLES_LIST[0], ROLES_LIST[1]),
+  "/activities/course/:id",
+  verifyRoles(ROLES_LIST[0]),
   getCourseActivities
 );
 router.get(
   "/activities/personal",
   verifyRoles(ROLES_LIST[1]),
   getPersonalActivities
+);
+router.get(
+  "/activities/:id",
+  verifyRoles(ROLES_LIST[0], ROLES_LIST[1]),
+  getActivityById
 );
 router.post("/activities", verifyRoles(ROLES_LIST[0]), createActivity);
 

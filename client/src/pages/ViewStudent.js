@@ -1,6 +1,6 @@
+import { useState, useEffect } from "react";
 import Layout from "./Layout";
 import MyCarousel from "../components/Carousel";
-import { useState, useEffect } from "react";
 import useAxiosCustom from "../hooks/useAxiosCustom";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 

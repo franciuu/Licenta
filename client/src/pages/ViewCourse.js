@@ -27,7 +27,7 @@ const ViewCourse = () => {
 
   const getActivities = async () => {
     try {
-      const response = await axiosCustom.get(`/activities/${id}`);
+      const response = await axiosCustom.get(`/activities/course/${id}`);
       setActivities(response.data);
       console.log(response.data);
     } catch (error) {

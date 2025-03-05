@@ -26,6 +26,19 @@ export const getPersonalActivities = async (req, res) => {
   }
 };
 
+export const getActivityById = async (req, res) => {
+  try {
+    const response = await Activity.findOne({
+      where: {
+        uuid: req.params.id,
+      },
+    });
+    res.status(200).json(response);
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
+};
+
 export const createActivity = async (req, res) => {
   const { name, startTime, endTime, room, idCourse, idProf, dayOfWeek } =
     req.body;

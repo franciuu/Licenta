@@ -1,20 +1,29 @@
 /* Layout container */
 .layoutContainer {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-  }
-  
-  /* Columns container */
-  .layoutColumns {
-    display: flex;
-    flex: 1;
-  }
-  
-  /* Content area styling */
-  .layoutContent {
-    flex: 1;
-    background-color: #f4f4f4;
-    padding: 20px;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Container pentru sidebar și conținut */
+.layoutColumns {
+  display: flex;
+  flex: 1;
+  height: calc(100vh - 60px); /* Asigură că ocupă întreaga pagină */
+}
+
+/* Sidebar */
+.layoutSidebar {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Zona principală de conținut */
+.layoutContent {
+  flex: 1;
+  background-color: #f4f4f4;
+  padding: 20px;
+  overflow-y: auto;
+  transition: margin-left 0.3s ease;
+}
