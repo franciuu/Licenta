@@ -1,9 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
-import {
-  MaterialReactTable,
-  useMaterialReactTable,
-} from "material-react-table";
+import { MaterialReactTable } from "material-react-table";
 import Swal from "sweetalert2";
 import useAxiosCustom from "../hooks/useAxiosCustom";
 

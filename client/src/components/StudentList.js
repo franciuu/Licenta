@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
+import { MaterialReactTable } from "material-react-table";
 import Swal from "sweetalert2";
 import dateFormat from "dateformat";
 import useAxiosCustom from "../hooks/useAxiosCustom";
@@ -23,6 +24,7 @@ const StudentList = () => {
     }
   };
 
+  console.log(students);
   const deleteUser = (uuid) => {
     Swal.fire({
       title: "Are you sure?",
@@ -56,42 +58,59 @@ const StudentList = () => {
   useEffect(() => {
     getStudents();
   }, []);
+
+  const columns = useMemo(
+    () => [
+      {
+        accessorKey: "name",
+        header: "Name",
+        enableColumnOrdering: false,
+      },
+      {
+        accessorKey: "birthDate",
+        header: "Birth Date",
+        Cell: ({ cell }) => dateFormat(cell.birthDate, "dd-mmm-yyyy"),
+      },
+      {
+        accessorKey: "email",
+        header: "Email",
+      },
+      {
+        accessorKey: "studyYear",
+        header: "Study Year",
+      },
+      {
+        accessorKey: "actions",
+        header: "Actions",
+        enableSorting: false,
+        enableColumnFilter: false,
+        Cell: ({ row }) => (
+          <div>
+            <button>
+              <Link to={`/students/${row.original.uuid}`}>View</Link>
+            </button>
+            <button>
+              <Link to={`/students/edit/${row.original.uuid}`}>Edit</Link>
+            </button>
+            <button onClick={() => deleteUser(row.original.uuid)}>
+              Delete
+            </button>
+          </div>
+        ),
+      },
+    ],
+    []
+  );
   return (
     <div>
       <h1>Student List</h1>
       {students?.length ? (
-        <table>
-          <thead>
-            <tr>
-              <th>No</th>
-              <th>Name</th>
-              <th>Birth Date</th>
-              <th>Email</th>
-              <th>Study Year</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {students.map((stud, index) => (
-              <tr key={stud.uuid}>
-                <td>{index + 1}</td>
-                <td>{stud.name}</td>
-                <td>{dateFormat(stud.birthDate, "dd-mmm-yyyy")}</td>
-                <td>{stud.email}</td>
-                <td>{stud.studyYear}</td>
-                <td>
-                  <button>
-                    <Link to={`/students/${stud.uuid}`}>View</Link>
-                  </button>
-                  <button>
-                    <Link to={`/students/edit/${stud.uuid}`}>Edit</Link>
-                  </button>
-                  <button onClick={() => deleteUser(stud.uuid)}>Delete</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <MaterialReactTable
+          columns={columns}
+          data={students}
+          enablePagination
+          enableColumnOrdering
+        />
       ) : (
         <p>No students to display</p>
       )}
