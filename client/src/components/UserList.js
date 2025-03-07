@@ -1,7 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
-import useAxiosCustom from "../hooks/useAxiosCustom";
+import {
+  MaterialReactTable,
+  useMaterialReactTable,
+} from "material-react-table";
 import Swal from "sweetalert2";
+import useAxiosCustom from "../hooks/useAxiosCustom";
 
 const UserList = () => {
   const [users, setUsers] = useState([]);
@@ -56,37 +60,41 @@ const UserList = () => {
     getUsers();
   }, []);
 
+  const columns = useMemo(
+    () => [
+      { accessorKey: "name", header: "Name", enableColumnOrdering: false },
+      { accessorKey: "email", header: "Email" },
+      { accessorKey: "role", header: "Role" },
+      {
+        accessorKey: "actions",
+        header: "Actions",
+        enableSorting: false,
+        enableColumnFilter: false,
+        Cell: ({ row }) => (
+          <div>
+            <button>
+              <Link to={`/users/edit/${row.original.uuid}`}>Edit</Link>
+            </button>
+            <button onClick={() => deleteUser(row.original.uuid)}>
+              Delete
+            </button>
+          </div>
+        ),
+      },
+    ],
+    []
+  );
+
   return (
     <div>
       <h1>List of Users</h1>
       {users?.length ? (
-        <table>
-          <thead>
-            <tr>
-              <th>No</th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Role</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map((user, index) => (
-              <tr key={user.uuid}>
-                <td>{index + 1}</td>
-                <td>{user.name}</td>
-                <td>{user.email}</td>
-                <td>{user.role}</td>
-                <td>
-                  <button>
-                    <Link to={`/users/edit/${user.uuid}`}>Edit</Link>
-                  </button>
-                  <button onClick={() => deleteUser(user.uuid)}>Delete</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <MaterialReactTable
+          columns={columns}
+          data={users}
+          enablePagination
+          enableColumnOrdering
+        />
       ) : (
         <p>No users to display</p>
       )}

@@ -21,6 +21,7 @@ const AddActivity = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      console.log(formData);
       const response = await axiosCustom.post("/activities", formData);
       if (response?.data) {
         navigate(`/courses/${formData.idCourse}`);
@@ -54,6 +55,7 @@ const AddActivity = () => {
   }, []);
 
   const handleChange = (e) => {
+    console.log(e.target.id);
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
   return (
@@ -97,7 +99,11 @@ const AddActivity = () => {
 
         <div>
           <label htmlFor="idCourse">Course: </label>
-          <select id="idCourse" onChange={handleChange}>
+          <select
+            id="idCourse"
+            onChange={handleChange}
+            defaultValue={courses[0]?.uuid}
+          >
             {courses.map((c) => (
               <option key={c.uuid} value={c.uuid}>
                 {c.name}
@@ -108,7 +114,11 @@ const AddActivity = () => {
 
         <div>
           <label htmlFor="idProf">Professor: </label>
-          <select id="idProf" onChange={handleChange}>
+          <select
+            id="idProf"
+            onChange={handleChange}
+            defaultValue={profs[0]?.uuid}
+          >
             {profs
               .filter((p) => p.role === "professor")
               .map((p) => (

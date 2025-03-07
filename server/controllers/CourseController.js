@@ -32,3 +32,18 @@ export const createCourse = async (req, res) => {
     res.status(400).json({ msg: error.message });
   }
 };
+
+export const deleteCourse = async (req, res) => {
+  try {
+    const course = await Course.findOne({
+      where: { uuid: req.params.id },
+    });
+    if (!course) {
+      res.status(404).json({ msg: "Course not found" });
+    }
+    await course.destroy();
+    res.status(200).json({ msg: "Course deleted" });
+  } catch (error) {
+    res.status(400).json({ msg: error.message });
+  }
+};

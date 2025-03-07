@@ -36,7 +36,6 @@ function App() {
             <Route path="/students" element={<Students />}></Route>
             <Route path="/students/:id" element={<ViewStudent />}></Route>
             <Route path="/activities/:id" element={<ViewActivity />}></Route>
-            <Route path="/activities/add" element={<AddActivity />}></Route>
           </Route>
 
           <Route element={<RequireAuth allowedRoles={["professor"]} />}>
@@ -52,6 +51,7 @@ function App() {
             <Route path="/courses" element={<Courses />}></Route>
             <Route path="/courses/add" element={<AddCourse />}></Route>
             <Route path="/courses/:id" element={<ViewCourse />}></Route>
+            <Route path="/activities/add" element={<AddActivity />}></Route>
           </Route>
         </Route>
       </Routes>

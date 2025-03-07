@@ -20,6 +20,7 @@ const Sidebar = () => {
     setExpanded((curr) => !curr);
   };
 
+  console.log(auth);
   return (
     <aside className={style.sidebar}>
       <div className={style.sidebarHeader}>
@@ -67,7 +68,7 @@ const Sidebar = () => {
           </NavLink>
         </li>
       </ul>
-      {auth.role === "professor" && expanded && <p>MY ACTIVITIES</p>}
+      {/* {auth.role === "professor" && expanded && <p>MY ACTIVITIES</p>} */}
       <div className={style.sidebarFooter}>
         <img
           src="https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&bold=true"
@@ -76,8 +77,8 @@ const Sidebar = () => {
         />
         {expanded && (
           <div className={style.userInfo}>
-            <h4 className={style.userName}>John</h4>
-            <span className={style.userEmail}>john@test.com</span>
+            <h4 className={style.userName}>{auth.name}</h4>
+            <span className={style.userEmail}>{auth.email}</span>
           </div>
         )}
       </div>

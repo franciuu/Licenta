@@ -23,6 +23,8 @@ export const handleRefreshToken = async (req, res) => {
       return res.sendStatus(403);
     }
     const role = user.role;
+    const name = user.name;
+    const email = user.email;
     const accessToken = jwt.sign(
       {
         UserInfo: {
@@ -33,6 +35,6 @@ export const handleRefreshToken = async (req, res) => {
       process.env.ACCESS_TOKEN_SECRET,
       { expiresIn: "30s" }
     );
-    res.json({ role, accessToken });
+    res.json({ role, accessToken, name, email });
   });
 };

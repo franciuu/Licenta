@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { Container, Row, Col } from "react-bootstrap";
-import { Link } from "react-router-dom";
 import useAxiosCustom from "../hooks/useAxiosCustom";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import Layout from "./Layout";
 import ActivityCard from "../components/ActivityCard.js";
+import Swal from "sweetalert2";
 
 const ViewCourse = () => {
   const [course, setCourse] = useState({});
@@ -38,6 +38,32 @@ const ViewCourse = () => {
     }
   };
 
+  const deleteCourse = (uuid) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await axiosCustom.delete(`/courses/${uuid}`);
+          Swal.fire({
+            title: "Deleted!",
+            text: "User has been deleted.",
+            icon: "success",
+          });
+          navigate("/courses");
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    });
+  };
+
   useEffect(() => {
     getCourse();
     getActivities();
@@ -46,6 +72,7 @@ const ViewCourse = () => {
     <Layout>
       <h1>{course.name}</h1>
       <p>{course.programLevel}</p>
+      <button onClick={() => deleteCourse(course.uuid)}>Delete course</button>
       <Container className="mt-4">
         <Row>
           {activities.map((activ) => (

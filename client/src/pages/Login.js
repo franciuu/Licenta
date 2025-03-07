@@ -71,8 +71,10 @@ const Login = () => {
       <div className={style.container}>
         <div className={style.left}>
           <div className={style.textDiv}>
-            <h1 className={style.title}>Attendance system abcdefg</h1>
-            <p className={style.subtitle}>gdhsgdkh</p>
+            <h1 className={style.title}>Vision Roster</h1>
+            <p className={style.subtitle}>
+              Simplifying Academic Management, One Click at a Time.
+            </p>
           </div>
         </div>
         <div className={style.right}>

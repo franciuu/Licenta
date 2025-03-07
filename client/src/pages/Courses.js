@@ -27,23 +27,29 @@ const Courses = () => {
 
   return (
     <Layout>
-      <Link to="/courses/add">Add Course</Link>
-      <Container className="mt-4">
-        <Row>
-          {courses.map((course) => (
-            <Col
-              key={course.uuid}
-              xs={12}
-              sm={6}
-              md={6}
-              lg={3}
-              className="mb-4"
-            >
-              <CourseCard info={course} />
-            </Col>
-          ))}
-        </Row>
-      </Container>
+      <button>
+        <Link to="/courses/add">Add Course</Link>
+      </button>
+      {courses?.length ? (
+        <Container className="mt-4">
+          <Row>
+            {courses.map((course) => (
+              <Col
+                key={course.uuid}
+                xs={12}
+                sm={6}
+                md={6}
+                lg={3}
+                className="mb-4"
+              >
+                <CourseCard info={course} />
+              </Col>
+            ))}
+          </Row>
+        </Container>
+      ) : (
+        <p>No courses to display</p>
+      )}
     </Layout>
   );
 };

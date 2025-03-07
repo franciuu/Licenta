@@ -92,7 +92,12 @@
   border-radius: 50%;
 }
 
+.userName {
+  font-size: 1.25rem;
+}
+
 .userInfo {
+  font-size: 0.75rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
