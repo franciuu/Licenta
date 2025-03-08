@@ -24,7 +24,6 @@ const StudentList = () => {
     }
   };
 
-  console.log(students);
   const deleteUser = (uuid) => {
     Swal.fire({
       title: "Are you sure?",

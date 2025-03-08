@@ -14,6 +14,8 @@ import EditStudent from "./pages/EditStudent.js";
 import AddActivity from "./pages/AddActivity.js";
 import PersonalCalendar from "./pages/PersonalCalendar.js";
 import ViewCourse from "./pages/ViewCourse.js";
+import ViewAttendance from "./pages/ViewAttendance.js";
+import NotFound from "./pages/NotFound.js";
 
 import RequireAuth from "./components/RequireAuth.js";
 import PersistLogin from "./components/PersistLogin.js";
@@ -40,6 +42,7 @@ function App() {
 
           <Route element={<RequireAuth allowedRoles={["professor"]} />}>
             <Route path="/calendar" element={<PersonalCalendar />}></Route>
+            <Route path="/attendance/:id" element={<ViewAttendance />}></Route>
           </Route>
 
           <Route element={<RequireAuth allowedRoles={["admin"]} />}>
@@ -54,6 +57,8 @@ function App() {
             <Route path="/activities/add" element={<AddActivity />}></Route>
           </Route>
         </Route>
+
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
   );

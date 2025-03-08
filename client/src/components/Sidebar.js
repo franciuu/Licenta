@@ -20,7 +20,6 @@ const Sidebar = () => {
     setExpanded((curr) => !curr);
   };
 
-  console.log(auth);
   return (
     <aside className={style.sidebar}>
       <div className={style.sidebarHeader}>

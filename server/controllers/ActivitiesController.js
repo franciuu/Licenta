@@ -33,7 +33,10 @@ export const getActivityById = async (req, res) => {
         uuid: req.params.id,
       },
     });
-    res.status(200).json(response);
+    if (response) {
+      return res.status(200).json(response);
+    }
+    res.status(404).json({ msg: "Activity not found" });
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }

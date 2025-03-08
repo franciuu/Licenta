@@ -5,7 +5,7 @@ import useAxiosCustom from "../hooks/useAxiosCustom";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 
 const ViewStudent = () => {
-  const [student, setStudent] = useState({});
+  const [student, setStudent] = useState(null);
   const axiosCustom = useAxiosCustom();
   const navigate = useNavigate();
   const location = useLocation();
@@ -20,7 +20,7 @@ const ViewStudent = () => {
         "Error fetching student:",
         error.response?.data || error.message
       );
-      navigate("/", { state: { from: location }, replace: true });
+      // navigate("/", { state: { from: location }, replace: true });
     }
   };
 
@@ -30,14 +30,20 @@ const ViewStudent = () => {
 
   return (
     <Layout>
-      <h1>{student.name}'s profile</h1>
-      <p>{student.birthDate}</p>
-      <p>{student.email}</p>
-      <p>{student.studyYear}</p>
-      {student.images?.length > 0 ? (
-        <MyCarousel urls={student.images.map((img) => img.imageUrl)} />
+      {student ? (
+        <div>
+          <h1>{student.name}'s profile</h1>
+          <p>{student.birthDate}</p>
+          <p>{student.email}</p>
+          <p>{student.studyYear}</p>
+          {student.images?.length > 0 ? (
+            <MyCarousel urls={student.images.map((img) => img.imageUrl)} />
+          ) : (
+            <p>No images available</p>
+          )}
+        </div>
       ) : (
-        <p>No images available</p>
+        <p>Not found</p>
       )}
     </Layout>
   );

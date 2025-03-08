@@ -18,7 +18,10 @@ export const getStudentById = async (req, res) => {
       },
       include: { model: Image, attributes: ["imageUrl"] },
     });
-    res.status(200).json(response);
+    if (response) {
+      return res.status(200).json(response);
+    }
+    res.status(404).json({ msg: "Student not found" });
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }
