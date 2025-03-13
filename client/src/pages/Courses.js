@@ -4,26 +4,24 @@ import { Container, Row, Col } from "react-bootstrap";
 import Layout from "./Layout";
 import CourseCard from "../components/CourseCard.js";
 import useAxiosCustom from "../hooks/useAxiosCustom.js";
+import { getCourses } from "../services/CourseService.js";
 
 const Courses = () => {
   const [courses, setCourses] = useState([]);
   const axiosCustom = useAxiosCustom();
 
   useEffect(() => {
-    const getCourses = async () => {
+    const fetchCoursesData = async () => {
       try {
-        const response = await axiosCustom.get("/courses");
-        setCourses(response.data);
+        const coursesData = await getCourses(axiosCustom);
+        setCourses(coursesData);
       } catch (error) {
-        console.error(
-          "Error fetching courses:",
-          error.response?.data || error.message
-        );
+        console.error("Failed to fetch courses data", error);
       }
     };
 
-    getCourses();
-  }, []);
+    fetchCoursesData();
+  }, [axiosCustom]);
 
   return (
     <Layout>

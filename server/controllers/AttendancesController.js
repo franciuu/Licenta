@@ -4,7 +4,7 @@ export const getActivityAttendances = async (req, res) => {
   try {
     const response = await Attendance.findAll({
       where: {
-        idActivity: req.params.idActivity,
+        id: req.params.id,
       },
     });
     if (!response) {

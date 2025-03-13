@@ -7,11 +7,11 @@ import AttendaceList from "../components/AttendanceList.js";
 const ViewAttendance = () => {
   const [attendances, setAttendances] = useState([]);
   const axiosCustom = useAxiosCustom();
-  const { idActivity } = useParams();
+  const { id } = useParams();
 
   const getAttendances = async () => {
     try {
-      const response = await axiosCustom.get(`/attendances/${idActivity}`);
+      const response = await axiosCustom.get(`/attendances/${id}`);
       setAttendances(response.data);
     } catch (error) {
       console.error(
@@ -27,7 +27,7 @@ const ViewAttendance = () => {
 
   return (
     <Layout>
-      <p>{idActivity}</p>
+      <p>{id}</p>
       <AttendaceList />
     </Layout>
   );

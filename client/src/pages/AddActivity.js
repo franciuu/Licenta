@@ -2,6 +2,9 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Layout from "../pages/Layout.js";
 import useAxiosCustom from "../hooks/useAxiosCustom.js";
+import { getCourses } from "../services/CourseService.js";
+import { getProfessors } from "../services/UserService.js";
+import { createActivity } from "../services/ActivityService.js";
 
 const AddActivity = () => {
   const [courses, setCourses] = useState([]);
@@ -21,38 +24,37 @@ const AddActivity = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log(formData);
-      const response = await axiosCustom.post("/activities", formData);
-      if (response?.data) {
+      const response = await createActivity(axiosCustom, formData);
+      if (response) {
         navigate(`/courses/${formData.idCourse}`);
       }
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      console.error("Failed to create activity", error);
     }
   };
 
   useEffect(() => {
-    const getCourses = async () => {
+    const fetchCourses = async () => {
       try {
-        const response = await axiosCustom.get("/courses");
-        setCourses(response.data);
+        const coursesData = await getCourses(axiosCustom);
+        setCourses(coursesData);
       } catch (error) {
-        console.log(error);
+        console.error("Failed to fetch courses data", error);
       }
     };
 
-    const getProfs = async () => {
+    const fetchProfs = async () => {
       try {
-        const response = await axiosCustom.get("/users");
-        setProfs(response.data);
+        const profsData = await getProfessors(axiosCustom);
+        setProfs(profsData);
       } catch (error) {
-        console.log(error);
+        console.error("Failed to fetch professors data", error);
       }
     };
 
-    getCourses();
-    getProfs();
-  }, []);
+    fetchCourses();
+    fetchProfs();
+  }, [axiosCustom]);
 
   const handleChange = (e) => {
     console.log(e.target.id);
@@ -119,13 +121,11 @@ const AddActivity = () => {
             onChange={handleChange}
             defaultValue={profs[0]?.uuid}
           >
-            {profs
-              .filter((p) => p.role === "professor")
-              .map((p) => (
-                <option key={p.uuid} value={p.uuid}>
-                  {p.name}
-                </option>
-              ))}
+            {profs.map((p) => (
+              <option key={p.uuid} value={p.uuid}>
+                {p.name}
+              </option>
+            ))}
           </select>
         </div>
 

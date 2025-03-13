@@ -90,7 +90,7 @@ const Sidebar = () => {
       <ul className={style.sidebarMenu}>
         {activities.map((a) => (
           <li key={a.uuid} className={style.sidebarItem}>
-            <NavLink to={`/attendance/${a.uuid}`} className={style.itemText}>
+            <NavLink to={`/activities/${a.uuid}`} className={style.itemText}>
               {expanded && <span className={style.label}>{a.name}</span>}
             </NavLink>
           </li>

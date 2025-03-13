@@ -6,7 +6,7 @@ import ROLES_LIST from "../config/rolesList.js";
 const router = express.Router();
 
 router.get(
-  "/attendances/:idActivity",
+  "/attendances/:id",
   verifyRoles(ROLES_LIST[1]),
   getActivityAttendances
 );

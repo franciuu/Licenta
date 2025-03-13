@@ -4,7 +4,7 @@ import useAxiosCustom from "../hooks/useAxiosCustom";
 import Layout from "./Layout";
 import style from "../styles/Activity.module.css";
 
-const ViewActivity = () => {
+const TakeAttendance = () => {
   const [activity, setActivity] = useState(null);
   const [matches, setMatches] = useState(null);
   const [running, setRunning] = useState(false);
@@ -162,4 +162,4 @@ const ViewActivity = () => {
   );
 };
 
-export default ViewActivity;
+export default TakeAttendance;

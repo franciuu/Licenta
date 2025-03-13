@@ -1,42 +1,19 @@
 import { useState, useEffect } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import useAxiosCustom from "../hooks/useAxiosCustom";
-import { useNavigate, useLocation, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Layout from "./Layout";
 import ActivityCard from "../components/ActivityCard.js";
 import Swal from "sweetalert2";
+import { getCourseById } from "../services/CourseService.js";
+import { getActivitesByCourse } from "../services/ActivityService.js";
 
 const ViewCourse = () => {
   const [course, setCourse] = useState({});
   const [activities, setActivities] = useState([]);
   const axiosCustom = useAxiosCustom();
   const navigate = useNavigate();
-  const location = useLocation();
   const { id } = useParams();
-
-  const getCourse = async () => {
-    try {
-      const response = await axiosCustom.get(`/courses/${id}`);
-      setCourse(response.data);
-      console.log(response.data);
-    } catch (err) {
-      console.log(err);
-      navigate("/", { state: { from: location }, replace: true });
-    }
-  };
-
-  const getActivities = async () => {
-    try {
-      const response = await axiosCustom.get(`/activities/course/${id}`);
-      setActivities(response.data);
-      console.log(response.data);
-    } catch (error) {
-      console.error(
-        "Error fetching activities:",
-        error.response?.data || error.message
-      );
-    }
-  };
 
   const deleteCourse = (uuid) => {
     Swal.fire({
@@ -65,9 +42,28 @@ const ViewCourse = () => {
   };
 
   useEffect(() => {
-    getCourse();
-    getActivities();
-  }, []);
+    const fetchCourseData = async () => {
+      try {
+        const courseData = await getCourseById(axiosCustom, id);
+        setCourse(courseData);
+      } catch (error) {
+        console.error("Failed to fetch course data", error);
+      }
+    };
+
+    const fetchActivitiesData = async () => {
+      try {
+        const activitiesData = await getActivitesByCourse(axiosCustom, id);
+        setActivities(activitiesData);
+      } catch (error) {
+        console.error("Failed to fetch activities data", error);
+      }
+    };
+
+    fetchCourseData();
+    fetchActivitiesData();
+  }, [axiosCustom, id]);
+
   return (
     <Layout>
       <h1>{course.name}</h1>

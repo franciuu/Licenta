@@ -9,7 +9,7 @@ import AddStudent from "./pages/AddStudent.js";
 import ViewStudent from "./pages/ViewStudent.js";
 import Courses from "./pages/Courses.js";
 import AddCourse from "./pages/AddCourse.js";
-import ViewActivity from "./pages/ViewActivity.js";
+import TakeAttendance from "./pages/TakeAttendance.js";
 import EditStudent from "./pages/EditStudent.js";
 import AddActivity from "./pages/AddActivity.js";
 import PersonalCalendar from "./pages/PersonalCalendar.js";
@@ -37,15 +37,12 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />}></Route>
             <Route path="/students" element={<Students />}></Route>
             <Route path="/students/:id" element={<ViewStudent />}></Route>
-            <Route path="/activities/:id" element={<ViewActivity />}></Route>
+            <Route path="/activities/:id" element={<ViewAttendance />}></Route>
           </Route>
 
           <Route element={<RequireAuth allowedRoles={["professor"]} />}>
             <Route path="/calendar" element={<PersonalCalendar />}></Route>
-            <Route
-              path="/attendance/:idActivity"
-              element={<ViewAttendance />}
-            ></Route>
+            <Route path="/attendance/:id" element={<TakeAttendance />}></Route>
           </Route>
 
           <Route element={<RequireAuth allowedRoles={["admin"]} />}>

@@ -7,11 +7,11 @@ export const getPersonalEnrollments = async (req, res) => {
   }
 };
 export const createEnrollment = async (req, res) => {
-  const { idStudent, idActivity } = req.body;
+  const { idStudent, id } = req.body;
   try {
     await Enrollment.create({
       idStudent: idStudent,
-      idActivity: idActivity,
+      id: id,
     });
     res.status(201).json({ msg: "Successful" });
   } catch (error) {

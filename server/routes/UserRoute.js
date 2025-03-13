@@ -5,6 +5,7 @@ import {
   createUser,
   updateUser,
   deleteUser,
+  getProfessors,
 } from "../controllers/UsersController.js";
 import { verifyRoles } from "../middlewares/verifyRole.js";
 import ROLES_LIST from "../config/rolesList.js";
@@ -16,5 +17,6 @@ router.get("/users/:id", verifyRoles(ROLES_LIST[0]), getUserById);
 router.post("/users", verifyRoles(ROLES_LIST[0]), createUser);
 router.patch("/users/:id", verifyRoles(ROLES_LIST[0]), updateUser);
 router.delete("/users/:id", verifyRoles(ROLES_LIST[0]), deleteUser);
+router.get("/professors", verifyRoles(ROLES_LIST[0]), getProfessors);
 
 export default router;
