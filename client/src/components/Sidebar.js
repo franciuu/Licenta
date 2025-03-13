@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BsChevronBarRight, BsChevronBarLeft } from "react-icons/bs";
 import {
   FaHome,
@@ -11,14 +11,33 @@ import {
 } from "react-icons/fa";
 import style from "../styles/Sidebar.module.css";
 import useAuth from "../hooks/useAuth";
+import useAxiosCustom from "../hooks/useAxiosCustom";
 
 const Sidebar = () => {
   const { auth } = useAuth();
   const [expanded, setExpanded] = useState(true);
+  const [activities, setActivities] = useState([]);
+  const axiosCustom = useAxiosCustom();
 
   const toggleSidebar = () => {
     setExpanded((curr) => !curr);
   };
+
+  const getActivities = async () => {
+    try {
+      const response = await axiosCustom.get(`/activities/personal`);
+      setActivities(response.data);
+    } catch (error) {
+      console.error(
+        "Error fetching activities:",
+        error.response?.data || error.message
+      );
+    }
+  };
+
+  useEffect(() => {
+    getActivities();
+  }, []);
 
   return (
     <aside className={style.sidebar}>
@@ -67,7 +86,16 @@ const Sidebar = () => {
           </NavLink>
         </li>
       </ul>
-      {/* {auth.role === "professor" && expanded && <p>MY ACTIVITIES</p>} */}
+      {auth.role === "professor" && expanded && <p>MY ACTIVITIES</p>}
+      <ul className={style.sidebarMenu}>
+        {activities.map((a) => (
+          <li key={a.uuid} className={style.sidebarItem}>
+            <NavLink to={`/attendance/${a.uuid}`} className={style.itemText}>
+              {expanded && <span className={style.label}>{a.name}</span>}
+            </NavLink>
+          </li>
+        ))}
+      </ul>
       <div className={style.sidebarFooter}>
         <img
           src="https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&bold=true"

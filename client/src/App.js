@@ -42,7 +42,10 @@ function App() {
 
           <Route element={<RequireAuth allowedRoles={["professor"]} />}>
             <Route path="/calendar" element={<PersonalCalendar />}></Route>
-            <Route path="/attendance/:id" element={<ViewAttendance />}></Route>
+            <Route
+              path="/attendance/:idActivity"
+              element={<ViewAttendance />}
+            ></Route>
           </Route>
 
           <Route element={<RequireAuth allowedRoles={["admin"]} />}>

@@ -1,0 +1,10 @@
+# Ignoră fișiere și directoare generate automat
+__pycache__/
+*.pyc
+
+# Virtual environment
+venv/
+
+# Editor-specific files (opțional)
+*.vscode/
+*.idea/

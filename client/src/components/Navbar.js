@@ -18,7 +18,9 @@ const Navbar = () => {
   return (
     <header>
       <nav className={style.navbar}>
-        <button onClick={handleLogout}>Log out</button>
+        <button onClick={handleLogout} className={style.btn}>
+          Log out
+        </button>
       </nav>
     </header>
   );

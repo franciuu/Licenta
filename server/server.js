@@ -11,6 +11,8 @@ import UploadRoute from "./routes/UploadRoute.js";
 import CourseRoute from "./routes/CourseRoute.js";
 import ActivityRoute from "./routes/ActivityRoute.js";
 import AIRoute from "./routes/AIRoute.js";
+import AttendanceRoute from "./routes/AttendanceRoute.js";
+import EnrollmentRoute from "./routes/EnrollmentRoute.js";
 
 import "./models/index.js";
 import { verifyJWT } from "./middlewares/verifyJWT.js";
@@ -26,8 +28,8 @@ app.use(
   })
 );
 
-app.use(express.json()); // pentru a parsa corpul cererii JSON
-app.use(express.urlencoded({ extended: true })); // pentru a parsa formularele urlencoded
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 (async () => {
@@ -51,7 +53,9 @@ app.use(StudentRoute);
 app.use(UploadRoute);
 app.use(CourseRoute);
 app.use(ActivityRoute);
+app.use(AttendanceRoute);
 app.use(AIRoute);
+app.use(EnrollmentRoute);
 
 app.listen(process.env.PORT, () => {
   console.log("server started on port 5000");

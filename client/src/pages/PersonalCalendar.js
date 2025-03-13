@@ -65,7 +65,7 @@ const PersonalCalendar = () => {
   };
   return (
     <Layout>
-      <button onClick={handleClick}>Apasa</button>
+      {/* <button onClick={handleClick}>Apasa</button> */}
       <Calendar
         localizer={localizer}
         events={myEvents}
@@ -73,7 +73,6 @@ const PersonalCalendar = () => {
         endAccessor="end"
         defaultView="week"
         onSelectEvent={(event) => handleSelectEvent(event)}
-        style={{ height: "100vh" }}
       />
     </Layout>
   );

@@ -1,4 +1,6 @@
 import Activity from "../models/Activity.js";
+import User from "../models/User.js";
+import Course from "../models/Course.js";
 
 export const getCourseActivities = async (req, res) => {
   try {
@@ -32,6 +34,16 @@ export const getActivityById = async (req, res) => {
       where: {
         uuid: req.params.id,
       },
+      include: [
+        {
+          model: User,
+          attributes: ["name"],
+        },
+        {
+          model: Course,
+          attributes: ["name"],
+        },
+      ],
     });
     if (response) {
       return res.status(200).json(response);
@@ -45,7 +57,6 @@ export const getActivityById = async (req, res) => {
 export const createActivity = async (req, res) => {
   const { name, startTime, endTime, room, idCourse, idProf, dayOfWeek } =
     req.body;
-  console.log(req.body);
   try {
     await Activity.create({
       name: name,

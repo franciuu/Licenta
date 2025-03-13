@@ -1,14 +1,10 @@
 import express from "express";
-import { getActivityAttendances } from "../controllers/AttendancesController.js";
+import { createEnrollment } from "../controllers/EnrollmentController.js";
 import { verifyRoles } from "../middlewares/verifyRole.js";
 import ROLES_LIST from "../config/rolesList.js";
 
 const router = express.Router();
 
-router.get(
-  "/attendances/:idActivity",
-  verifyRoles(ROLES_LIST[1]),
-  getActivityAttendances
-);
+router.post("/enrollments", verifyRoles(ROLES_LIST[0]), createEnrollment);
 
 export default router;

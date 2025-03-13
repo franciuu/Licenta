@@ -1,22 +1,31 @@
-import { spawn } from "child_process";
+import axios from "axios";
+import markAttendance from "../services/attendanceService.js";
 
-export const processAI = (req, res) => {
+export const getRecognize = async (req, res) => {
   try {
-    const process = spawn("python", ["./scripts/test.py"]);
+    const { imageData, activityId } = req.body;
 
-    let result = "";
-    process.stdout.on("data", (data) => {
-      result += data.toString();
+    console.log(
+      "Imaginea primită:",
+      imageData ? imageData.slice(0, 100) : "Nicio imagine"
+    );
+    console.log("ID Activitate:", activityId);
+
+    const pyRes = await axios.post("http://localhost:5001/recognize", {
+      imageData,
     });
 
-    process.stderr.on("data", (data) => {
-      console.error(`Python error: ${data}`);
-    });
+    const { identity, confidence } = pyRes.data;
 
-    process.on("close", () => {
-      res.json({ message: result.trim() }); // Trimite un singur răspuns JSON
+    if (identity && confidence >= 0.9) {
+      await markAttendance(identity, activityId);
+    }
+
+    res.json({
+      recognized_faces: identity ? [{ name: identity }] : [],
     });
   } catch (error) {
-    res.status(500).json({ msg: error.message });
+    console.error("Eroare în recunoaștere:", error);
+    res.status(500).json({ error: "Eroare la recunoaștere" });
   }
 };

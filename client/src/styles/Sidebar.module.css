@@ -4,7 +4,6 @@
   display: flex;
   align-items: center;
   flex-direction: column;
-  row-gap: 3rem;
   background-color: var(--background-card);
   border-right: solid 1px #ddd;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -29,7 +28,9 @@
   border: none;
   background-color: #f9fafb;
   border-radius: 4px;
-  cursor: pointer;
+  color: black;
+  padding: 0;
+  min-width: 0;
 }
 
 .toggleButton:hover {
@@ -45,8 +46,7 @@
 .sidebarItem {
   display: flex;
   align-items: center;
-  padding: 8px 12px;
-  margin: 4px 0;
+  padding: 8px 10px;
   font-weight: 500;
   border-radius: 4px;
   cursor: pointer;
@@ -65,6 +65,7 @@
 .itemText {
   display: flex;
   align-items: center;
+  font-size: 10px;
 }
 
 .icon {

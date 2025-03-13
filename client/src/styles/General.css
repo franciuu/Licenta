@@ -26,35 +26,6 @@ body {
   color: var(--text-main);
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 20px 0;
-  font-size: 16px;
-  text-align: left;
-  background-color: var(--table-background);
-  border: 1px solid var(--table-border);
-}
-
-thead {
-  background-color: var(--table-header);
-  color: white;
-}
-
-th,
-td {
-  padding: 12px 15px;
-  border: 1px solid var(--table-border);
-}
-
-tr:nth-child(even) {
-  background-color: var(--table-row-even);
-}
-
-thead th {
-  font-weight: bold;
-}
-
 .loader-container {
   display: flex;
   justify-content: center;
@@ -87,4 +58,36 @@ a {
 
 a:hover {
   color: var(--button-hover);
+}
+
+.rbc-calendar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: auto !important;
+  padding: 20px;
+}
+
+.rbc-header {
+  background-color: #e2e3e3;
+  color: rgb(0, 0, 0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 46px;
+}
+.rbc-time-view .rbc-time-gutter {
+  background-color: #e2e3e3;
+}
+.rbc-time-header-gutter {
+  background-color: #e2e3e3;
+}
+.rbc-allday-cell {
+  display: none;
+}
+.rbc-time-header-cell .rbc-today {
+  background-color: #86a5c2;
+  color: white;
 }
