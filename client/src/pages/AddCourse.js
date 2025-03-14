@@ -6,6 +6,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import Layout from "./Layout";
 import styles from "../styles/AddCourse.module.css";
+import { createCourse } from "../services/CourseService";
 
 const schema = Yup.object().shape({
   name: Yup.string().required("Name is required"),
@@ -22,27 +23,27 @@ const AddCourse = () => {
   } = useForm({
     resolver: yupResolver(schema),
   });
-  const [name, setName] = useState("");
-  const [program, setProgram] = useState("Bachelor");
+  const [formData, setFormData] = useState({
+    name: "",
+    program: "Bachelor",
+  });
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const axiosCustom = useAxiosCustom();
 
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
+
   const addCourse = async () => {
     try {
-      const response = await axiosCustom.post("/courses", {
-        name,
-        program,
-      });
-      if (response?.data) {
+      const courseData = createCourse(axiosCustom, formData);
+      if (courseData) {
         navigate("/courses");
       }
-    } catch (err) {
-      if (err.response) {
-        setError(err.response.data.msg);
-      } else {
-        setError("An unexpected error occurred");
-      }
+    } catch (error) {
+      setError(error.response.data.msg);
+      console.error("Failed to create activity", error);
     }
   };
 
@@ -59,9 +60,9 @@ const AddCourse = () => {
                 {...register("name")}
                 type="text"
                 id="name"
-                value={name}
+                value={formData.name}
                 placeholder="Course Name"
-                onChange={(e) => setName(e.target.value)}
+                onChange={handleChange}
               />
               <p className={styles.error}>{errors.name?.message}</p>
             </div>
@@ -72,8 +73,8 @@ const AddCourse = () => {
               <select
                 {...register("program")}
                 id="program"
-                value={program}
-                onChange={(e) => setProgram(e.target.value)}
+                value={formData.program}
+                onChange={handleChange}
               >
                 <option value="Bachelor">Bachelor</option>
                 <option value="Master">Master</option>

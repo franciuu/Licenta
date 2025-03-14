@@ -17,3 +17,13 @@ export const getCourseById = async (axiosCustom, id) => {
     throw error;
   }
 };
+
+export const createCourse = async (axiosCustom, formData) => {
+  try {
+    const response = await axiosCustom.post("/courses", formData);
+    return response.data;
+  } catch (error) {
+    console.error("Error creating course:", error);
+    throw error;
+  }
+};
