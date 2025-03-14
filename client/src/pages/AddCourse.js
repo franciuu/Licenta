@@ -42,7 +42,7 @@ const AddCourse = () => {
         navigate("/courses");
       }
     } catch (error) {
-      setError(error.response.data.msg);
+      setError(error.response?.data?.msg);
       console.error("Failed to create activity", error);
     }
   };

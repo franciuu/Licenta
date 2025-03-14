@@ -17,3 +17,12 @@ export const getProfessors = async (axiosCustom) => {
     throw error;
   }
 };
+
+export const deleteUser = async (axiosCustom, id) => {
+  try {
+    const response = await axiosCustom.delete(`/users/${id}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

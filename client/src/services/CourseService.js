@@ -3,7 +3,6 @@ export const getCourses = async (axiosCustom) => {
     const response = await axiosCustom.get("/courses");
     return response.data;
   } catch (error) {
-    console.error("Error fetching data: ", error);
     throw error;
   }
 };
@@ -13,7 +12,6 @@ export const getCourseById = async (axiosCustom, id) => {
     const response = await axiosCustom.get(`/courses/${id}`);
     return response.data;
   } catch (error) {
-    console.error("Error fetching data: ", error);
     throw error;
   }
 };
@@ -23,7 +21,6 @@ export const createCourse = async (axiosCustom, formData) => {
     const response = await axiosCustom.post("/courses", formData);
     return response.data;
   } catch (error) {
-    console.error("Error creating course:", error);
     throw error;
   }
 };

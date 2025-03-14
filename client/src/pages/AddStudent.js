@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import useAxiosCustom from "../hooks/useAxiosCustom";
 import Layout from "./Layout";
 import StudentForm from "../components/StudentForm";
+import { createStudent } from "../services/StudentService";
 
 const AddStudent = () => {
   const navigate = useNavigate();
@@ -15,17 +16,13 @@ const AddStudent = () => {
       if (data.images.length > 0) {
         imageUrls = await uploadImages(data.images);
       }
-      console.log(data.images);
-      const response = await axiosCustom.post("/students", {
-        ...data,
-        images: imageUrls,
-      });
-
-      if (response?.data) {
+      const studentData = await createStudent(axiosCustom, data, imageUrls);
+      if (studentData) {
         navigate("/students");
       }
-    } catch (err) {
-      setError(err.response?.data?.msg || "An unexpected error occurred");
+    } catch (error) {
+      setError(error.response?.data?.msg);
+      console.error("Failed to create user", error);
     }
   };
 

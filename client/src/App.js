@@ -16,6 +16,7 @@ import PersonalCalendar from "./pages/PersonalCalendar.js";
 import ViewCourse from "./pages/ViewCourse.js";
 import ViewAttendance from "./pages/ViewAttendance.js";
 import NotFound from "./pages/NotFound.js";
+import Page404 from "./pages/404.js";
 
 import RequireAuth from "./components/RequireAuth.js";
 import PersistLogin from "./components/PersistLogin.js";
@@ -38,6 +39,7 @@ function App() {
             <Route path="/students" element={<Students />}></Route>
             <Route path="/students/:id" element={<ViewStudent />}></Route>
             <Route path="/activities/:id" element={<ViewAttendance />}></Route>
+            <Route path="/404" element={<Page404 />}></Route>
           </Route>
 
           <Route element={<RequireAuth allowedRoles={["professor"]} />}>

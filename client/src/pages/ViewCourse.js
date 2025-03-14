@@ -7,8 +7,10 @@ import ActivityCard from "../components/ActivityCard.js";
 import Swal from "sweetalert2";
 import { getCourseById } from "../services/CourseService.js";
 import { getActivitesByCourse } from "../services/ActivityService.js";
+import Loader from "../components/Loader.js";
 
 const ViewCourse = () => {
+  const [loadingCount, setLoadingCount] = useState(0);
   const [course, setCourse] = useState({});
   const [activities, setActivities] = useState([]);
   const axiosCustom = useAxiosCustom();
@@ -43,26 +45,42 @@ const ViewCourse = () => {
 
   useEffect(() => {
     const fetchCourseData = async () => {
+      setLoadingCount((prev) => prev + 1);
       try {
         const courseData = await getCourseById(axiosCustom, id);
         setCourse(courseData);
       } catch (error) {
+        if (error.response?.status === 404) {
+          navigate("/404");
+        }
         console.error("Failed to fetch course data", error);
+      } finally {
+        setLoadingCount((prev) => prev - 1);
       }
     };
 
     const fetchActivitiesData = async () => {
+      setLoadingCount((prev) => prev + 1);
       try {
         const activitiesData = await getActivitesByCourse(axiosCustom, id);
         setActivities(activitiesData);
       } catch (error) {
         console.error("Failed to fetch activities data", error);
+      } finally {
+        setLoadingCount((prev) => prev - 1);
       }
     };
 
     fetchCourseData();
     fetchActivitiesData();
   }, [axiosCustom, id]);
+
+  if (loadingCount > 0)
+    return (
+      <Layout>
+        <Loader />
+      </Layout>
+    );
 
   return (
     <Layout>

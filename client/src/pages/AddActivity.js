@@ -27,8 +27,8 @@ const AddActivity = () => {
     e.preventDefault();
     setLoadingCount((prev) => prev + 1);
     try {
-      const response = await createActivity(axiosCustom, formData);
-      if (response) {
+      const activityData = await createActivity(axiosCustom, formData);
+      if (activityData) {
         navigate(`/courses/${formData.idCourse}`);
       }
     } catch (error) {
