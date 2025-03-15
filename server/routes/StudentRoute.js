@@ -18,11 +18,7 @@ router.get(
   getStudentById
 );
 router.post("/students", verifyRoles(ROLES_LIST[0]), createStudent);
-router.put(
-  "/students/:id",
-  verifyRoles(ROLES_LIST[0], ROLES_LIST[1]),
-  updateStudent
-);
+router.put("/students/:id", verifyRoles(ROLES_LIST[0]), updateStudent);
 router.delete("/students/:id", verifyRoles(ROLES_LIST[0]), deleteStudent);
 
 export default router;

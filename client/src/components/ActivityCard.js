@@ -59,7 +59,7 @@ const ActivityCard = ({ info }) => {
           {info.startTime} - {info.endTime}
         </Card.Text>
         <button>
-          <Link to={`/activities/${info.uuid}`}>View</Link>
+          <Link to={`/admin/activities/${info.uuid}`}>View</Link>
         </button>
       </Card.Body>
     </Card>

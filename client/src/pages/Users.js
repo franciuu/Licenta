@@ -67,7 +67,7 @@ const Users = () => {
         Cell: ({ row }) => (
           <div>
             <button>
-              <Link to={`/users/edit/${row.original.uuid}`}>Edit</Link>
+              <Link to={`/admin/users/edit/${row.original.uuid}`}>Edit</Link>
             </button>
             <button onClick={() => onDeleteUser(row.original.uuid)}>
               Delete
@@ -88,7 +88,7 @@ const Users = () => {
 
   return (
     <Layout>
-      <Link to="/users/add" className="btn">
+      <Link to="/admin/users/add" className="btn">
         Add new user
       </Link>
 

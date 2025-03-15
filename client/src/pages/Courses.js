@@ -38,7 +38,7 @@ const Courses = () => {
   return (
     <Layout>
       <button>
-        <Link to="/courses/add">Add Course</Link>
+        <Link to="/admin/courses/add">Add Course</Link>
       </button>
       {courses?.length ? (
         <Container className="mt-4">

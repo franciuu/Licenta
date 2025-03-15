@@ -27,7 +27,7 @@ const EditUser = () => {
   const updateUser = async (data) => {
     try {
       await axiosCustom.patch(`/users/${id}`, data);
-      navigate("/users");
+      navigate("/admin/users");
     } catch (err) {
       setError(err.response?.data?.msg || "An unexpected error occurred");
     }

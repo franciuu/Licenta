@@ -29,7 +29,7 @@ const AddActivity = () => {
     try {
       const activityData = await createActivity(axiosCustom, formData);
       if (activityData) {
-        navigate(`/courses/${formData.idCourse}`);
+        navigate(`/admin/courses/${formData.idCourse}`);
       }
     } catch (error) {
       console.error("Failed to create activity", error);

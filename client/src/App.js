@@ -17,6 +17,7 @@ import ViewCourse from "./pages/ViewCourse.js";
 import ViewAttendance from "./pages/ViewAttendance.js";
 import NotFound from "./pages/NotFound.js";
 import Page404 from "./pages/404.js";
+import ActivityEnrollment from "./pages/ActivityEnrollment.js";
 
 import RequireAuth from "./components/RequireAuth.js";
 import PersistLogin from "./components/PersistLogin.js";
@@ -38,25 +39,45 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />}></Route>
             <Route path="/students" element={<Students />}></Route>
             <Route path="/students/:id" element={<ViewStudent />}></Route>
-            <Route path="/activities/:id" element={<ViewAttendance />}></Route>
+
             <Route path="/404" element={<Page404 />}></Route>
           </Route>
 
           <Route element={<RequireAuth allowedRoles={["professor"]} />}>
-            <Route path="/calendar" element={<PersonalCalendar />}></Route>
-            <Route path="/attendance/:id" element={<TakeAttendance />}></Route>
+            <Route
+              path="/professor/activities/:id"
+              element={<ViewAttendance />}
+            ></Route>
+            <Route
+              path="/professor/calendar"
+              element={<PersonalCalendar />}
+            ></Route>
+            <Route
+              path="/professor/attendance/:id"
+              element={<TakeAttendance />}
+            ></Route>
           </Route>
 
           <Route element={<RequireAuth allowedRoles={["admin"]} />}>
-            <Route path="/users" element={<Users />} />
-            <Route path="/users/add" element={<AddUser />}></Route>
-            <Route path="/users/edit/:id" element={<EditUser />}></Route>
-            <Route path="/students/add" element={<AddStudent />}></Route>
-            <Route path="/students/edit/:id" element={<EditStudent />}></Route>
-            <Route path="/courses" element={<Courses />}></Route>
-            <Route path="/courses/add" element={<AddCourse />}></Route>
-            <Route path="/courses/:id" element={<ViewCourse />}></Route>
-            <Route path="/activities/add" element={<AddActivity />}></Route>
+            <Route path="/admin/users" element={<Users />} />
+            <Route path="/admin/users/add" element={<AddUser />}></Route>
+            <Route path="/admin/users/edit/:id" element={<EditUser />}></Route>
+            <Route path="/admin/students/add" element={<AddStudent />}></Route>
+            <Route
+              path="/admin/students/edit/:id"
+              element={<EditStudent />}
+            ></Route>
+            <Route path="/admin/courses" element={<Courses />}></Route>
+            <Route path="/admin/courses/add" element={<AddCourse />}></Route>
+            <Route path="/admin/courses/:id" element={<ViewCourse />}></Route>
+            <Route
+              path="/admin/activities/add"
+              element={<AddActivity />}
+            ></Route>
+            <Route
+              path="/admin/activities/:id"
+              element={<ActivityEnrollment />}
+            ></Route>
           </Route>
         </Route>
 

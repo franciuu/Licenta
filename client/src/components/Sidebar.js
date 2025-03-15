@@ -56,7 +56,7 @@ const Sidebar = () => {
           </NavLink>
         </li>
         <li className={style.sidebarItem}>
-          <NavLink to="/users" className={style.itemText}>
+          <NavLink to="/admin/users" className={style.itemText}>
             <FaUserFriends className={style.icon} />
             {expanded && <span className={style.label}>Users</span>}
           </NavLink>
@@ -68,19 +68,19 @@ const Sidebar = () => {
           </NavLink>
         </li>
         <li className={style.sidebarItem}>
-          <NavLink to="/courses" className={style.itemText}>
+          <NavLink to="/admin/courses" className={style.itemText}>
             <FaBook className={style.icon} />
             {expanded && <span className={style.label}>Courses</span>}
           </NavLink>
         </li>
         <li className={style.sidebarItem}>
-          <NavLink to="/activities/add" className={style.itemText}>
+          <NavLink to="/admin/activities/add" className={style.itemText}>
             <FaChalkboardTeacher className={style.icon} />
             {expanded && <span className={style.label}>Add Activity</span>}
           </NavLink>
         </li>
         <li className={style.sidebarItem}>
-          <NavLink to="/calendar" className={style.itemText}>
+          <NavLink to="/professor/calendar" className={style.itemText}>
             <FaCalendarAlt className={style.icon} />
             {expanded && <span className={style.label}>My Schedule</span>}
           </NavLink>
@@ -90,7 +90,10 @@ const Sidebar = () => {
       <ul className={style.sidebarMenu}>
         {activities.map((a) => (
           <li key={a.uuid} className={style.sidebarItem}>
-            <NavLink to={`/activities/${a.uuid}`} className={style.itemText}>
+            <NavLink
+              to={`/professor/activities/${a.uuid}`}
+              className={style.itemText}
+            >
               {expanded && <span className={style.label}>{a.name}</span>}
             </NavLink>
           </li>

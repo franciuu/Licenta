@@ -39,7 +39,7 @@ const AddCourse = () => {
     try {
       const courseData = createCourse(axiosCustom, formData);
       if (courseData) {
-        navigate("/courses");
+        navigate("/admin/courses");
       }
     } catch (error) {
       setError(error.response?.data?.msg);

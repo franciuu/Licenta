@@ -35,7 +35,7 @@ const ViewCourse = () => {
             text: "User has been deleted.",
             icon: "success",
           });
-          navigate("/courses");
+          navigate("/admin/courses");
         } catch (error) {
           console.log(error);
         }

@@ -86,7 +86,7 @@ const Students = () => {
               <Link to={`/students/${row.original.uuid}`}>View</Link>
             </button>
             <button>
-              <Link to={`/students/edit/${row.original.uuid}`}>Edit</Link>
+              <Link to={`/admin/students/edit/${row.original.uuid}`}>Edit</Link>
             </button>
             <button onClick={() => onDeleteStudent(row.original.uuid)}>
               Delete
@@ -107,7 +107,7 @@ const Students = () => {
 
   return (
     <Layout>
-      <Link to="/students/add" className="btn">
+      <Link to="/admin/students/add" className="btn">
         Add new student
       </Link>
       <h1>Student List</h1>

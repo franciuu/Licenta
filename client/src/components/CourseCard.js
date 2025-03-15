@@ -16,7 +16,7 @@ const CourseCard = ({ info }) => {
           {info.programLevel}
         </Card.Subtitle>
         <button>
-          <Link to={`/courses/${info.uuid}`}>View</Link>
+          <Link to={`/admin/courses/${info.uuid}`}>View</Link>
         </button>
       </Card.Body>
     </Card>

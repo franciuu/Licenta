@@ -56,7 +56,7 @@ const PersonalCalendar = () => {
 
   const handleSelectEvent = (event) => {
     const selectedEvent = event.originalData;
-    navigate(`/attendance/${selectedEvent.uuid}`);
+    navigate(`/professor/attendance/${selectedEvent.uuid}`);
   };
 
   const handleClick = async () => {

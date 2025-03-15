@@ -13,7 +13,7 @@ const AddUser = () => {
     try {
       const response = await axiosCustom.post("/users", data);
       if (response?.data) {
-        navigate("/users");
+        navigate("/admin/users");
       }
     } catch (err) {
       setError(err.response?.data?.msg || "An unexpected error occurred");
