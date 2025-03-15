@@ -6,13 +6,19 @@ import { axiosCustom } from "../api/axios";
 import { useNavigate } from "react-router-dom";
 import Loader from "../components/Loader";
 import { getStudentByEmail } from "../services/StudentService";
+import {
+  createEnrollment,
+  getActivityEnrollments,
+} from "../services/EnrollmentService";
 
 const ActivityEnrollment = () => {
   const [activity, setActivity] = useState({});
   const [email, setEmail] = useState("");
   const [notFound, setNotFound] = useState("");
+  const [exist, setExist] = useState("");
   const [student, setStudent] = useState(null);
   const [loadingCount, setLoadingCount] = useState(0);
+  const [enrollments, setEnrollments] = useState([]);
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -32,7 +38,20 @@ const ActivityEnrollment = () => {
       }
     };
 
+    const fetchEnrollmentsData = async () => {
+      setLoadingCount((prev) => prev + 1);
+      try {
+        const enrollmentsData = await getActivityEnrollments(axiosCustom, id);
+        setEnrollments(enrollmentsData);
+      } catch (error) {
+        console.error("Failed to fetch student data", error);
+      } finally {
+        setLoadingCount((prev) => prev - 1);
+      }
+    };
+
     fetchActivityData();
+    fetchEnrollmentsData();
   }, []);
 
   const fetchStudentData = async () => {
@@ -46,6 +65,25 @@ const ActivityEnrollment = () => {
         setStudent(null);
       }
       console.error("Failed to fetch student data", error);
+    }
+  };
+
+  const onAddEnrollment = async () => {
+    try {
+      const enrollmentData = await createEnrollment(
+        axiosCustom,
+        student.uuid,
+        id
+      );
+      if (enrollmentData) {
+        alert("ok");
+      }
+      setExist("");
+    } catch (error) {
+      if (error.response?.status === 409) {
+        setExist(error.response.data.msg);
+      }
+      console.error("Failed to add enrollment", error);
     }
   };
 
@@ -73,7 +111,24 @@ const ActivityEnrollment = () => {
         onChange={(e) => setEmail(e.target.value)}
       />
       <button onClick={fetchStudentData}>Search</button>
-      {student ? <p>{student.name}</p> : <p>{notFound}</p>}
+      {student ? (
+        <div>
+          <p>{student.name}</p>
+          <button onClick={onAddEnrollment}>Add</button>
+        </div>
+      ) : (
+        <p>{notFound}</p>
+      )}
+      {exist.length > 0 && <p>{exist}</p>}
+      {enrollments.length > 0 ? (
+        <p>
+          {enrollments.map((e) => (
+            <p key={e.uuid}>{e.name}</p>
+          ))}
+        </p>
+      ) : (
+        <p>Nu sunt</p>
+      )}
     </Layout>
   );
 };
