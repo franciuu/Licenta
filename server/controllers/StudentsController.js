@@ -10,6 +10,7 @@ export const getStudents = async (req, res) => {
     res.status(500).json({ msg: error.message });
   }
 };
+
 export const getStudentById = async (req, res) => {
   try {
     const response = await Student.findOne({
@@ -26,6 +27,25 @@ export const getStudentById = async (req, res) => {
     res.status(500).json({ msg: error.message });
   }
 };
+
+export const getStudentByEmail = async (req, res) => {
+  try {
+    const { email } = req.query;
+    const trimmedEmail = email?.trim().toLowerCase();
+    const response = await Student.findOne({
+      where: {
+        email: trimmedEmail,
+      },
+    });
+    if (response) {
+      return res.status(200).json(response);
+    }
+    res.status(404).json({ msg: "Student not found" });
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
+};
+
 export const createStudent = async (req, res) => {
   const { name, birthDate, email, studyYear, images } = req.body;
 
@@ -49,6 +69,7 @@ export const createStudent = async (req, res) => {
     res.status(400).json({ msg: error.message });
   }
 };
+
 export const updateStudent = async (req, res) => {
   const { name, birthDate, email, studyYear, images } = req.body;
   const student = await Student.findOne({
@@ -80,6 +101,7 @@ export const updateStudent = async (req, res) => {
     });
   }
 };
+
 export const deleteStudent = async (req, res) => {
   try {
     const student = await Student.findOne({

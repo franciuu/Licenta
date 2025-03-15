@@ -13,10 +13,10 @@ import ROLES_LIST from "../config/rolesList.js";
 const router = express.Router();
 
 router.get("/users", verifyRoles(ROLES_LIST[0], ROLES_LIST[1]), getUsers);
-router.get("/users/:id", verifyRoles(ROLES_LIST[0]), getUserById);
 router.post("/users", verifyRoles(ROLES_LIST[0]), createUser);
+router.get("/professors", verifyRoles(ROLES_LIST[0]), getProfessors);
+router.get("/users/:id", verifyRoles(ROLES_LIST[0]), getUserById);
 router.patch("/users/:id", verifyRoles(ROLES_LIST[0]), updateUser);
 router.delete("/users/:id", verifyRoles(ROLES_LIST[0]), deleteUser);
-router.get("/professors", verifyRoles(ROLES_LIST[0]), getProfessors);
 
 export default router;
