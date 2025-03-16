@@ -13,7 +13,7 @@ def decode_image(image_base64):
     except Exception as e:
         raise ValueError(f"Eroare la decodificarea imaginii: {str(e)}")
 
-def recognize_faces(image_data):
+def recognize_faces(image_data, db_connection=None):
     image = decode_image(image_data)
 
     os.makedirs("temp", exist_ok=True)
@@ -22,8 +22,19 @@ def recognize_faces(image_data):
     filename = f"temp/image_{timestamp}.jpg"
     cv2.imwrite(filename, image)
 
-    # Aici poți pune logica de recunoaștere facială cu modelul tău
-    # În loc de DeepFace, folosesc un exemplu de recunoaștere generic
+    if db_connection:
+        try:
+            cursor = db_connection.cursor()
+            cursor.execute("SELECT imageUrl, idStudent FROM images")
+            results = cursor.fetchall()
+            print("✅ URL-urile din DB:")
+            for row in results:
+                print(f"- Student: {row[0]} | URL: {row[1]}")
+            cursor.close()
+        except Exception as e:
+            print(f"❌ Eroare interogare DB în recognize_faces: {e}")
+    else:
+        print("Nu s-a primit conexiunea la baza de date.")
 
     # Simulare răspuns pentru testare (în loc de real face recognition)
     identity = "c9799df4-18c7-48d0-8de3-ad249ef6fae0"
