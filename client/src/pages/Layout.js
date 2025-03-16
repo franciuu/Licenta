@@ -1,6 +1,7 @@
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import style from "../styles/Layout.module.css";
+import { ToastContainer } from "react-toastify";
 
 const Layout = ({ children }) => {
   return (
@@ -11,7 +12,10 @@ const Layout = ({ children }) => {
           <Sidebar />
         </div>
         <div className={style.layoutContent}>
-          <main>{children}</main>
+          <main>
+            {children}
+            <ToastContainer autoClose={2000} style={{ top: "80px" }} />
+          </main>
         </div>
       </div>
     </div>

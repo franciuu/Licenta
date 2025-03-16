@@ -11,8 +11,10 @@ export const getRecognize = async (req, res) => {
     );
     console.log("ID Activitate:", activityId);
 
+    const cleanedImage = imageData.replace(/^data:image\/\w+;base64,/, "");
+
     const pyRes = await axios.post("http://localhost:5001/recognize", {
-      imageData,
+      imageData: cleanedImage,
     });
 
     const { identity, confidence } = pyRes.data;

@@ -3,7 +3,7 @@ from flask_cors import CORS
 from controllers.FaceRecognition import recognize_faces
 
 app = Flask(__name__)
-CORS(app)  # Permite accesul frontend-ului la API
+CORS(app)  
 
 @app.route('/recognize', methods=['POST'])
 def face_recognition():

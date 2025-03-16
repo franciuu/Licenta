@@ -8,3 +8,5 @@ venv/
 # Editor-specific files (opțional)
 *.vscode/
 *.idea/
+
+/temp

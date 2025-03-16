@@ -10,6 +10,7 @@ import {
   createEnrollment,
   getActivityEnrollments,
 } from "../services/EnrollmentService";
+import { toast } from "react-toastify";
 
 const ActivityEnrollment = () => {
   const [activity, setActivity] = useState({});
@@ -21,6 +22,18 @@ const ActivityEnrollment = () => {
   const [enrollments, setEnrollments] = useState([]);
   const { id } = useParams();
   const navigate = useNavigate();
+
+  const fetchEnrollmentsData = async () => {
+    setLoadingCount((prev) => prev + 1);
+    try {
+      const enrollmentsData = await getActivityEnrollments(axiosCustom, id);
+      setEnrollments(enrollmentsData);
+    } catch (error) {
+      console.error("Failed to fetch student data", error);
+    } finally {
+      setLoadingCount((prev) => prev - 1);
+    }
+  };
 
   useEffect(() => {
     const fetchActivityData = async () => {
@@ -38,21 +51,34 @@ const ActivityEnrollment = () => {
       }
     };
 
-    const fetchEnrollmentsData = async () => {
-      setLoadingCount((prev) => prev + 1);
-      try {
-        const enrollmentsData = await getActivityEnrollments(axiosCustom, id);
-        setEnrollments(enrollmentsData);
-      } catch (error) {
-        console.error("Failed to fetch student data", error);
-      } finally {
-        setLoadingCount((prev) => prev - 1);
-      }
-    };
-
     fetchActivityData();
     fetchEnrollmentsData();
   }, []);
+
+  const onAddEnrollment = async () => {
+    try {
+      const enrollmentData = await createEnrollment(
+        axiosCustom,
+        student.uuid,
+        id
+      );
+      if (enrollmentData) {
+        fetchEnrollmentsData();
+        toast.success("Student enrolled successfully!", {
+          position: "top-right",
+        });
+      }
+      setExist("");
+    } catch (error) {
+      if (error.response?.status === 409) {
+        setExist(error.response.data.msg);
+        toast.warning("Student already enrolled!", {
+          position: "top-right",
+        });
+      }
+      console.error("Failed to add enrollment", error);
+    }
+  };
 
   const fetchStudentData = async () => {
     try {
@@ -65,25 +91,6 @@ const ActivityEnrollment = () => {
         setStudent(null);
       }
       console.error("Failed to fetch student data", error);
-    }
-  };
-
-  const onAddEnrollment = async () => {
-    try {
-      const enrollmentData = await createEnrollment(
-        axiosCustom,
-        student.uuid,
-        id
-      );
-      if (enrollmentData) {
-        alert("ok");
-      }
-      setExist("");
-    } catch (error) {
-      if (error.response?.status === 409) {
-        setExist(error.response.data.msg);
-      }
-      console.error("Failed to add enrollment", error);
     }
   };
 
@@ -121,11 +128,11 @@ const ActivityEnrollment = () => {
       )}
       {exist.length > 0 && <p>{exist}</p>}
       {enrollments.length > 0 ? (
-        <p>
+        <ul>
           {enrollments.map((e) => (
-            <p key={e.uuid}>{e.name}</p>
+            <li key={e.uuid}>{e.name}</li>
           ))}
-        </p>
+        </ul>
       ) : (
         <p>Nu sunt</p>
       )}

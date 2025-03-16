@@ -144,10 +144,7 @@ const TakeAttendance = () => {
             {matches?.length > 0 ? (
               <ul>
                 {matches.map((match, index) => (
-                  <li key={index}>
-                    {match.name} - Coordonate:{" "}
-                    {JSON.stringify(match.coordinates)}
-                  </li>
+                  <li key={index}>{match.name}</li>
                 ))}
               </ul>
             ) : (
