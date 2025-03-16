@@ -6,7 +6,7 @@ import style from "../styles/Activity.module.css";
 
 const TakeAttendance = () => {
   const [activity, setActivity] = useState(null);
-  const [matches, setMatches] = useState(null);
+  const [presentStudents, setPresentStudents] = useState([]); // ← listă cumulativă
   const [running, setRunning] = useState(false);
   const [timeStatus, setTimeStatus] = useState(false);
   const axiosCustom = useAxiosCustom();
@@ -39,10 +39,19 @@ const TakeAttendance = () => {
     try {
       const response = await axiosCustom.post("/rec", {
         imageData: base64Img,
-        activityId: id, // transmis clar către backend
+        activityId: id,
       });
 
-      setMatches(response.data.recognized_faces || []);
+      const newlyRecognized = response.data.recognized_faces || [];
+
+      // ✅ Adaugă doar studenții noi, fără duplicate
+      setPresentStudents((prev) => {
+        const existingNames = prev.map((item) => item.name);
+        const uniqueNew = newlyRecognized.filter(
+          (item) => !existingNames.includes(item.name)
+        );
+        return [...prev, ...uniqueNew];
+      });
     } catch (error) {
       console.log("Eroare la trimiterea imaginii:", error);
     }
@@ -139,21 +148,21 @@ const TakeAttendance = () => {
 
           <video ref={videoRef} autoPlay muted></video>
 
-          <div>
-            <h3>Rezultate:</h3>
-            {matches?.length > 0 ? (
+          <div className={style.results}>
+            <h3>Studenți marcați prezenți:</h3>
+            {presentStudents.length > 0 ? (
               <ul>
-                {matches.map((match, index) => (
-                  <li key={index}>{match.name}</li>
+                {presentStudents.map((student, index) => (
+                  <li key={index}>{student.name}</li>
                 ))}
               </ul>
             ) : (
-              <p>Nicio persoană identificată.</p>
+              <p>Niciun student marcat prezent încă.</p>
             )}
           </div>
         </div>
       ) : (
-        <p>Activity not found</p>
+        <p>Activitate negăsită.</p>
       )}
     </Layout>
   );

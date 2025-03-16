@@ -18,6 +18,6 @@ const markAttendance = async (studentId, activityId) => {
     },
   });
 
-  return attendance;
+  return { attendance, created };
 };
 export default markAttendance;
