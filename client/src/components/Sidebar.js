@@ -1,6 +1,5 @@
 import { NavLink } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { BsChevronBarRight, BsChevronBarLeft } from "react-icons/bs";
 import {
   FaHome,
   FaUserFriends,
@@ -15,13 +14,8 @@ import useAxiosCustom from "../hooks/useAxiosCustom";
 
 const Sidebar = () => {
   const { auth } = useAuth();
-  const [expanded, setExpanded] = useState(true);
   const [activities, setActivities] = useState([]);
   const axiosCustom = useAxiosCustom();
-
-  const toggleSidebar = () => {
-    setExpanded((curr) => !curr);
-  };
 
   const getActivities = async () => {
     try {
@@ -40,16 +34,13 @@ const Sidebar = () => {
   }, []);
 
   return (
-    <aside className={`${style.sidebar} ${expanded ? style.expanded : ""}`}>
+    <aside className={style.sidebar}>
       <div className={style.sidebarHeader}>
-        {expanded && <h2 className={style.logo}>Vision Roster</h2>}
-        <button className={style.toggleButton} onClick={toggleSidebar}>
-          {expanded ? <BsChevronBarLeft /> : <BsChevronBarRight />}
-        </button>
+        <h2 className={style.logo}>Vision Roster</h2>
       </div>
 
       <div className={style.menuContainer}>
-        {expanded && <p className={style.menuTitle}>MAIN MENU</p>}
+        <p className={style.menuTitle}>MAIN MENU</p>
         <ul className={style.sidebarMenu}>
           <li className={style.sidebarItem}>
             <NavLink
@@ -59,7 +50,7 @@ const Sidebar = () => {
               }
             >
               <FaHome className={style.icon} />
-              {expanded && <span className={style.label}>Dashboard</span>}
+              <span className={style.label}>Dashboard</span>
             </NavLink>
           </li>
           <li className={style.sidebarItem}>
@@ -70,7 +61,7 @@ const Sidebar = () => {
               }
             >
               <FaUserFriends className={style.icon} />
-              {expanded && <span className={style.label}>Users</span>}
+              <span className={style.label}>Users</span>
             </NavLink>
           </li>
           <li className={style.sidebarItem}>
@@ -81,7 +72,7 @@ const Sidebar = () => {
               }
             >
               <FaGraduationCap className={style.icon} />
-              {expanded && <span className={style.label}>Students</span>}
+              <span className={style.label}>Students</span>
             </NavLink>
           </li>
           <li className={style.sidebarItem}>
@@ -92,7 +83,7 @@ const Sidebar = () => {
               }
             >
               <FaBook className={style.icon} />
-              {expanded && <span className={style.label}>Courses</span>}
+              <span className={style.label}>Courses</span>
             </NavLink>
           </li>
           <li className={style.sidebarItem}>
@@ -103,7 +94,7 @@ const Sidebar = () => {
               }
             >
               <FaChalkboardTeacher className={style.icon} />
-              {expanded && <span className={style.label}>Add Activity</span>}
+              <span className={style.label}>Add Activity</span>
             </NavLink>
           </li>
           <li className={style.sidebarItem}>
@@ -114,31 +105,33 @@ const Sidebar = () => {
               }
             >
               <FaCalendarAlt className={style.icon} />
-              {expanded && <span className={style.label}>My Schedule</span>}
+              <span className={style.label}>My Schedule</span>
             </NavLink>
           </li>
         </ul>
       </div>
 
-      <div className={style.activitiesSection}>
-        {auth.role === "professor" && expanded && (
+      <div className={style.activitiesContainer}>
+        {auth.role === "professor" && (
           <p className={style.menuTitle}>MY ACTIVITIES</p>
         )}
-        <ul className={style.sidebarMenu}>
-          {activities.map((a) => (
-            <li key={a.uuid} className={style.sidebarItem}>
-              <NavLink
-                to={`/professor/activities/${a.uuid}`}
-                className={({ isActive }) =>
-                  `${style.itemText} ${isActive ? style.active : ""}`
-                }
-              >
-                <span className={style.activityIcon}>•</span>
-                {expanded && <span className={style.label}>{a.name}</span>}
-              </NavLink>
-            </li>
-          ))}
-        </ul>
+        <div className={style.activitiesSection}>
+          <ul className={style.sidebarMenu}>
+            {activities.map((a) => (
+              <li key={a.uuid} className={style.sidebarItem}>
+                <NavLink
+                  to={`/professor/activities/${a.uuid}`}
+                  className={({ isActive }) =>
+                    `${style.itemText} ${isActive ? style.active : ""}`
+                  }
+                >
+                  <span className={style.activityIcon}>•</span>
+                  <span className={style.label}>{a.name}</span>
+                </NavLink>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
 
       <div className={style.sidebarFooter}>
@@ -147,12 +140,10 @@ const Sidebar = () => {
           alt="Avatar"
           className={style.avatar}
         />
-        {expanded && (
-          <div className={style.userInfo}>
-            <h4 className={style.userName}>{auth.name || "User Name"}</h4>
-            <span className={style.userEmail}>{auth.email}</span>
-          </div>
-        )}
+        <div className={style.userInfo}>
+          <h4 className={style.userName}>{auth.name || "User Name"}</h4>
+          <span className={style.userEmail}>{auth.email}</span>
+        </div>
       </div>
     </aside>
   );

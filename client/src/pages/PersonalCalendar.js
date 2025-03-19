@@ -12,7 +12,6 @@ const PersonalCalendar = () => {
   const [myEvents, setMyEvents] = useState([]);
   const navigate = useNavigate();
   const axiosCustom = useAxiosCustom();
-  const [result, setResult] = useState("");
 
   const getPersonalActivities = async () => {
     try {
@@ -59,19 +58,16 @@ const PersonalCalendar = () => {
     navigate(`/professor/attendance/${selectedEvent.uuid}`);
   };
 
-  const handleClick = async () => {
-    const response = await axiosCustom.get("/ai");
-    console.log(response.data.message);
-  };
   return (
     <Layout>
-      {/* <button onClick={handleClick}>Apasa</button> */}
       <Calendar
         localizer={localizer}
         events={myEvents}
         startAccessor="start"
         endAccessor="end"
         defaultView="week"
+        min={new Date(2023, 1, 1, 7, 0)}
+        max={new Date(2023, 1, 1, 23, 59)}
         onSelectEvent={(event) => handleSelectEvent(event)}
       />
     </Layout>

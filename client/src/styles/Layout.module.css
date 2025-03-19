@@ -3,20 +3,15 @@
   flex-direction: column;
   min-height: 100vh;
   width: 100%;
-  overflow: hidden; /* prevenim scroll global */
+  overflow: hidden;
 }
 
 .layoutContent {
-  margin-left: 250px; /* Same as sidebar width */
-  margin-top: 60px; /* Same as navbar height */
+  margin-left: 250px;
+  margin-top: 60px;
   padding: 1.5rem;
-  height: calc(100vh - 60px); /* înălțime fixă pentru zona de content */
-  overflow-y: auto; /* scroll doar aici dacă e nevoie */
-  transition: margin-left 0.3s ease;
-}
-
-.contentExpanded {
-  margin-left: 60px; /* Same as collapsed sidebar width */
+  height: calc(100vh - 60px);
+  overflow-y: auto;
 }
 
 .mainContent {
@@ -27,7 +22,7 @@
 
 @media (max-width: 768px) {
   .layoutContent {
-    margin-left: 60px;
+    margin-left: 250px;
     padding: 1rem;
   }
 }

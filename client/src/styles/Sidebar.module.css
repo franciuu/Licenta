@@ -5,16 +5,11 @@
   color: white;
   height: 100vh;
   width: 250px;
-  transition: all 0.3s ease;
   position: fixed;
   left: 0;
   top: 0;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
   z-index: 100;
-}
-
-.sidebar:not(.expanded) {
-  width: 60px;
 }
 
 .sidebarHeader {
@@ -33,25 +28,6 @@
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
-.toggleButton {
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  color: white;
-  font-size: 1.2rem;
-  cursor: pointer;
-  padding: 0.5rem;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-}
-
-.toggleButton:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: scale(1.1);
-}
-
 .menuTitle {
   padding: 1rem 1rem 0.25rem;
   font-size: 0.7rem;
@@ -63,7 +39,7 @@
 }
 
 .menuContainer {
-  padding-top: 0.5rem;
+  padding-top: 0.25rem;
 }
 
 .sidebarMenu {
@@ -73,13 +49,13 @@
 }
 
 .sidebarItem {
-  margin: 0.25rem 0;
+  margin: 0.15rem 0;
 }
 
 .itemText {
   display: flex;
   align-items: center;
-  padding: 0.75rem 1rem;
+  padding: 0.5rem 1rem;
   color: rgba(255, 255, 255, 0.8);
   text-decoration: none;
   transition: all 0.2s ease;
@@ -101,9 +77,9 @@
 }
 
 .icon {
-  font-size: 1.2rem;
-  margin-right: 0.75rem;
-  min-width: 1.2rem;
+  font-size: 1rem;
+  margin-right: 0.5rem;
+  min-width: 1rem;
 }
 
 .activityIcon {
@@ -121,13 +97,17 @@
   text-overflow: ellipsis;
 }
 
-/* Scrollable activities section */
-.activitiesSection {
+.activitiesContainer {
+  display: flex;
+  flex-direction: column;
   flex: 1;
+  max-height: calc(100vh - 250px); /* adaugă această linie */
+  overflow: hidden; /* adaugă această linie */
+}
+
+.activitiesSection {
   overflow-y: auto;
   padding-bottom: 0.5rem;
-  margin-top: 0.5rem;
-  /* Scrollbar styling */
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
 }
@@ -145,7 +125,6 @@
   background: transparent;
 }
 
-/* Fixed footer */
 .sidebarFooter {
   display: flex;
   align-items: center;
@@ -188,24 +167,6 @@
 
 @media (max-width: 768px) {
   .sidebar {
-    width: 60px;
-  }
-
-  .sidebar.expanded {
     width: 250px;
-  }
-
-  .logo,
-  .label,
-  .userInfo,
-  .menuTitle {
-    display: none;
-  }
-
-  .sidebar.expanded .logo,
-  .sidebar.expanded .label,
-  .sidebar.expanded .userInfo,
-  .sidebar.expanded .menuTitle {
-    display: block;
   }
 }

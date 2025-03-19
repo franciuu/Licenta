@@ -13,19 +13,16 @@ export const getActivityAttendances = async (req, res) => {
       },
     });
 
-    console.log(req.params.id);
+    if (response) {
+      const formatted = response.map((e) => ({
+        name: e.student?.name || "Unknown",
+        date: e.date,
+        arrivalTime: e.arrivalTime,
+      }));
 
-    if (!response || response.length === 0) {
-      return res.status(404).json({ msg: "No attendances found" });
+      return res.status(200).json(formatted);
     }
-
-    const formatted = response.map((entry) => ({
-      name: entry.Student?.name || "Unknown",
-      date: entry.date,
-      arrivalTime: entry.arrivalTime,
-    }));
-
-    res.status(200).json(formatted);
+    res.status(200).json(response);
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }

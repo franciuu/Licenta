@@ -1,4 +1,3 @@
-/* Navbar styling */
 .navbar {
   display: flex;
   justify-content: flex-end;
@@ -10,9 +9,10 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   position: fixed;
   top: 0;
+  left: 250px; /* Starts where sidebar ends (250px) */
   right: 0;
   z-index: 90;
-  width: 100%;
+  width: calc(100% - 250px); /* Adjust width to account for sidebar */
 }
 
 .btn {
@@ -46,4 +46,11 @@
 .btn:active {
   transform: translateY(0);
   box-shadow: 0 2px 5px rgba(231, 147, 22, 0.3);
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    left: 250px;
+    width: calc(100% - 250px);
+  }
 }
