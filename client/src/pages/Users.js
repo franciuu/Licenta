@@ -6,6 +6,7 @@ import Swal from "sweetalert2";
 import useAxiosCustom from "../hooks/useAxiosCustom";
 import { getUsers, deleteUser } from "../services/UserService.js";
 import Loader from "../components/Loader.js";
+import style from "../styles/Users.module.css";
 
 const Users = () => {
   const [loadingCount, setLoadingCount] = useState(0);
@@ -65,11 +66,14 @@ const Users = () => {
         enableSorting: false,
         enableColumnFilter: false,
         Cell: ({ row }) => (
-          <div>
-            <button>
+          <div className={style.actionButtonContainer}>
+            <button className={`${style.actionButton} ${style.editButton}`}>
               <Link to={`/admin/users/edit/${row.original.uuid}`}>Edit</Link>
             </button>
-            <button onClick={() => onDeleteUser(row.original.uuid)}>
+            <button
+              onClick={() => onDeleteUser(row.original.uuid)}
+              className={`${style.actionButton} ${style.deleteButton}`}
+            >
               Delete
             </button>
           </div>
@@ -82,27 +86,32 @@ const Users = () => {
   if (loadingCount > 0)
     return (
       <Layout>
-        <Loader />
+        <div className={style.usersContainer}>
+          <Loader />
+        </div>
       </Layout>
     );
 
   return (
     <Layout>
-      <Link to="/admin/users/add" className="btn">
-        Add new user
-      </Link>
-
-      <h1>List of Users</h1>
-      {users?.length ? (
-        <MaterialReactTable
-          columns={columns}
-          data={users}
-          enablePagination
-          enableColumnOrdering
-        />
-      ) : (
-        <p>No users to display</p>
-      )}
+      <div className={style.usersContainer}>
+        <div className={style.pageHeader}>
+          <h1 className={style.pageTitle}>List of Users</h1>
+          <Link to="/admin/users/add" className={style.btn}>
+            Add new user
+          </Link>
+        </div>
+        {users?.length ? (
+          <MaterialReactTable
+            columns={columns}
+            data={users}
+            enablePagination
+            enableColumnOrdering
+          />
+        ) : (
+          <p className={style.emptyState}>No users to display</p>
+        )}
+      </div>
     </Layout>
   );
 };

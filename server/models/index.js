@@ -9,8 +9,12 @@ import SurveillanceCamera from "./SurveillanceCamera.js";
 import Image from "./Image.js";
 import Enrollment from "./Enrollment.js";
 
-Student.hasMany(Attendance, { foreignKey: "idStudent", onDelete: "CASCADE" });
-Attendance.belongsTo(Student, { foreignKey: "idStudent" });
+Student.hasMany(Attendance, {
+  foreignKey: "idStudent",
+  onDelete: "CASCADE",
+  targetKey: "uuid",
+});
+Attendance.belongsTo(Student, { foreignKey: "idStudent", targetKey: "uuid" });
 
 Activity.hasMany(Attendance, { foreignKey: "idActivity", onDelete: "CASCADE" });
 Attendance.belongsTo(Activity, { foreignKey: "idActivity" });

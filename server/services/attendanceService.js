@@ -1,8 +1,17 @@
 import Attendance from "../models/Attendance.js";
 
 const markAttendance = async (studentId, activityId) => {
-  const today = new Date().toISOString().split("T")[0];
-  const arrivalTime = new Date().toISOString().split("T")[1].split(".")[0];
+  const today = new Date()
+    .toLocaleDateString("ro-RO")
+    .split(".")
+    .reverse()
+    .join("-");
+  const arrivalTime = new Date().toLocaleTimeString("ro-RO", {
+    hour12: false,
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  });
 
   const [attendance, created] = await Attendance.findOrCreate({
     where: {

@@ -6,6 +6,7 @@ import { getCourses } from "../services/CourseService.js";
 import { getProfessors } from "../services/UserService.js";
 import { createActivity } from "../services/ActivityService.js";
 import Loader from "../components/Loader.js";
+import styles from "../styles/AddActivity.module.css";
 
 const AddActivity = () => {
   const [loadingCount, setLoadingCount] = useState(0);
@@ -88,90 +89,109 @@ const AddActivity = () => {
 
   return (
     <Layout>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="name">Name: </label>
-          <input
-            id="name"
-            placeholder="Name"
-            value={formData.name}
-            onChange={handleChange}
-          />
-        </div>
+      <div className={styles.addActivityContainer}>
+        <h2 className={styles.addActivityTitle}>Add Activity</h2>
+        <form onSubmit={handleSubmit}>
+          {/* Full width name field */}
+          <div className={`${styles.formGroup} ${styles.fullWidthField}`}>
+            <label htmlFor="name">Name: </label>
+            <input
+              id="name"
+              placeholder="Name"
+              value={formData.name}
+              onChange={handleChange}
+            />
+          </div>
 
-        <div>
-          <label htmlFor="startTime">Start time:</label>
-          <input
-            id="startTime"
-            type="time"
-            value={formData.startTime}
-            onChange={handleChange}
-          />
-        </div>
+          <div className={styles.formColumns}>
+            <div className={styles.formColumn}>
+              <div className={styles.formGroup}>
+                <label htmlFor="room">Room: </label>
+                <select id="room" value={formData.room} onChange={handleChange}>
+                  <option value="2013A">2013A</option>
+                  <option value="2001D">2001D</option>
+                </select>
+              </div>
 
-        <div>
-          <label htmlFor="endTime">End time:</label>
-          <input
-            id="endTime"
-            type="time"
-            value={formData.endTime}
-            onChange={handleChange}
-          />
-        </div>
+              <div className={styles.formGroup}>
+                <label htmlFor="startTime">Start time:</label>
+                <input
+                  id="startTime"
+                  type="time"
+                  value={formData.startTime}
+                  onChange={handleChange}
+                />
+              </div>
 
-        <div>
-          <label htmlFor="dayOfWeek">Day of week: </label>
-          <select
-            id="dayOfWeek"
-            value={formData.dayOfWeek}
-            onChange={handleChange}
-          >
-            <option value="0">Sunday</option>
-            <option value="1">Monday</option>
-            <option value="2">Tuesday</option>
-            <option value="3">Wednesday</option>
-            <option value="4">Thursday</option>
-            <option value="5">Friday</option>
-            <option value="6">Saturday</option>
-          </select>
-        </div>
+              <div className={styles.formGroup}>
+                <label htmlFor="dayOfWeek">Day of week: </label>
+                <select
+                  id="dayOfWeek"
+                  value={formData.dayOfWeek}
+                  onChange={handleChange}
+                >
+                  <option value="0">Sunday</option>
+                  <option value="1">Monday</option>
+                  <option value="2">Tuesday</option>
+                  <option value="3">Wednesday</option>
+                  <option value="4">Thursday</option>
+                  <option value="5">Friday</option>
+                  <option value="6">Saturday</option>
+                </select>
+              </div>
+            </div>
 
-        <div>
-          <label htmlFor="room">Room: </label>
-          <select id="room" value={formData.room} onChange={handleChange}>
-            <option value="2013A">2013A</option>
-            <option value="2001D">2001D</option>
-          </select>
-        </div>
+            <div className={styles.formColumn}>
+              <div className={styles.formGroup}>
+                <label htmlFor="idCourse">Course: </label>
+                <select
+                  id="idCourse"
+                  value={formData.idCourse}
+                  onChange={handleChange}
+                >
+                  {courses.map((c) => (
+                    <option key={c.uuid} value={c.uuid}>
+                      {c.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-        <div>
-          <label htmlFor="idCourse">Course: </label>
-          <select
-            id="idCourse"
-            value={formData.idCourse}
-            onChange={handleChange}
-          >
-            {courses.map((c) => (
-              <option key={c.uuid} value={c.uuid}>
-                {c.name}
-              </option>
-            ))}
-          </select>
-        </div>
+              <div className={styles.formGroup}>
+                <label htmlFor="endTime">End time:</label>
+                <input
+                  id="endTime"
+                  type="time"
+                  value={formData.endTime}
+                  onChange={handleChange}
+                />
+              </div>
 
-        <div>
-          <label htmlFor="idProf">Professor: </label>
-          <select id="idProf" value={formData.idProf} onChange={handleChange}>
-            {profs.map((p) => (
-              <option key={p.uuid} value={p.uuid}>
-                {p.name}
-              </option>
-            ))}
-          </select>
-        </div>
+              <div className={styles.formGroup}>
+                <label htmlFor="idProf">Professor: </label>
+                <select
+                  id="idProf"
+                  value={formData.idProf}
+                  onChange={handleChange}
+                >
+                  {profs.map((p) => (
+                    <option key={p.uuid} value={p.uuid}>
+                      {p.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          </div>
 
-        <button type="submit">Save</button>
-      </form>
+          {/* Full width save button */}
+          <div className={`${styles.formActions} ${styles.fullWidthActions}`}>
+            <button type="submit" className={styles.submitButton}>
+              Save
+            </button>
+          </div>
+        </form>
+      </div>
     </Layout>
   );
 };

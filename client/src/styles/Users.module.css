@@ -1,0 +1,100 @@
+.usersContainer {
+  padding: 1rem 1.25rem;
+  height: 100%; /* se adaptează la înălțimea din layoutContent */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.pageHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding: 0.5rem 0;
+}
+
+.pageTitle {
+  font-size: 2rem;
+  color: #333;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+
+/* Style for the Add New User button */
+.btn {
+  background: linear-gradient(90deg, #5d5fef 0%, #7b5fef 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.7rem 1.4rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  display: inline-block;
+  box-shadow: 0 4px 10px rgba(93, 95, 239, 0.2);
+}
+
+.btn:hover {
+  background: linear-gradient(90deg, #4b4ddb 0%, #6b4ddb 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 12px rgba(93, 95, 239, 0.25);
+}
+
+/* Action button styles */
+.actionButtonContainer {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.actionButton {
+  padding: 0.4rem 1rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.editButton {
+  background-color: #e0f2fe;
+  color: #3b82f6;
+}
+
+.editButton:hover {
+  background-color: #bfdbfe;
+  transform: translateY(-1px);
+}
+
+.editButton a {
+  color: inherit;
+  text-decoration: none;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.deleteButton {
+  background-color: #fee2e2;
+  color: #ef4444;
+}
+
+.deleteButton:hover {
+  background-color: #fecaca;
+  transform: translateY(-1px);
+}
+
+/* Empty state style */
+.emptyState {
+  text-align: center;
+  padding: 3rem;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  color: #64748b;
+  font-size: 1.1rem;
+}

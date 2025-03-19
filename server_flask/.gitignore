@@ -3,7 +3,7 @@ __pycache__/
 *.pyc
 
 # Virtual environment
-venv/
+deepface_env_310/
 
 # Editor-specific files (opțional)
 *.vscode/

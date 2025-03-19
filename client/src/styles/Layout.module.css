@@ -1,30 +1,33 @@
-/* Layout container */
 .layoutContainer {
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  overflow: hidden;
+  min-height: 100vh;
+  width: 100%;
+  overflow: hidden; /* prevenim scroll global */
 }
 
-/* Container pentru sidebar și conținut */
-.layoutColumns {
-  display: flex;
-  flex: 1;
-  height: calc(100vh - 60px); /* Asigură că ocupă întreaga pagină */
-}
-
-/* Sidebar */
-.layoutSidebar {
-  display: flex;
-  flex-direction: column;
-}
-
-/* Zona principală de conținut */
 .layoutContent {
-  flex: 1;
-  background-color: #f4f4f4;
-  padding: 20px;
-  overflow-y: auto;
+  margin-left: 250px; /* Same as sidebar width */
+  margin-top: 60px; /* Same as navbar height */
+  padding: 1.5rem;
+  height: calc(100vh - 60px); /* înălțime fixă pentru zona de content */
+  overflow-y: auto; /* scroll doar aici dacă e nevoie */
   transition: margin-left 0.3s ease;
-  position: relative;
+}
+
+.contentExpanded {
+  margin-left: 60px; /* Same as collapsed sidebar width */
+}
+
+.mainContent {
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .layoutContent {
+    margin-left: 60px;
+    padding: 1rem;
+  }
 }

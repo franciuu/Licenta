@@ -18,6 +18,12 @@ const Navbar = () => {
   return (
     <header>
       <nav className={style.navbar}>
+        <button
+          onClick={() => navigate("/admin/generate")}
+          className={style.btn}
+        >
+          Update
+        </button>
         <button onClick={handleLogout} className={style.btn}>
           Log out
         </button>

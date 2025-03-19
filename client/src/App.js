@@ -18,6 +18,7 @@ import ViewAttendance from "./pages/ViewAttendance.js";
 import NotFound from "./pages/NotFound.js";
 import Page404 from "./pages/404.js";
 import ActivityEnrollment from "./pages/ActivityEnrollment.js";
+import GenerateEmbeddings from "./pages/GenerateEmbeddings.js";
 
 import RequireAuth from "./components/RequireAuth.js";
 import PersistLogin from "./components/PersistLogin.js";
@@ -47,6 +48,7 @@ function App() {
             <Route
               path="/professor/activities/:id"
               element={<ViewAttendance />}
+              key={window.location.pathname}
             ></Route>
             <Route
               path="/professor/calendar"
@@ -77,6 +79,10 @@ function App() {
             <Route
               path="/admin/activities/:id"
               element={<ActivityEnrollment />}
+            ></Route>
+            <Route
+              path="/admin/generate"
+              element={<GenerateEmbeddings />}
             ></Route>
           </Route>
         </Route>

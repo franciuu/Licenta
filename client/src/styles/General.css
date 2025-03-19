@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Manrope:wght@200..800&display=swap");
+
 :root {
   --background-main: #d0e0f0;
   --background-card: #b5cfe6;
@@ -21,19 +23,30 @@
   box-sizing: border-box;
 }
 
-@keyframes l13 {
-  100% {
-    transform: rotate(1turn);
-  }
+body {
+  background-color: rgb(252, 230, 241);
+  background-image: radial-gradient(
+      at 18% 38%,
+      rgb(227, 221, 254) 0px,
+      transparent 50%
+    ),
+    radial-gradient(at 67% 82%, rgb(205, 230, 245) 0px, transparent 50%),
+    radial-gradient(at 56% 23%, rgb(248, 222, 235) 0px, transparent 50%),
+    radial-gradient(at 85% 23%, rgb(218, 208, 241) 0px, transparent 50%);
 }
 
-a {
-  text-decoration: none;
-  color: var(--text-main);
+p,
+label {
+  font-family: "Manrope", sans-serif;
 }
 
-a:hover {
-  color: var(--button-hover);
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Bricolage Grotesque", sans-seri;
 }
 
 .rbc-calendar {

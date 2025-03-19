@@ -1,14 +1,21 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from controllers.FaceRecognition import recognize_faces, load_students_from_db
-from db_connection import create_db_connection
+from controllers.FaceRecognition import recognize_faces
+from controllers.EmbeddingsGenerator import generate_all_embeddings
+import base64
+import cv2
+import numpy as np
 
 app = Flask(__name__)
 CORS(app)  
 
-db_connection = create_db_connection()
-if db_connection:
-    load_students_from_db(db_connection)
+@app.route('/generate-embeddings', methods=['POST'])
+def trigger_embedding_generation():
+    try:
+        generate_all_embeddings()
+        return jsonify({"message": "✅ Embeddingurile au fost generate cu succes."}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 @app.route('/recognize', methods=['POST'])
 def face_recognition():
@@ -18,8 +25,19 @@ def face_recognition():
 
         if not image_data:
             return jsonify({"error": "Lipsesc datele necesare"}), 400
+        
+        try:
+            image_bytes = base64.b64decode(image_data)
+            nparr = np.frombuffer(image_bytes, np.uint8)
+            image = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 
-        result = recognize_faces(image_data)
+            if image is None:
+                raise ValueError("Imaginea decodificată e None")
+        except Exception as decode_err:
+            print(f"❌ Eroare la decodare imagine: {decode_err}")
+            return jsonify({"error": f"Decoding error: {str(decode_err)}"}), 500
+
+        result = recognize_faces(image)
         return jsonify(result), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500

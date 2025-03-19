@@ -125,12 +125,8 @@ const Login = () => {
               <span className={style.loginText}>Login</span>
               <FaLongArrowAltRight className={style.btnIcon} />
             </button>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-              }}
-            >
+
+            <div className={style.checkboxContainer}>
               <input
                 type="checkbox"
                 id="persist"
@@ -140,12 +136,12 @@ const Login = () => {
               <label htmlFor="persist">Trust this device</label>
             </div>
 
-            <span className={style.forgotPassword}>
+            <div className={style.forgotPassword}>
               Forgot your password?
               {/* <a className={style.forgotPasswordLink}>
                 Click Here
               </a> */}
-            </span>
+            </div>
           </form>
         </div>
       </div>
