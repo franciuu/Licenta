@@ -1,25 +1,30 @@
 import { Link } from "react-router-dom";
 import Card from "react-bootstrap/Card";
 import { generatePatternImage } from "../utils/GeneratePattern.js";
+import styles from "../styles/CourseCard.module.css";
 
 const CourseCard = ({ info }) => {
   return (
-    <Card style={{ width: "18rem" }}>
+    <Card className={styles.courseCard}>
       <Card.Img
         variant="top"
         src={generatePatternImage()}
         alt="Pattern image"
+        className={styles.cardImage}
       />
-      <Card.Body>
-        <Card.Title>{info.name}</Card.Title>
-        <Card.Subtitle className="mb-2 text-muted">
+      <Card.Body className={styles.cardBody}>
+        <Card.Title className={styles.cardTitle}>{info.name}</Card.Title>
+        <Card.Subtitle className={styles.cardSubtitle}>
           {info.programLevel}
         </Card.Subtitle>
-        <button>
-          <Link to={`/admin/courses/${info.uuid}`}>View</Link>
+        <button className={styles.viewButton}>
+          <Link to={`/admin/courses/${info.uuid}`} className={styles.viewLink}>
+            View
+          </Link>
         </button>
       </Card.Body>
     </Card>
   );
 };
+
 export default CourseCard;

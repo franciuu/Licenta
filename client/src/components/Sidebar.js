@@ -17,21 +17,23 @@ const Sidebar = () => {
   const [activities, setActivities] = useState([]);
   const axiosCustom = useAxiosCustom();
 
-  const getActivities = async () => {
-    try {
-      const response = await axiosCustom.get(`/activities/personal`);
-      setActivities(response.data);
-    } catch (error) {
-      console.error(
-        "Error fetching activities:",
-        error.response?.data || error.message
-      );
-    }
-  };
-
   useEffect(() => {
-    getActivities();
-  }, []);
+    const getActivities = async () => {
+      try {
+        const response = await axiosCustom.get(`/activities/personal`);
+        setActivities(response.data);
+      } catch (error) {
+        console.error(
+          "Error fetching activities:",
+          error.response?.data || error.message
+        );
+      }
+    };
+
+    if (auth.role === "professor") {
+      getActivities();
+    }
+  }, [axiosCustom, auth.role]);
 
   return (
     <aside className={style.sidebar}>

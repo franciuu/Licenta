@@ -1,0 +1,77 @@
+.coursesContainer {
+  padding: 1.5rem;
+}
+
+.coursesHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.coursesTitle {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.addCourseBtn {
+  background-color: #7e22ce;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1.5rem;
+  transition: background-color 0.3s ease;
+}
+
+.addCourseBtn:hover {
+  background-color: #6b21a8;
+}
+
+.addCourseBtnLink {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.coursesList {
+  margin-top: 1rem;
+}
+
+.courseColumn {
+  padding: 0.75rem;
+}
+
+.courseCardWrapper {
+  transition: transform 0.3s ease;
+}
+
+.courseCardWrapper:hover {
+  transform: translateY(-5px);
+}
+
+.noCourses {
+  background-color: white;
+  border-radius: 8px;
+  padding: 2rem;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.noCoursesText {
+  color: #666;
+  font-size: 1.1rem;
+}
+
+/* Make the layout responsive */
+@media (max-width: 768px) {
+  .coursesHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .addCourseBtn {
+    width: 100%;
+  }
+}
