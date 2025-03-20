@@ -32,7 +32,7 @@ export const getRecognize = async (req, res) => {
       const { student } = result;
 
       if (student) {
-        console.log(`✅ Student recunoscut: ${student}`);
+        console.log(`Student recunoscut: ${student}`);
 
         const studentDb = await Student.findByPk(student);
         const { created } = await markAttendance(student, activityId);
@@ -41,7 +41,7 @@ export const getRecognize = async (req, res) => {
           newRecognized.push({ uuid: student, name: studentDb.name });
         }
       } else {
-        console.log(`❌ Nicio potrivire - fața nu a fost recunoscută`);
+        console.log(`Nicio potrivire - fața nu a fost recunoscută`);
       }
     }
 

@@ -9,19 +9,16 @@ from scipy.spatial.distance import cosine
 def recognize_faces(imagineStudenti, embedding_threshold=0.3):
     results = []
 
-    base_dir = os.path.abspath(os.path.dirname(__file__))  # controllers/
+    base_dir = os.path.abspath(os.path.dirname(__file__))  
     model_path = os.path.join(base_dir, "..", "face_detection_yunet_2023mar.onnx")
     model_path = os.path.abspath(model_path)  
 
-    # Inițializare detector facial
     detector = cv2.FaceDetectorYN.create(model=model_path, input_size=(320, 320), config="")
     h, w, _ = imagineStudenti.shape
     detector.setInputSize((w, h))
 
-    # Detectare fețe
     faces = detector.detect(imagineStudenti)
 
-    # Căutare fișier embeddings
     embedding_file = None
     for file in os.listdir():
         if file.startswith("embeddings_") and file.endswith(".pkl"):
@@ -31,12 +28,11 @@ def recognize_faces(imagineStudenti, embedding_threshold=0.3):
     if embedding_file:
         with open(embedding_file, "rb") as f:
             saved_embeddings = pickle.load(f)
-        print(f"✅ Loaded embeddings from {embedding_file}")
+        print(f"Loaded embeddings from {embedding_file}")
     else:
-        print("❌ Nu am găsit fișierul de embeddings.")
+        print("Nu am găsit fișierul de embeddings.")
         return results
 
-    # Procesare fețe detectate
     if faces[1] is not None:
         for i, face in enumerate(faces[1]):
             x, y, w, h = map(int, face[:4])
@@ -51,7 +47,7 @@ def recognize_faces(imagineStudenti, embedding_threshold=0.3):
                 )
 
                 if len(embedding_obj) != 1:
-                    print(f"⚠️ Ignorat: {len(embedding_obj)} fețe în crop.")
+                    print(f"Ignorat: {len(embedding_obj)} fețe în crop.")
                     continue
 
                 input_embedding = np.array(embedding_obj[0]["embedding"])
@@ -76,6 +72,6 @@ def recognize_faces(imagineStudenti, embedding_threshold=0.3):
                     })
 
             except Exception as e:
-                print(f"⚠️ Eroare embedding față: {e}")
+                print(f"Eroare embedding față: {e}")
 
     return results
