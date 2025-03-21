@@ -1,0 +1,149 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+  padding: 15px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.leftSection {
+  flex: 1.5;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.rightSection {
+  flex: 1;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+  font-size: 24px;
+  color: #333;
+}
+
+.videoContainer {
+  width: 100%;
+  margin-top: 10px;
+  aspect-ratio: 16/9;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 370px;
+}
+
+.video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 15px;
+  margin-top: 5px;
+}
+
+.btn {
+  outline: none;
+  cursor: pointer;
+  font-size: 8px;
+  border-radius: 500px;
+  transition-property: background-color, border-color, color, box-shadow, filter;
+  transition-duration: 0.3s;
+  border: 1px solid transparent;
+  letter-spacing: 2px;
+  min-width: 100px;
+  font-weight: 700;
+  text-align: center;
+  padding: 10px 8px;
+  color: #fff;
+  background-color: #e79316;
+  height: 36px;
+}
+
+.btn:hover {
+  background-color: #f8bb03;
+}
+
+.btn:disabled {
+  background-color: #f5d098;
+  cursor: default;
+}
+
+.results {
+  margin-top: 20px;
+}
+
+.resultTitle {
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.studentList {
+  list-style-type: none;
+  padding: 0;
+}
+
+.studentItem {
+  padding: 10px;
+  margin-bottom: 8px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.studentItem:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.15);
+}
+
+.noStudents {
+  font-style: italic;
+  color: #777;
+}
+
+.timeStatus {
+  padding: 8px;
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: 10px;
+  text-align: center;
+}
+
+.timeActive {
+  background-color: #e6f7e6;
+  color: #2e7d32;
+}
+
+.timeInactive {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .leftSection,
+  .rightSection {
+    width: 100%;
+  }
+
+  .videoContainer {
+    min-height: 300px;
+  }
+}

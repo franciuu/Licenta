@@ -2,26 +2,31 @@ import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import useAxiosCustom from "../hooks/useAxiosCustom";
 import Layout from "./Layout";
-import style from "../styles/Activity.module.css";
+import style from "../styles/TakeAttendance.module.css";
+import Loader from "../components/Loader";
 
 const TakeAttendance = () => {
+  const [loadingCount, setLoadingCount] = useState(0);
   const [activity, setActivity] = useState(null);
-  const [presentStudents, setPresentStudents] = useState([]); // ← listă cumulativă
+  const [presentStudents, setPresentStudents] = useState([]);
   const [running, setRunning] = useState(false);
   const [timeStatus, setTimeStatus] = useState(false);
   const axiosCustom = useAxiosCustom();
-  const { id } = useParams(); // id-ul activității
+  const { id } = useParams();
   const videoRef = useRef(null);
   const streamRef = useRef(null);
   const intervalRef = useRef(null);
   const timeIntervalRef = useRef(null);
 
   const getActivity = async () => {
+    setLoadingCount((prev) => prev + 1);
     try {
       const response = await axiosCustom.get(`/activities/${id}`);
       setActivity(response.data);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoadingCount((prev) => prev - 1);
     }
   };
 
@@ -44,7 +49,6 @@ const TakeAttendance = () => {
 
       const newlyRecognized = response.data.recognized_faces || [];
 
-      // ✅ Adaugă doar studenții noi, fără duplicate
       setPresentStudents((prev) => {
         const existingNames = prev.map((item) => item.name);
         const uniqueNew = newlyRecognized.filter(
@@ -63,7 +67,7 @@ const TakeAttendance = () => {
         video: true,
       });
       videoRef.current.srcObject = streamRef.current;
-      intervalRef.current = setInterval(captureImage, 3000); // imagine la fiecare 3 secunde
+      intervalRef.current = setInterval(captureImage, 3000);
       setRunning(true);
     } catch (error) {
       console.log(error);
@@ -120,49 +124,78 @@ const TakeAttendance = () => {
     }
   }, [activity]);
 
+  if (loadingCount > 0)
+    return (
+      <Layout>
+        <Loader />
+      </Layout>
+    );
+
   return (
     <Layout>
       {activity ? (
-        <div>
-          <h1>{activity.name}</h1>
-          <p>{`Room: ${activity.room}`}</p>
-          <p>{activity.startTime}</p>
-          <p>{activity.endTime}</p>
-          <p>{activity.course.name}</p>
-          <p>{activity.user.name}</p>
+        <div className={style.container}>
+          <div className={style.leftSection}>
+            <h1 className={style.title}>{activity.name}</h1>
 
-          <button
-            className={style.btn}
-            onClick={startCamera}
-            disabled={running || !timeStatus}
-          >
-            Start Attendance
-          </button>
-          <button
-            className={style.btn}
-            onClick={stopCamera}
-            disabled={!running || !timeStatus}
-          >
-            Stop Attendance
-          </button>
+            <div
+              className={
+                style.timeStatus +
+                " " +
+                (timeStatus ? style.timeActive : style.timeInactive)
+              }
+            >
+              {timeStatus
+                ? "This activity is currently in progress"
+                : "You are outside the scheduled time for this activity"}
+            </div>
 
-          <video ref={videoRef} autoPlay muted></video>
+            <div className={style.buttonGroup}>
+              <button
+                className={style.btn}
+                onClick={startCamera}
+                disabled={running || !timeStatus}
+              >
+                Start Attendance
+              </button>
+              <button
+                className={style.btn}
+                onClick={stopCamera}
+                disabled={!running || !timeStatus}
+              >
+                Stop Attendance
+              </button>
+            </div>
 
-          <div className={style.results}>
-            <h3>Studenți marcați prezenți:</h3>
+            <div className={style.videoContainer}>
+              <video
+                ref={videoRef}
+                autoPlay
+                muted
+                className={style.video}
+              ></video>
+            </div>
+          </div>
+
+          <div className={style.rightSection}>
+            <h3 className={style.resultTitle}>Students marked as present:</h3>
             {presentStudents.length > 0 ? (
-              <ul>
+              <ul className={style.studentList}>
                 {presentStudents.map((student, index) => (
-                  <li key={index}>{student.name}</li>
+                  <li key={index} className={style.studentItem}>
+                    {student.name}
+                  </li>
                 ))}
               </ul>
             ) : (
-              <p>Niciun student marcat prezent încă.</p>
+              <p className={style.noStudents}>
+                Marked students will appear here.
+              </p>
             )}
           </div>
         </div>
       ) : (
-        <p>Activitate negăsită.</p>
+        <p>Activity not found.</p>
       )}
     </Layout>
   );

@@ -73,7 +73,7 @@ const ViewCourse = () => {
 
     fetchCourseData();
     fetchActivitiesData();
-  }, [axiosCustom, id]);
+  }, [navigate, axiosCustom, id]);
 
   if (loadingCount > 0)
     return (

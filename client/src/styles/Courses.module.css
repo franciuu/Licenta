@@ -7,24 +7,41 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 2rem;
+  gap: 1rem;
+  min-height: 50px;
 }
 
 .coursesTitle {
   font-size: 2rem;
   font-weight: 600;
   color: #333;
+  margin: 0;
+  line-height: 1.2;
+  align-self: center;
 }
 
 .addCourseBtn {
-  background-color: #7e22ce;
+  background: linear-gradient(135deg, #7c26a6 0%, #9d3fbf 100%);
+  color: white;
   border: none;
-  border-radius: 6px;
-  padding: 0.5rem 1.5rem;
-  transition: background-color 0.3s ease;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  line-height: 1;
+  height: 40px;
+  align-self: center;
 }
 
 .addCourseBtn:hover {
-  background-color: #6b21a8;
+  background: linear-gradient(135deg, #9d3fbf 0%, #7c26a6 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .addCourseBtnLink {

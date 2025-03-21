@@ -7,6 +7,7 @@ import {
   FaBook,
   FaChalkboardTeacher,
   FaCalendarAlt,
+  FaUniversity,
 } from "react-icons/fa";
 import style from "../styles/Sidebar.module.css";
 import useAuth from "../hooks/useAuth";
@@ -44,6 +45,17 @@ const Sidebar = () => {
       <div className={style.menuContainer}>
         <p className={style.menuTitle}>MAIN MENU</p>
         <ul className={style.sidebarMenu}>
+          <li className={style.sidebarItem}>
+            <NavLink
+              to="/admin/academic"
+              className={({ isActive }) =>
+                `${style.itemText} ${isActive ? style.active : ""}`
+              }
+            >
+              <FaUniversity className={style.icon} />
+              <span className={style.label}>Academic</span>
+            </NavLink>
+          </li>
           <li className={style.sidebarItem}>
             <NavLink
               to="/dashboard"

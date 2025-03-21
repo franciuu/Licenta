@@ -8,6 +8,8 @@ import Attendance from "./Attendance.js";
 import SurveillanceCamera from "./SurveillanceCamera.js";
 import Image from "./Image.js";
 import Enrollment from "./Enrollment.js";
+import Semester from "./Semester.js";
+import AcademicYear from "./AcademicYear.js";
 
 Student.hasMany(Attendance, {
   foreignKey: "idStudent",
@@ -39,5 +41,17 @@ Activity.belongsTo(SurveillanceCamera, { foreignKey: "idCamera" });
 
 Student.hasMany(Image, { foreignKey: "idStudent", onDelete: "CASCADE" });
 Image.belongsTo(Student, { foreignKey: "idStudent" });
+
+AcademicYear.hasMany(Semester, {
+  foreignKey: "idAcademicYear",
+  onDelete: "CASCADE",
+});
+Semester.belongsTo(AcademicYear, { foreignKey: "idAcademicYear" });
+
+Semester.hasMany(Activity, {
+  foreignKey: "idSemester",
+  onDelete: "CASCADE",
+});
+Activity.belongsTo(Semester, { foreignKey: "idSemester" });
 
 export { db, Student, User, Course, Activity, Attendance, SurveillanceCamera };

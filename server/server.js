@@ -13,6 +13,7 @@ import ActivityRoute from "./routes/ActivityRoute.js";
 import AIRoute from "./routes/AIRoute.js";
 import AttendanceRoute from "./routes/AttendanceRoute.js";
 import EnrollmentRoute from "./routes/EnrollmentRoute.js";
+import AcademicYearRoute from "./routes/AcademicYearRoute.js";
 
 import "./models/index.js";
 import { verifyJWT } from "./middlewares/verifyJWT.js";
@@ -56,6 +57,7 @@ app.use(ActivityRoute);
 app.use(AttendanceRoute);
 app.use(AIRoute);
 app.use(EnrollmentRoute);
+app.use(AcademicYearRoute);
 
 app.listen(process.env.PORT, () => {
   console.log("server started on port 5000");
