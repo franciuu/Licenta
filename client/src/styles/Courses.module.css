@@ -80,7 +80,6 @@
   font-size: 1.1rem;
 }
 
-/* Make the layout responsive */
 @media (max-width: 768px) {
   .coursesHeader {
     flex-direction: column;

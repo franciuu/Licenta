@@ -55,8 +55,16 @@ export const getActivityById = async (req, res) => {
 };
 
 export const createActivity = async (req, res) => {
-  const { name, startTime, endTime, room, idCourse, idProf, dayOfWeek } =
-    req.body;
+  const {
+    name,
+    startTime,
+    endTime,
+    room,
+    idCourse,
+    idProf,
+    dayOfWeek,
+    idSemester,
+  } = req.body;
   try {
     await Activity.create({
       name: name,
@@ -66,6 +74,7 @@ export const createActivity = async (req, res) => {
       idCourse: idCourse,
       idProf: idProf,
       dayOfWeek: dayOfWeek,
+      idSemester: idSemester,
     });
     res.status(201).json({ msg: "Successful" });
   } catch (error) {

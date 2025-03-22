@@ -9,11 +9,13 @@ import {
   AccordionItemHeading,
   AccordionItemPanel,
 } from "react-accessible-accordion";
+import { useNavigate } from "react-router-dom";
 import styles from "../styles/AcademicYears.module.css";
 
 const AcademicYears = () => {
   const [years, setYears] = useState([]);
   const axiosCustom = useAxiosCustom();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchYearsData = async () => {
@@ -30,9 +32,7 @@ const AcademicYears = () => {
   }, []);
 
   const handleAddYear = () => {
-    // Function to handle adding a new academic year
-    console.log("Add new academic year");
-    // Implementation will go here
+    navigate("/admin/academic/add");
   };
 
   return (
@@ -62,14 +62,16 @@ const AcademicYears = () => {
                 </AccordionItemButton>
               </AccordionItemHeading>
               <AccordionItemPanel>
-                {y.semesters.map((s) => (
-                  <div key={s.uuid} className={styles.semesterItem}>
-                    <span className={styles.semesterName}>{s.name}</span>
-                    <span className={styles.semesterDates}>
-                      {s.startDate} - {s.endDate}
-                    </span>
-                  </div>
-                ))}
+                {[...y.semesters]
+                  .sort((a, b) => a.name.localeCompare(b.name))
+                  .map((s) => (
+                    <div key={s.uuid} className={styles.semesterItem}>
+                      <span className={styles.semesterName}>{s.name}</span>
+                      <span className={styles.semesterDates}>
+                        {s.startDate} - {s.endDate}
+                      </span>
+                    </div>
+                  ))}
               </AccordionItemPanel>
             </AccordionItem>
           ))}

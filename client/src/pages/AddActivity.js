@@ -5,6 +5,7 @@ import useAxiosCustom from "../hooks/useAxiosCustom.js";
 import { getCourses } from "../services/CourseService.js";
 import { getProfessors } from "../services/UserService.js";
 import { createActivity } from "../services/ActivityService.js";
+import { getSemesters } from "../services/AcademicYearService.js";
 import Loader from "../components/Loader.js";
 import styles from "../styles/AddActivity.module.css";
 
@@ -12,6 +13,7 @@ const AddActivity = () => {
   const [loadingCount, setLoadingCount] = useState(0);
   const [courses, setCourses] = useState([]);
   const [profs, setProfs] = useState([]);
+  const [semesters, setSemesters] = useState([]);
   const [formData, setFormData] = useState({
     name: "",
     startTime: "",
@@ -20,6 +22,7 @@ const AddActivity = () => {
     idCourse: "",
     idProf: "",
     dayOfWeek: "0",
+    idSemester: "",
   });
   const axiosCustom = useAxiosCustom();
   const navigate = useNavigate();
@@ -72,6 +75,24 @@ const AddActivity = () => {
       }
     };
 
+    const fetchSemesters = async () => {
+      setLoadingCount((prev) => prev + 1);
+      try {
+        const semData = await getSemesters(axiosCustom);
+        setSemesters(semData);
+        setFormData((prev) => ({
+          ...prev,
+          idSemester: semData[0]?.uuid || "",
+        }));
+        console.log(semData);
+      } catch (error) {
+        console.error("Failed to fetch semesters data", error);
+      } finally {
+        setLoadingCount((prev) => prev - 1);
+      }
+    };
+
+    fetchSemesters();
     fetchCourses();
     fetchProfs();
   }, [axiosCustom]);
@@ -92,19 +113,19 @@ const AddActivity = () => {
       <div className={styles.addActivityContainer}>
         <h2 className={styles.addActivityTitle}>Add Activity</h2>
         <form onSubmit={handleSubmit}>
-          {/* Full width name field */}
-          <div className={`${styles.formGroup} ${styles.fullWidthField}`}>
-            <label htmlFor="name">Name: </label>
-            <input
-              id="name"
-              placeholder="Name"
-              value={formData.name}
-              onChange={handleChange}
-            />
-          </div>
-
           <div className={styles.formColumns}>
             <div className={styles.formColumn}>
+              <div className={styles.formGroup}>
+                <label htmlFor="name">Name: </label>
+                <input
+                  id="name"
+                  placeholder="e.g. Baze de date, Tip-S, 1092"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+
               <div className={styles.formGroup}>
                 <label htmlFor="room">Room: </label>
                 <select id="room" value={formData.room} onChange={handleChange}>
@@ -181,10 +202,24 @@ const AddActivity = () => {
                   ))}
                 </select>
               </div>
+
+              <div className={styles.formGroup}>
+                <label htmlFor="idSemester">Semester: </label>
+                <select
+                  id="idSemester"
+                  value={formData.idSemester}
+                  onChange={handleChange}
+                >
+                  {semesters.map((s) => (
+                    <option key={s.uuid} value={s.uuid}>
+                      {s.name} - {s.academic_year.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
           </div>
 
-          {/* Full width save button */}
           <div className={`${styles.formActions} ${styles.fullWidthActions}`}>
             <button type="submit" className={styles.submitButton}>
               Save

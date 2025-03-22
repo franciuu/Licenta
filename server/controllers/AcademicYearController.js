@@ -4,12 +4,12 @@ import Semester from "../models/Semester.js";
 export const createAcademicYear = async (req, res) => {
   const { name, startDate, endDate } = req.body;
   try {
-    await AcademicYear.create({
+    const year = await AcademicYear.create({
       name: name,
       startDate: startDate,
       endDate: endDate,
     });
-    res.status(201).json({ msg: "Successful" });
+    res.status(201).json({ uuid: year.uuid });
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }
@@ -39,6 +39,19 @@ export const getAcademicYears = async (req, res) => {
     });
 
     res.status(201).json(response);
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
+};
+
+export const getSemesters = async (req, res) => {
+  try {
+    const response = await Semester.findAll({
+      include: {
+        model: AcademicYear,
+      },
+    });
+    res.status(200).json(response);
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }

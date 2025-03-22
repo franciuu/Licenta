@@ -20,6 +20,7 @@ import Page404 from "./pages/404.js";
 import ActivityEnrollment from "./pages/ActivityEnrollment.js";
 import GenerateEmbeddings from "./pages/GenerateEmbeddings.js";
 import AcademicYears from "./pages/AcademicYears.js";
+import AddAcademicYear from "./pages/AddAcademicYear.js";
 
 import RequireAuth from "./components/RequireAuth.js";
 import PersistLogin from "./components/PersistLogin.js";
@@ -63,6 +64,10 @@ function App() {
 
           <Route element={<RequireAuth allowedRoles={["admin"]} />}>
             <Route path="/admin/academic" element={<AcademicYears />}></Route>
+            <Route
+              path="/admin/academic/add"
+              element={<AddAcademicYear />}
+            ></Route>
             <Route path="/admin/users" element={<Users />} />
             <Route path="/admin/users/add" element={<AddUser />}></Route>
             <Route path="/admin/users/edit/:id" element={<EditUser />}></Route>

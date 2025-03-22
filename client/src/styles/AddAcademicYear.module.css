@@ -1,6 +1,6 @@
-.container {
-  max-width: 600px;
-  margin: 80px auto;
+.addAcademicYearContainer {
+  max-width: 800px;
+  margin: 0 auto;
   padding: 20px 30px;
   background-color: rgba(255, 255, 255, 0.5);
   backdrop-filter: blur(15px);
@@ -9,7 +9,7 @@
   border: 2px solid rgba(255, 255, 255, 0.6);
 }
 
-.container h1 {
+.addAcademicYearTitle {
   font-size: 22px;
   color: #333;
   margin-bottom: 20px;
@@ -18,28 +18,21 @@
   font-weight: 600;
 }
 
-.inputDiv {
+.formGroup {
   margin-bottom: 16px;
-  display: flex;
-  align-items: flex-start;
-}
-
-.inputDiv label {
-  font-weight: 500;
-  color: #444;
-  font-size: 14px;
-  width: 100px;
-  padding-top: 10px;
-}
-
-.input {
-  flex: 1;
   display: flex;
   flex-direction: column;
 }
 
-.input input,
-.input select {
+.formGroup label {
+  font-weight: 500;
+  margin-bottom: 6px;
+  color: #444;
+  font-size: 14px;
+}
+
+.formGroup input,
+.formGroup select {
   padding: 10px 12px;
   border: 2px solid rgba(142, 68, 173, 0.4);
   border-radius: 6px;
@@ -48,31 +41,45 @@
   transition: all 0.3s ease;
 }
 
-.input input:focus,
-.input select:focus {
+.formGroup input:focus,
+.formGroup select:focus {
   outline: none;
   border-color: #8e44ad;
   box-shadow: 0 0 0 2px rgba(142, 68, 173, 0.2);
   background-color: rgba(255, 255, 255, 0.6);
 }
 
-.error {
-  color: #e74c3c;
-  font-size: 12px;
-  margin-top: 4px;
-  margin-bottom: 0;
+.semesterSection {
+  margin-top: 24px;
+  margin-bottom: 20px;
 }
 
-.errorMessage {
-  background-color: rgba(231, 76, 60, 0.1);
-  color: #e74c3c;
-  padding: 10px;
-  border-radius: 6px;
+.semesterTitle {
+  font-size: 18px;
+  color: #8e44ad;
   margin-bottom: 16px;
-  border-left: 3px solid #e74c3c;
+  font-weight: 500;
+  padding-left: 8px;
+  border-left: 3px solid #8e44ad;
 }
 
-.btn {
+.formColumns {
+  display: flex;
+  gap: 20px;
+}
+
+.formColumn {
+  flex: 1;
+  min-width: 0;
+}
+
+.formActions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 30px;
+}
+
+.submitButton {
   background-color: #8e44ad;
   color: white;
   border: none;
@@ -83,48 +90,59 @@
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 3px 5px rgba(142, 68, 173, 0.2);
-  margin-top: 20px;
-  display: block;
-  margin-left: auto;
 }
 
-.btn:hover {
+.submitButton:hover {
   background-color: #7d3c98;
   transform: translateY(-1px);
   box-shadow: 0 4px 6px rgba(142, 68, 173, 0.3);
 }
 
-.btn:active {
+.submitButton:active {
   transform: translateY(1px);
 }
 
-form {
-  margin-bottom: 0;
+.cancelButton {
+  background-color: rgba(243, 243, 243, 0.5);
+  color: #555;
+  border: 2px solid rgba(142, 68, 173, 0.2);
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-right: 12px;
+  transition: all 0.3s ease;
+}
+
+.cancelButton:hover {
+  background-color: rgba(229, 229, 229, 0.7);
 }
 
 @media (max-width: 600px) {
-  .container {
+  .addAcademicYearContainer {
     padding: 15px;
     margin: 0 10px;
   }
 
-  .inputDiv {
+  .formColumns {
     flex-direction: column;
+    gap: 0;
   }
 
-  .inputDiv label {
-    width: 100%;
-    margin-bottom: 6px;
-    padding-top: 0;
-  }
-
-  .input input,
-  .input select {
+  .formGroup input,
+  .formGroup select {
     font-size: 13px;
     padding: 8px 10px;
   }
 
-  .btn {
+  .formActions {
+    flex-direction: column;
+  }
+
+  .submitButton,
+  .cancelButton {
     width: 100%;
+    margin-right: 0;
+    margin-bottom: 8px;
   }
 }

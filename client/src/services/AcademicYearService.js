@@ -6,3 +6,12 @@ export const getAcademicYears = async (axiosCustom) => {
     throw error;
   }
 };
+
+export const getSemesters = async (axiosCustom) => {
+  try {
+    const response = await axiosCustom.get("/semesters");
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
