@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
-import useAxiosCustom from "../hooks/useAxiosCustom";
-import Layout from "./Layout";
-import style from "../styles/TakeAttendance.module.css";
-import Loader from "../components/Loader";
+import useAxiosCustom from "../../hooks/useAxiosCustom";
+import Layout from "../Layout";
+import style from "../../styles/TakeAttendance.module.css";
+import Loader from "../../components/Loader";
 
 const TakeAttendance = () => {
   const [loadingCount, setLoadingCount] = useState(0);

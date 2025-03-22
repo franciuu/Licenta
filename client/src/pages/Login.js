@@ -13,11 +13,15 @@ const Login = () => {
   const { setAuth, persist, setPersist } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const from = location.state?.from.pathname || "/dashboard";
+  const from = location.state?.from.pathname;
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const redirectByRole = {
+    admin: "/admin/academic",
+    professor: "/dashboard",
+  };
 
   useEffect(() => {
     setError("");
@@ -40,10 +44,11 @@ const Login = () => {
       console.log(response?.data);
       const accessToken = response?.data?.accessToken;
       const role = response.data.role;
-      setAuth({ email, password, role, accessToken });
+      const name = response.data.name;
+      setAuth({ email, name, password, role, accessToken });
       setEmail("");
       setPassword("");
-      navigate(from, { replace: true });
+      navigate(redirectByRole[role] || from, { replace: true });
     } catch (error) {
       if (!error?.response) {
         console.log(error);

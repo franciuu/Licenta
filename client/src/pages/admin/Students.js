@@ -1,12 +1,13 @@
-import Layout from "./Layout.js";
+import Layout from "../Layout.js";
 import { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { MaterialReactTable } from "material-react-table";
 import Swal from "sweetalert2";
 import dateFormat from "dateformat";
-import useAxiosCustom from "../hooks/useAxiosCustom";
-import { getStudents, deleteStudent } from "../services/StudentService.js";
-import Loader from "../components/Loader.js";
+import useAxiosCustom from "../../hooks/useAxiosCustom.js";
+import { getStudents, deleteStudent } from "../../services/StudentService.js";
+import Loader from "../../components/Loader.js";
+import styles from "../../styles/Students.module.css";
 
 const Students = () => {
   const [loadingCount, setLoadingCount] = useState(0);
@@ -65,7 +66,7 @@ const Students = () => {
       {
         accessorKey: "birthDate",
         header: "Birth Date",
-        Cell: ({ cell }) => dateFormat(cell.birthDate, "dd-mmm-yyyy"),
+        Cell: ({ cell }) => dateFormat(cell.getValue(), "dd-mmm-yyyy"),
       },
       {
         accessorKey: "email",
@@ -81,14 +82,17 @@ const Students = () => {
         enableSorting: false,
         enableColumnFilter: false,
         Cell: ({ row }) => (
-          <div>
-            <button>
-              <Link to={`/students/${row.original.uuid}`}>View</Link>
+          <div className={styles.actionButtonContainer}>
+            <button className={`${styles.actionButton} ${styles.viewButton}`}>
+              <Link to={`/admin/students/${row.original.uuid}`}>View</Link>
             </button>
-            <button>
+            <button className={`${styles.actionButton} ${styles.editButton}`}>
               <Link to={`/admin/students/edit/${row.original.uuid}`}>Edit</Link>
             </button>
-            <button onClick={() => onDeleteStudent(row.original.uuid)}>
+            <button
+              className={`${styles.actionButton} ${styles.deleteButton}`}
+              onClick={() => onDeleteStudent(row.original.uuid)}
+            >
               Delete
             </button>
           </div>
@@ -107,20 +111,28 @@ const Students = () => {
 
   return (
     <Layout>
-      <Link to="/admin/students/add" className="btn">
-        Add new student
-      </Link>
-      <h1>Student List</h1>
-      {students?.length ? (
-        <MaterialReactTable
-          columns={columns}
-          data={students}
-          enablePagination
-          enableColumnOrdering
-        />
-      ) : (
-        <p>No students to display</p>
-      )}
+      <div className={styles.studentsContainer}>
+        <div className={styles.pageHeader}>
+          <h1 className={styles.pageTitle}>Student List</h1>
+          <Link to="/admin/students/add" className={styles.btn}>
+            Add new student
+          </Link>
+        </div>
+        <div className={styles.tableContainer}>
+          {students?.length ? (
+            <MaterialReactTable
+              columns={columns}
+              data={students}
+              enablePagination
+              enableColumnOrdering
+            />
+          ) : (
+            <div className={styles.emptyState}>
+              <p>No students to display</p>
+            </div>
+          )}
+        </div>
+      </div>
     </Layout>
   );
 };

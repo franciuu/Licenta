@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Row, Col } from "react-bootstrap";
-import Layout from "./Layout";
-import CourseCard from "../components/CourseCard.js";
-import useAxiosCustom from "../hooks/useAxiosCustom.js";
-import { getCourses } from "../services/CourseService.js";
-import Loader from "../components/Loader.js";
-import styles from "../styles/Courses.module.css";
+import Layout from "../Layout";
+import CourseCard from "../../components/CourseCard.js";
+import useAxiosCustom from "../../hooks/useAxiosCustom.js";
+import { getCourses } from "../../services/CourseService.js";
+import Loader from "../../components/Loader.js";
+import styles from "../../styles/Courses.module.css";
 
 const Courses = () => {
   const [loadingCount, setLoadingCount] = useState(0);

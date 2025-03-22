@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import useAxiosCustom from "../hooks/useAxiosCustom";
+import useAxiosCustom from "../../hooks/useAxiosCustom";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import Layout from "./Layout";
-import styles from "../styles/AddCourse.module.css";
-import { createCourse } from "../services/CourseService";
+import Layout from "../Layout";
+import styles from "../../styles/AddCourse.module.css";
+import { createCourse } from "../../services/CourseService";
 
 const schema = Yup.object().shape({
   name: Yup.string().required("Name is required"),

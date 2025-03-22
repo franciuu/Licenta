@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import Layout from "./Layout";
-import useAxiosCustom from "../hooks/useAxiosCustom";
-import Loader from "../components/Loader";
+import Layout from "../Layout";
+import useAxiosCustom from "../../hooks/useAxiosCustom";
+import Loader from "../../components/Loader";
 
 const localizer = momentLocalizer(moment);
 

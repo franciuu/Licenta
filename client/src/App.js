@@ -1,26 +1,30 @@
-import Dashboard from "./pages/Dashboard.js";
 import Login from "./pages/Login.js";
-import Users from "./pages/Users.js";
-import AddUser from "./pages/AddUser.js";
-import EditUser from "./pages/EditUser.js";
 import Unauthorized from "./pages/Unauthorized.js";
-import Students from "./pages/Students.js";
-import AddStudent from "./pages/AddStudent.js";
-import ViewStudent from "./pages/ViewStudent.js";
-import Courses from "./pages/Courses.js";
-import AddCourse from "./pages/AddCourse.js";
-import TakeAttendance from "./pages/TakeAttendance.js";
-import EditStudent from "./pages/EditStudent.js";
-import AddActivity from "./pages/AddActivity.js";
-import PersonalCalendar from "./pages/PersonalCalendar.js";
-import ViewCourse from "./pages/ViewCourse.js";
-import ViewAttendance from "./pages/ViewAttendance.js";
 import NotFound from "./pages/NotFound.js";
 import Page404 from "./pages/404.js";
-import ActivityEnrollment from "./pages/ActivityEnrollment.js";
-import GenerateEmbeddings from "./pages/GenerateEmbeddings.js";
-import AcademicYears from "./pages/AcademicYears.js";
-import AddAcademicYear from "./pages/AddAcademicYear.js";
+
+import Users from "./pages/admin/Users.js";
+import AddUser from "./pages/admin/AddUser.js";
+import EditUser from "./pages/admin/EditUser.js";
+import Courses from "./pages/admin/Courses.js";
+import AddCourse from "./pages/admin/AddCourse.js";
+import EditStudent from "./pages/admin/EditStudent.js";
+import AddActivity from "./pages/admin/AddActivity.js";
+import ViewCourse from "./pages/admin/ViewCourse.js";
+import ActivityEnrollment from "./pages/admin/ActivityEnrollment.js";
+import GenerateEmbeddings from "./pages/admin/GenerateEmbeddings.js";
+import AcademicYears from "./pages/admin/AcademicYears.js";
+import AddAcademicYear from "./pages/admin/AddAcademicYear.js";
+import ViewStudent from "./pages/admin/ViewStudent.js";
+import Students from "./pages/admin/Students.js";
+import AddStudent from "./pages/admin/AddStudent.js";
+
+import Dashboard from "./pages/Dashboard.js";
+
+import TakeAttendance from "./pages/professor/TakeAttendance.js";
+import PersonalCalendar from "./pages/professor/PersonalCalendar.js";
+import ViewAttendance from "./pages/professor/ViewAttendance.js";
+import PersonalStudents from "./pages/professor/PersonalStudents.js";
 
 import RequireAuth from "./components/RequireAuth.js";
 import PersistLogin from "./components/PersistLogin.js";
@@ -40,9 +44,6 @@ function App() {
             element={<RequireAuth allowedRoles={["admin", "professor"]} />}
           >
             <Route path="/dashboard" element={<Dashboard />}></Route>
-            <Route path="/students" element={<Students />}></Route>
-            <Route path="/students/:id" element={<ViewStudent />}></Route>
-
             <Route path="/404" element={<Page404 />}></Route>
           </Route>
 
@@ -60,6 +61,10 @@ function App() {
               path="/professor/attendance/:id"
               element={<TakeAttendance />}
             ></Route>
+            <Route
+              path="/professor/students"
+              element={<PersonalStudents />}
+            ></Route>
           </Route>
 
           <Route element={<RequireAuth allowedRoles={["admin"]} />}>
@@ -72,6 +77,8 @@ function App() {
             <Route path="/admin/users/add" element={<AddUser />}></Route>
             <Route path="/admin/users/edit/:id" element={<EditUser />}></Route>
             <Route path="/admin/students/add" element={<AddStudent />}></Route>
+            <Route path="/admin/students" element={<Students />}></Route>
+            <Route path="/admin/students/:id" element={<ViewStudent />}></Route>
             <Route
               path="/admin/students/edit/:id"
               element={<EditStudent />}

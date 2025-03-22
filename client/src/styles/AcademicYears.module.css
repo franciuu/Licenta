@@ -23,6 +23,7 @@
 }
 
 .addButton {
+  text-decoration: none;
   background: linear-gradient(135deg, #7c26a6 0%, #9d3fbf 100%);
   color: white;
   border: none;

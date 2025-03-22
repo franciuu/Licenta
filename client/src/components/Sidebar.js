@@ -5,10 +5,12 @@ import {
   FaUserFriends,
   FaGraduationCap,
   FaBook,
+  FaUsers,
   FaChalkboardTeacher,
   FaCalendarAlt,
   FaUniversity,
 } from "react-icons/fa";
+import { Avatar } from "@chakra-ui/react";
 import style from "../styles/Sidebar.module.css";
 import useAuth from "../hooks/useAuth";
 import useAxiosCustom from "../hooks/useAxiosCustom";
@@ -80,12 +82,23 @@ const Sidebar = () => {
           </li>
           <li className={style.sidebarItem}>
             <NavLink
-              to="/students"
+              to="/admin/students"
               className={({ isActive }) =>
                 `${style.itemText} ${isActive ? style.active : ""}`
               }
             >
               <FaGraduationCap className={style.icon} />
+              <span className={style.label}>Students</span>
+            </NavLink>
+          </li>
+          <li className={style.sidebarItem}>
+            <NavLink
+              to="/professor/students"
+              className={({ isActive }) =>
+                `${style.itemText} ${isActive ? style.active : ""}`
+              }
+            >
+              <FaUsers className={style.icon} />
               <span className={style.label}>Students</span>
             </NavLink>
           </li>
@@ -149,11 +162,9 @@ const Sidebar = () => {
       </div>
 
       <div className={style.sidebarFooter}>
-        <img
-          src="https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&bold=true"
-          alt="Avatar"
-          className={style.avatar}
-        />
+        <Avatar.Root colorPalette="orange" className={style.avatar}>
+          <Avatar.Fallback name={auth.name || "User Name"} />
+        </Avatar.Root>
         <div className={style.userInfo}>
           <h4 className={style.userName}>{auth.name || "User Name"}</h4>
           <span className={style.userEmail}>{auth.email}</span>

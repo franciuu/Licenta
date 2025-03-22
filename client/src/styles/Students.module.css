@@ -1,4 +1,4 @@
-.usersContainer {
+.studentsContainer {
   padding: 1rem 1.25rem;
   height: 100%;
   display: flex;
@@ -38,7 +38,8 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   line-height: 1;
   height: 40px;
-  align-self: center;
+  align-self: flex-start;
+  margin-bottom: 1rem;
 }
 
 .btn:hover {
@@ -50,6 +51,14 @@
 .btn:active {
   transform: translateY(0);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.tableContainer {
+  flex: 1;
+  overflow: auto;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
 }
 
 .actionButtonContainer {
@@ -68,6 +77,16 @@
   transition: all 0.2s ease;
 }
 
+.viewButton {
+  background-color: #d2f8e1;
+  color: #14ae3d;
+}
+
+.viewButton:hover {
+  background-color: #bff1d3;
+  transform: translateY(-1px);
+}
+
 .editButton {
   background-color: #e0f2fe;
   color: #3b82f6;
@@ -76,14 +95,6 @@
 .editButton:hover {
   background-color: #bfdbfe;
   transform: translateY(-1px);
-}
-
-.editButton a {
-  color: inherit;
-  text-decoration: none;
-  display: block;
-  width: 100%;
-  height: 100%;
 }
 
 .deleteButton {
@@ -96,7 +107,15 @@
   transform: translateY(-1px);
 }
 
-/* Empty state style */
+.viewButton a,
+.editButton a {
+  color: inherit;
+  text-decoration: none;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
 .emptyState {
   text-align: center;
   padding: 3rem;

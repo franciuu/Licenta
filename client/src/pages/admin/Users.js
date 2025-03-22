@@ -1,12 +1,12 @@
-import Layout from "./Layout.js";
+import Layout from "../Layout.js";
 import { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { MaterialReactTable } from "material-react-table";
 import Swal from "sweetalert2";
-import useAxiosCustom from "../hooks/useAxiosCustom";
-import { getUsers, deleteUser } from "../services/UserService.js";
-import Loader from "../components/Loader.js";
-import style from "../styles/Users.module.css";
+import useAxiosCustom from "../../hooks/useAxiosCustom";
+import { getUsers, deleteUser } from "../../services/UserService.js";
+import Loader from "../../components/Loader.js";
+import style from "../../styles/Users.module.css";
 
 const Users = () => {
   const [loadingCount, setLoadingCount] = useState(0);
@@ -98,7 +98,8 @@ const Users = () => {
         <div className={style.pageHeader}>
           <h1 className={style.pageTitle}>List of Users</h1>
           <Link to="/admin/users/add" className={style.btn}>
-            Add new user
+            <span className={style.addIcon}>+</span>
+            Add user
           </Link>
         </div>
         {users?.length ? (

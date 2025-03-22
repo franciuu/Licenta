@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Layout from "../pages/Layout.js";
-import useAxiosCustom from "../hooks/useAxiosCustom.js";
-import { getCourses } from "../services/CourseService.js";
-import { getProfessors } from "../services/UserService.js";
-import { createActivity } from "../services/ActivityService.js";
-import { getSemesters } from "../services/AcademicYearService.js";
-import Loader from "../components/Loader.js";
-import styles from "../styles/AddActivity.module.css";
+import Layout from "../Layout.js";
+import useAxiosCustom from "../../hooks/useAxiosCustom.js";
+import { getCourses } from "../../services/CourseService.js";
+import { getProfessors } from "../../services/UserService.js";
+import { createActivity } from "../../services/ActivityService.js";
+import { getSemesters } from "../../services/AcademicYearService.js";
+import Loader from "../../components/Loader.js";
+import styles from "../../styles/AddActivity.module.css";
 
 const AddActivity = () => {
   const [loadingCount, setLoadingCount] = useState(0);

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import useAxiosCustom from "../hooks/useAxiosCustom";
-import Layout from "./Layout";
-import UserForm from "../components/UserForm";
+import useAxiosCustom from "../../hooks/useAxiosCustom";
+import Layout from "../Layout";
+import UserForm from "../../components/UserForm";
 
 const EditUser = () => {
   const { id } = useParams();

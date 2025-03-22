@@ -1,8 +1,8 @@
 import { useState } from "react";
-import Layout from "./Layout";
-import useAxiosCustom from "../hooks/useAxiosCustom";
+import Layout from "../Layout";
+import useAxiosCustom from "../../hooks/useAxiosCustom";
 import { useNavigate } from "react-router-dom";
-import styles from "../styles/AddAcademicYear.module.css";
+import styles from "../../styles/AddAcademicYear.module.css";
 
 const AddAcademicYear = () => {
   const [formData, setFormData] = useState({

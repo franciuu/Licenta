@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import useAxiosCustom from "../hooks/useAxiosCustom";
-import Layout from "./Layout";
-import StudentForm from "../components/StudentForm";
-import { createStudent } from "../services/StudentService";
+import useAxiosCustom from "../../hooks/useAxiosCustom";
+import Layout from "../Layout";
+import StudentForm from "../../components/StudentForm";
+import { createStudent } from "../../services/StudentService";
 
 const AddStudent = () => {
   const navigate = useNavigate();

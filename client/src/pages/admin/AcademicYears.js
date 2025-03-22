@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import Layout from "./Layout";
-import useAxiosCustom from "../hooks/useAxiosCustom";
-import { getAcademicYears } from "../services/AcademicYearService";
+import Layout from "../Layout";
+import useAxiosCustom from "../../hooks/useAxiosCustom";
+import { getAcademicYears } from "../../services/AcademicYearService";
 import {
   Accordion,
   AccordionItem,
@@ -9,13 +9,12 @@ import {
   AccordionItemHeading,
   AccordionItemPanel,
 } from "react-accessible-accordion";
-import { useNavigate } from "react-router-dom";
-import styles from "../styles/AcademicYears.module.css";
+import { Link } from "react-router-dom";
+import styles from "../../styles/AcademicYears.module.css";
 
 const AcademicYears = () => {
   const [years, setYears] = useState([]);
   const axiosCustom = useAxiosCustom();
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchYearsData = async () => {
@@ -31,19 +30,15 @@ const AcademicYears = () => {
     fetchYearsData();
   }, []);
 
-  const handleAddYear = () => {
-    navigate("/admin/academic/add");
-  };
-
   return (
     <Layout>
       <div className={styles.container}>
         <div className={styles.titleContainer}>
           <h1 className={styles.pageTitle}>Academic Years</h1>
-          <button onClick={handleAddYear} className={styles.addButton}>
+          <Link to="/admin/academic/add" className={styles.addButton}>
             <span className={styles.addIcon}>+</span>
             Add Year
-          </button>
+          </Link>
         </div>
         <Accordion
           allowZeroExpanded={true}

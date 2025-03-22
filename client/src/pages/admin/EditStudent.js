@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import useAxiosCustom from "../hooks/useAxiosCustom";
-import Layout from "./Layout";
-import StudentForm from "../components/StudentForm";
+import useAxiosCustom from "../../hooks/useAxiosCustom";
+import Layout from "../Layout";
+import StudentForm from "../../components/StudentForm";
 
 const EditStudent = () => {
   const { id } = useParams();

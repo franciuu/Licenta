@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import { Container, Row, Col } from "react-bootstrap";
-import useAxiosCustom from "../hooks/useAxiosCustom";
+import useAxiosCustom from "../../hooks/useAxiosCustom";
 import { useNavigate, useParams } from "react-router-dom";
-import Layout from "./Layout";
-import ActivityCard from "../components/ActivityCard.js";
+import Layout from "../Layout";
+import ActivityCard from "../../components/ActivityCard.js";
 import Swal from "sweetalert2";
-import { getCourseById } from "../services/CourseService.js";
-import { getActivitesByCourse } from "../services/ActivityService.js";
-import Loader from "../components/Loader.js";
+import { getCourseById } from "../../services/CourseService.js";
+import { getActivitesByCourse } from "../../services/ActivityService.js";
+import Loader from "../../components/Loader.js";
 
 const ViewCourse = () => {
   const [loadingCount, setLoadingCount] = useState(0);

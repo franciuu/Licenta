@@ -1,0 +1,143 @@
+.studentContainer {
+  padding: 1.7rem;
+  background-color: #fdfcff;
+}
+
+.pageHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.pageTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #333;
+}
+
+.backButton {
+  padding: 0.5rem 1.2rem;
+  background-color: #7c26a6;
+  color: #fff;
+  font-size: 0.95rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  text-decoration: none;
+}
+
+.backButton:hover {
+  background-color: #691c8f;
+  transform: translateY(-2px);
+}
+
+.contentWrapper {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.studentInfoSection {
+  flex: 1 1 350px;
+  text-align: center;
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 1.2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.infoLabel {
+  font-weight: 600;
+  color: #555;
+  margin-top: 1rem;
+}
+
+.infoValue {
+  font-size: 1.05rem;
+  color: #333;
+  margin-top: 0.3rem;
+}
+
+.studyYearValue {
+  background-color: #f3e8ff;
+  padding: 0.3rem 0.8rem;
+  border-radius: 0.4rem;
+  font-weight: 600;
+  display: inline-block;
+  margin-top: 0.3rem;
+}
+
+.carouselSection {
+  flex: 1 1 350px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  background-color: transparent;
+}
+
+.carouselWrapper {
+  width: 100%;
+  max-width: 350px;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+}
+
+.emptyStateWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 350px;
+  aspect-ratio: 3 / 4;
+  border-radius: 1rem;
+  background-color: #f9f9f9;
+  color: #888;
+  font-style: italic;
+  font-size: 1rem;
+  border: 2px dashed #ccc;
+  text-align: center;
+  padding: 2rem;
+}
+
+.noData {
+  font-size: 1.2rem;
+  color: #999;
+  text-align: center;
+  margin-top: 4rem;
+}
+
+.infoRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 1rem;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.infoLabel {
+  font-weight: 600;
+  color: #5c5c5c;
+}
+
+.infoValue {
+  font-weight: 500;
+  color: #2d2d2d;
+}
+
+.studyYearValue {
+  background-color: #e6ddff;
+  padding: 0.3rem 0.8rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  color: #5c26a6;
+}

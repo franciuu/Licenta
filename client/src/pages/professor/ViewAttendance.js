@@ -1,9 +1,9 @@
 import { useState, useEffect, useMemo } from "react";
-import Layout from "./Layout";
-import useAxiosCustom from "../hooks/useAxiosCustom";
+import Layout from "../Layout";
+import useAxiosCustom from "../../hooks/useAxiosCustom";
 import { useParams } from "react-router-dom";
 import { MaterialReactTable } from "material-react-table";
-import Loader from "../components/Loader";
+import Loader from "../../components/Loader";
 
 const ViewAttendance = () => {
   const [loadingCount, setLoadingCount] = useState(0);

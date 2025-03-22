@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import useAxiosCustom from "../hooks/useAxiosCustom";
-import Layout from "./Layout";
-import UserForm from "../components/UserForm.js";
+import useAxiosCustom from "../../hooks/useAxiosCustom";
+import Layout from "../Layout";
+import UserForm from "../../components/UserForm.js";
 
 const AddUser = () => {
   const [error, setError] = useState(null);

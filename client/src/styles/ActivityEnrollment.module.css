@@ -1,0 +1,157 @@
+/* ActivityEnrollment.module.css */
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.activityDetails {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.sectionTitle {
+  color: #8e44ad;
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #e9ecef;
+}
+
+.detailRow {
+  display: flex;
+  margin-bottom: 10px;
+  align-items: center;
+}
+
+.detailLabel {
+  font-weight: 600;
+  min-width: 150px;
+  color: #495057;
+}
+
+.detailValue {
+  color: #212529;
+}
+
+.enrollmentSection {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.formGroup {
+  margin-bottom: 15px;
+}
+
+.label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #495057;
+}
+
+.input {
+  width: 100%;
+  max-width: 400px;
+  padding: 10px 15px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+
+.button {
+  background-color: #8e44ad;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.button:hover {
+  background-color: #7d3c98;
+}
+
+.searchButton {
+  margin-left: 10px;
+}
+
+.errorMessage {
+  color: #dc3545;
+  margin-top: 5px;
+  font-size: 0.9rem;
+}
+
+.successMessage {
+  color: #28a745;
+  margin-top: 5px;
+  font-size: 0.9rem;
+}
+
+.studentCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px;
+  background-color: white;
+  border-radius: 4px;
+  border-left: 4px solid #8e44ad;
+  margin-top: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.studentName {
+  font-weight: 600;
+  color: #343a40;
+}
+
+.enrollmentsList {
+  list-style-type: none;
+  padding: 0;
+  margin-top: 20px;
+}
+
+.enrollmentItem {
+  display: flex;
+  align-items: center;
+  padding: 12px 15px;
+  background-color: white;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  border-left: 3px solid #8e44ad;
+}
+
+.emptyMessage {
+  color: #6c757d;
+  font-style: italic;
+  margin-top: 15px;
+}
+
+.saveButton {
+  background-color: #8e44ad;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 12px 24px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.saveButton:hover {
+  background-color: #7d3c98;
+}

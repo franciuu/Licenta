@@ -17,6 +17,7 @@ export const login = async (req, res) => {
 
   const match = await argon2.verify(user.password, req.body.password);
   if (!match) return res.status(400).json({ msg: "Wrong Password" });
+  const name = user.name;
   const role = user.role;
   const accessToken = jwt.sign(
     {
@@ -47,11 +48,11 @@ export const login = async (req, res) => {
     sameSite: "None",
     secure: true,
   });
-  res.status(200).json({ role, accessToken });
+  res.status(200).json({ name, role, accessToken });
 };
 
 export const logout = async (req, res) => {
-  console.log("Cookies received:", req.cookies); // Vezi ce primește backend-ul
+  console.log("Cookies received:", req.cookies);
 
   const cookies = req.cookies;
   if (!cookies?.jwt) {

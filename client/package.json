@@ -4,6 +4,7 @@
   "proxy": "http://localhost:5000/",
   "private": true,
   "dependencies": {
+    "@chakra-ui/react": "^3.13.0",
     "@hookform/resolvers": "^3.9.1",
     "@mui/icons-material": "^6.4.7",
     "@mui/material": "^6.4.7",

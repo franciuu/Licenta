@@ -1,7 +1,7 @@
-import useAxiosCustom from "../hooks/useAxiosCustom";
-import Layout from "./Layout";
+import useAxiosCustom from "../../hooks/useAxiosCustom";
+import Layout from "../Layout";
 import { useState } from "react";
-import { generateEmbeddings } from "../services/EmbeddingsService";
+import { generateEmbeddings } from "../../services/EmbeddingsService";
 
 const GenerateEmbeddings = () => {
   const axiosCustom = useAxiosCustom();
