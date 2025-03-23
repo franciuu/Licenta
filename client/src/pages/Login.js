@@ -20,7 +20,7 @@ const Login = () => {
   const [error, setError] = useState("");
   const redirectByRole = {
     admin: "/admin/academic",
-    professor: "/dashboard",
+    professor: "/professor/dashboard",
   };
 
   useEffect(() => {

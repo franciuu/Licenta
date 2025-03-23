@@ -2,7 +2,17 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import useAxiosCustom from "../../hooks/useAxiosCustom";
 import Layout from "../Layout";
-import UserForm from "../../components/UserForm";
+import { useForm } from "react-hook-form";
+import * as Yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+const editUserSchema = Yup.object().shape({
+  name: Yup.string().required("Name is required"),
+  email: Yup.string().email("Invalid email").required("Email is required"),
+  role: Yup.mixed()
+    .oneOf(["admin", "professor"], "Invalid role")
+    .required("Role is required"),
+});
 
 const EditUser = () => {
   const { id } = useParams();
@@ -24,6 +34,21 @@ const EditUser = () => {
     fetchUser();
   }, [id, axiosCustom]);
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({
+    resolver: yupResolver(editUserSchema),
+  });
+
+  useEffect(() => {
+    if (user) {
+      reset(user);
+    }
+  }, [user, reset]);
+
   const updateUser = async (data) => {
     try {
       await axiosCustom.patch(`/users/${id}`, data);
@@ -38,12 +63,50 @@ const EditUser = () => {
   return (
     <Layout>
       <h1>Edit User</h1>
-      <UserForm
-        initialValues={user}
-        onSubmit={updateUser}
-        error={error}
-        isEdit={true}
-      />
+      <form onSubmit={handleSubmit(updateUser)}>
+        {error && <p className="error">{error}</p>}
+
+        <div className="inputDiv">
+          <label htmlFor="name">Name: </label>
+          <div className="input">
+            <input
+              {...register("name")}
+              type="text"
+              id="name"
+              placeholder="Name"
+            />
+          </div>
+          <p>{errors.name?.message}</p>
+        </div>
+
+        <div className="inputDiv">
+          <label htmlFor="email">Email: </label>
+          <div className="input">
+            <input
+              {...register("email")}
+              type="email"
+              id="email"
+              placeholder="Email"
+            />
+          </div>
+          <p>{errors.email?.message}</p>
+        </div>
+
+        <div className="inputDiv">
+          <label htmlFor="role">Role: </label>
+          <div className="input">
+            <select {...register("role")} id="role">
+              <option value="admin">Admin</option>
+              <option value="professor">Professor</option>
+            </select>
+          </div>
+          <p>{errors.role?.message}</p>
+        </div>
+
+        <button type="submit" className="btn">
+          Save
+        </button>
+      </form>
     </Layout>
   );
 };

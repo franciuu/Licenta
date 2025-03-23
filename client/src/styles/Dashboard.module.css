@@ -33,7 +33,7 @@
 .statCard {
   background-color: #f9fafb;
   border-radius: 0.5rem;
-  padding: 0.6rem;
+  padding: 1rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;

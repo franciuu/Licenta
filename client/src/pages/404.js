@@ -10,7 +10,7 @@ const Page404 = () => {
     if (auth.role === "admin") {
       navigate("/admin/academic");
     } else if (auth.role === "professor") {
-      navigate("/dashboard");
+      navigate("/professor/dashboard");
     }
   };
 

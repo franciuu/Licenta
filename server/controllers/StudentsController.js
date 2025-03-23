@@ -48,7 +48,7 @@ export const getPersonalStudents = async (req, res) => {
       },
     });
 
-    return res.status(200).json({ students });
+    return res.status(200).json(students);
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }

@@ -1,4 +1,3 @@
-// Dashboard.js
 import React from "react";
 import { Icon } from "@chakra-ui/react";
 import { FaTasks, FaUserGraduate, FaChartBar } from "react-icons/fa";
@@ -16,8 +15,8 @@ import {
   Pie,
   Cell,
 } from "recharts";
-import Layout from "./Layout";
-import styles from "../styles/Dashboard.module.css";
+import Layout from "../Layout";
+import styles from "../../styles/Dashboard.module.css";
 
 const Dashboard = () => {
   const lineData = [

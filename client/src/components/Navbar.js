@@ -1,8 +1,10 @@
 import style from "../styles/Navbar.module.css";
 import { useNavigate } from "react-router-dom";
 import useLogout from "../hooks/useLogout";
+import useAuth from "../hooks/useAuth";
 
 const Navbar = () => {
+  const { auth } = useAuth();
   const navigate = useNavigate();
   const logout = useLogout();
 
@@ -18,12 +20,14 @@ const Navbar = () => {
   return (
     <header>
       <nav className={style.navbar}>
-        <button
-          onClick={() => navigate("/admin/generate")}
-          className={style.btn}
-        >
-          Update
-        </button>
+        {auth.role === "admin" && (
+          <button
+            onClick={() => navigate("/admin/generate")}
+            className={style.btn}
+          >
+            Update
+          </button>
+        )}
         <button onClick={handleLogout} className={style.btn}>
           Log out
         </button>
