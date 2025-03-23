@@ -23,6 +23,7 @@ const AddActivity = () => {
     idProf: "",
     dayOfWeek: "0",
     idSemester: "",
+    type: "seminar",
   });
   const axiosCustom = useAxiosCustom();
   const navigate = useNavigate();
@@ -113,17 +114,34 @@ const AddActivity = () => {
       <div className={styles.addActivityContainer}>
         <h2 className={styles.addActivityTitle}>Add Activity</h2>
         <form onSubmit={handleSubmit}>
+          {/* Full width Name field */}
+          <div className={styles.formGroupFullWidth}>
+            <label htmlFor="name">Name: </label>
+            <input
+              id="name"
+              placeholder="e.g. Baze de date, Tip-S, 1092"
+              value={formData.name}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
           <div className={styles.formColumns}>
+            {/* Left Column */}
             <div className={styles.formColumn}>
               <div className={styles.formGroup}>
-                <label htmlFor="name">Name: </label>
-                <input
-                  id="name"
-                  placeholder="e.g. Baze de date, Tip-S, 1092"
-                  value={formData.name}
+                <label htmlFor="idCourse">Course: </label>
+                <select
+                  id="idCourse"
+                  value={formData.idCourse}
                   onChange={handleChange}
-                  required
-                />
+                >
+                  {courses.map((c) => (
+                    <option key={c.uuid} value={c.uuid}>
+                      {c.name}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div className={styles.formGroup}>
@@ -162,30 +180,14 @@ const AddActivity = () => {
               </div>
             </div>
 
+            {/* Right Column */}
             <div className={styles.formColumn}>
               <div className={styles.formGroup}>
-                <label htmlFor="idCourse">Course: </label>
-                <select
-                  id="idCourse"
-                  value={formData.idCourse}
-                  onChange={handleChange}
-                >
-                  {courses.map((c) => (
-                    <option key={c.uuid} value={c.uuid}>
-                      {c.name}
-                    </option>
-                  ))}
+                <label htmlFor="type">Type: </label>
+                <select id="type" value={formData.type} onChange={handleChange}>
+                  <option value="seminar">Seminar</option>
+                  <option value="lecture">Lecture</option>
                 </select>
-              </div>
-
-              <div className={styles.formGroup}>
-                <label htmlFor="endTime">End time:</label>
-                <input
-                  id="endTime"
-                  type="time"
-                  value={formData.endTime}
-                  onChange={handleChange}
-                />
               </div>
 
               <div className={styles.formGroup}>
@@ -201,6 +203,16 @@ const AddActivity = () => {
                     </option>
                   ))}
                 </select>
+              </div>
+
+              <div className={styles.formGroup}>
+                <label htmlFor="endTime">End time:</label>
+                <input
+                  id="endTime"
+                  type="time"
+                  value={formData.endTime}
+                  onChange={handleChange}
+                />
               </div>
 
               <div className={styles.formGroup}>
@@ -220,7 +232,7 @@ const AddActivity = () => {
             </div>
           </div>
 
-          <div className={`${styles.formActions} ${styles.fullWidthActions}`}>
+          <div className={styles.formActions}>
             <button type="submit" className={styles.submitButton}>
               Save
             </button>

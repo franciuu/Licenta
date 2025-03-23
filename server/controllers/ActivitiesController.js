@@ -64,6 +64,7 @@ export const createActivity = async (req, res) => {
     idProf,
     dayOfWeek,
     idSemester,
+    type,
   } = req.body;
   try {
     await Activity.create({
@@ -75,6 +76,7 @@ export const createActivity = async (req, res) => {
       idProf: idProf,
       dayOfWeek: dayOfWeek,
       idSemester: idSemester,
+      type: type,
     });
     res.status(201).json({ msg: "Successful" });
   } catch (error) {

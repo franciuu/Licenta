@@ -1,11 +1,54 @@
 import Student from "../models/Student.js";
+import Activity from "../models/Activity.js";
+import Enrollment from "../models/Enrollment.js";
 import Image from "../models/Image.js";
 import cloudinary from "../config/cloudinary.js";
+import { Op } from "sequelize";
 
 export const getStudents = async (req, res) => {
   try {
     const response = await Student.findAll();
     res.status(200).json(response);
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
+};
+
+export const getPersonalStudents = async (req, res) => {
+  try {
+    const idProf = req.user;
+
+    const activities = await Activity.findAll({
+      where: { idProf: idProf },
+      attributes: ["uuid"],
+    });
+
+    const idActivities = activities.map((a) => a.uuid);
+
+    if (idActivities.length === 0) {
+      return res.status(200).json({ studenti: [] });
+    }
+
+    const enrollments = await Enrollment.findAll({
+      where: {
+        idActivity: {
+          [Op.in]: idActivities,
+        },
+      },
+      attributes: ["idStudent"],
+    });
+
+    const idStudents = [...new Set(enrollments.map((e) => e.idStudent))];
+
+    const students = await Student.findAll({
+      where: {
+        uuid: {
+          [Op.in]: idStudents,
+        },
+      },
+    });
+
+    return res.status(200).json({ students });
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }

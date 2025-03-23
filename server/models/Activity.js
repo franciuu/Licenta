@@ -55,6 +55,14 @@ const Activity = db.define(
         notEmpty: true,
       },
     },
+    type: {
+      type: DataTypes.ENUM("lecture", "seminar"),
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+      defaultValue: "seminar",
+    },
   },
   {
     freezeTableName: true,

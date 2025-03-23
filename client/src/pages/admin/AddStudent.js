@@ -18,7 +18,7 @@ const AddStudent = () => {
       }
       const studentData = await createStudent(axiosCustom, data, imageUrls);
       if (studentData) {
-        navigate("/students");
+        navigate("/admin/students");
       }
     } catch (error) {
       setError(error.response?.data?.msg);
