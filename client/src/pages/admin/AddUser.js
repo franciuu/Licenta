@@ -61,7 +61,7 @@ const AddUser = () => {
                     {...register("name")}
                     type="text"
                     id="name"
-                    placeholder="Name"
+                    placeholder="e.g. John Doe"
                   />
                 </div>
                 {errors.name && (
@@ -76,7 +76,7 @@ const AddUser = () => {
                     {...register("email")}
                     type="email"
                     id="email"
-                    placeholder="Email"
+                    placeholder="e.g. johndoe@gmail.com"
                   />
                 </div>
                 {errors.email && (
@@ -106,7 +106,6 @@ const AddUser = () => {
                     {...register("password")}
                     type="password"
                     id="password"
-                    placeholder="Password"
                   />
                 </div>
                 {errors.password && (
@@ -121,7 +120,6 @@ const AddUser = () => {
                     {...register("confirmPassword")}
                     type="password"
                     id="confirmPassword"
-                    placeholder="Confirm password"
                   />
                 </div>
                 {errors.confirmPassword && (

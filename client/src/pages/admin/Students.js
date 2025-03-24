@@ -115,7 +115,8 @@ const Students = () => {
         <div className={styles.pageHeader}>
           <h1 className={styles.pageTitle}>Student List</h1>
           <Link to="/admin/students/add" className={styles.btn}>
-            Add new student
+            <span className={styles.addIcon}>+</span>
+            Add student
           </Link>
         </div>
         <div className={styles.tableContainer}>

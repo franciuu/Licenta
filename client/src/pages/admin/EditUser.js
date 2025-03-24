@@ -5,6 +5,7 @@ import Layout from "../Layout";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import styles from "../../styles/EditUser.module.css";
 
 const editUserSchema = Yup.object().shape({
   name: Yup.string().required("Name is required"),
@@ -58,55 +59,83 @@ const EditUser = () => {
     }
   };
 
-  if (!user) return <p>Loading...</p>;
+  const handleBack = () => {
+    navigate("/admin/users");
+  };
+
+  if (!user)
+    return (
+      <Layout>
+        <div className={styles.container}>
+          <div className={styles.loader}>Loading user data...</div>
+        </div>
+      </Layout>
+    );
 
   return (
     <Layout>
-      <h1>Edit User</h1>
-      <form onSubmit={handleSubmit(updateUser)}>
-        {error && <p className="error">{error}</p>}
-
-        <div className="inputDiv">
-          <label htmlFor="name">Name: </label>
-          <div className="input">
-            <input
-              {...register("name")}
-              type="text"
-              id="name"
-              placeholder="Name"
-            />
-          </div>
-          <p>{errors.name?.message}</p>
-        </div>
-
-        <div className="inputDiv">
-          <label htmlFor="email">Email: </label>
-          <div className="input">
-            <input
-              {...register("email")}
-              type="email"
-              id="email"
-              placeholder="Email"
-            />
-          </div>
-          <p>{errors.email?.message}</p>
-        </div>
-
-        <div className="inputDiv">
-          <label htmlFor="role">Role: </label>
-          <div className="input">
-            <select {...register("role")} id="role">
-              <option value="admin">Admin</option>
-              <option value="professor">Professor</option>
-            </select>
-          </div>
-          <p>{errors.role?.message}</p>
-        </div>
-
-        <button type="submit" className="btn">
-          Save
+      <div className={styles.container}>
+        <button onClick={handleBack} className={styles.backButton}>
+          ← Back to Users
         </button>
-      </form>
+        <h1 className={styles.title}>Edit User</h1>
+        <form onSubmit={handleSubmit(updateUser)}>
+          {error && <p className={styles.errorMessage}>{error}</p>}
+
+          <div className={styles.formColumns}>
+            <div className={styles.formColumn}>
+              <div className={styles.inputDiv}>
+                <label htmlFor="name">Name: </label>
+                <div className={styles.input}>
+                  <input
+                    {...register("name")}
+                    type="text"
+                    id="name"
+                    placeholder="e.g. John Doe"
+                  />
+                </div>
+                {errors.name && (
+                  <p className={styles.error}>{errors.name.message}</p>
+                )}
+              </div>
+
+              <div className={styles.inputDiv}>
+                <label htmlFor="email">Email: </label>
+                <div className={styles.input}>
+                  <input
+                    {...register("email")}
+                    type="email"
+                    id="email"
+                    placeholder="e.g. johndoe@gmail.com"
+                  />
+                </div>
+                {errors.email && (
+                  <p className={styles.error}>{errors.email.message}</p>
+                )}
+              </div>
+            </div>
+
+            <div className={styles.formColumn}>
+              <div className={styles.inputDiv}>
+                <label htmlFor="role">Role: </label>
+                <div className={styles.input}>
+                  <select {...register("role")} id="role">
+                    <option value="admin">Admin</option>
+                    <option value="professor">Professor</option>
+                  </select>
+                </div>
+                {errors.role && (
+                  <p className={styles.error}>{errors.role.message}</p>
+                )}
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" className={styles.btn}>
+            Save Changes
+          </button>
+        </form>
+      </div>
     </Layout>
   );
 };

@@ -16,9 +16,9 @@ import useAuth from "../hooks/useAuth";
 import useAxiosCustom from "../hooks/useAxiosCustom";
 
 const Sidebar = () => {
-  const { auth } = useAuth();
   const [activities, setActivities] = useState([]);
   const axiosCustom = useAxiosCustom();
+  const { auth } = useAuth();
 
   useEffect(() => {
     const getActivities = async () => {

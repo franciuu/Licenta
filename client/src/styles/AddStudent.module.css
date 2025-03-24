@@ -1,0 +1,167 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px 30px;
+  background-color: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(15px);
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(142, 68, 173, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.6);
+}
+
+.title {
+  font-size: 20px;
+  color: #333;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid rgba(142, 68, 173, 0.4);
+  font-weight: 600;
+}
+
+.formWrapper {
+  width: 100%;
+}
+
+.inputDiv {
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.inputDiv label {
+  font-weight: 500;
+  margin-bottom: 6px;
+  color: #444;
+  font-size: 14px;
+}
+
+.input {
+  display: flex;
+  flex-direction: column;
+}
+
+.input input,
+.input select {
+  padding: 10px 12px;
+  border: 2px solid rgba(142, 68, 173, 0.4);
+  border-radius: 6px;
+  font-size: 14px;
+  background-color: rgba(255, 255, 255, 0.4);
+  transition: all 0.3s ease;
+}
+
+.input input:focus,
+.input select:focus {
+  outline: none;
+  border-color: #8e44ad;
+  box-shadow: 0 0 0 2px rgba(142, 68, 173, 0.2);
+  background-color: rgba(255, 255, 255, 0.6);
+}
+
+.error {
+  color: #e74c3c;
+  font-size: 12px;
+  margin-top: 4px;
+  margin-bottom: 0;
+}
+
+.errorMessage {
+  background-color: rgba(231, 76, 60, 0.1);
+  color: #e74c3c;
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  border-left: 3px solid #e74c3c;
+}
+
+.imagesContainer {
+  margin-top: 10px;
+}
+
+.imageItem {
+  margin-bottom: 8px;
+  font-size: 12px;
+}
+
+.imagePreview {
+  max-width: 105px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.fileInput {
+  padding: 8px 0;
+}
+
+.imagesTitle {
+  font-weight: 500;
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: #444;
+}
+
+.btn {
+  background-color: #8e44ad;
+  width: 100%;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 5px rgba(142, 68, 173, 0.2);
+  margin-top: 20px;
+}
+
+.btn:hover {
+  background-color: #7d3c98;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(142, 68, 173, 0.3);
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn:disabled {
+  background-color: #b39ddb;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.formColumns {
+  display: flex;
+  gap: 20px;
+}
+
+.formColumn {
+  flex: 1;
+  min-width: 0;
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 15px;
+    margin: 0 10px;
+  }
+
+  .formColumns {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .input input,
+  .input select {
+    font-size: 13px;
+    padding: 8px 10px;
+  }
+
+  .btn {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+}

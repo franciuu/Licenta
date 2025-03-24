@@ -16,9 +16,11 @@ import {
   Cell,
 } from "recharts";
 import Layout from "../Layout";
+import useAuth from "../../hooks/useAuth";
 import styles from "../../styles/Dashboard.module.css";
 
 const Dashboard = () => {
+  const { auth } = useAuth();
   const lineData = [
     { name: "13/02/2025", value: 590 },
     { name: "20/02/2025", value: 868 },
@@ -70,7 +72,7 @@ const Dashboard = () => {
     <Layout>
       <div className={styles.dashboardContainer}>
         <div className={styles.topSection}>
-          <div className={styles.greeting}>Hello, Name!</div>
+          <div className={styles.greeting}>Hello, {auth.name}!</div>
           <div className={styles.statsWrapper}>
             <div className={styles.statCard}>
               <div className={styles.statHeader}>

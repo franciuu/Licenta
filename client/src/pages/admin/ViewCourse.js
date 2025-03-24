@@ -8,6 +8,7 @@ import Swal from "sweetalert2";
 import { getCourseById } from "../../services/CourseService.js";
 import { getActivitesByCourse } from "../../services/ActivityService.js";
 import Loader from "../../components/Loader.js";
+import styles from "../../styles/ViewCourse.module.css";
 
 const ViewCourse = () => {
   const [loadingCount, setLoadingCount] = useState(0);
@@ -75,6 +76,29 @@ const ViewCourse = () => {
     fetchActivitiesData();
   }, [navigate, axiosCustom, id]);
 
+  const renderActivities = () => {
+    if (activities.length === 0) {
+      return (
+        <div className={styles.noActivitiesMessage}>
+          <div className={styles.noActivitiesIcon}>📚</div>
+          <p>No activities available for this course yet.</p>
+        </div>
+      );
+    }
+
+    return (
+      <Container fluid>
+        <Row>
+          {activities.map((activ) => (
+            <Col key={activ.uuid} xs={12} sm={6} md={6} lg={3} className="mb-4">
+              <ActivityCard info={activ} />
+            </Col>
+          ))}
+        </Row>
+      </Container>
+    );
+  };
+
   if (loadingCount > 0)
     return (
       <Layout>
@@ -84,18 +108,25 @@ const ViewCourse = () => {
 
   return (
     <Layout>
-      <h1>{course.name}</h1>
-      <p>{course.programLevel}</p>
-      <button onClick={() => deleteCourse(course.uuid)}>Delete course</button>
-      <Container className="mt-4">
-        <Row>
-          {activities.map((activ) => (
-            <Col key={activ.uuid} xs={12} sm={6} md={6} lg={3} className="mb-4">
-              <ActivityCard info={activ} />
-            </Col>
-          ))}
-        </Row>
-      </Container>
+      <div className={styles.courseContainer}>
+        <div className={styles.courseHeader}>
+          <div>
+            <h1 className={styles.courseTitle}>{course.name}</h1>
+            <p className={styles.courseLevel}>{course.programLevel}</p>
+          </div>
+          <button
+            className={styles.deleteButton}
+            onClick={() => deleteCourse(course.uuid)}
+          >
+            Delete course
+          </button>
+        </div>
+
+        <div className={styles.activitiesContainer}>
+          <h2 className={styles.activitiesTitle}>Course Activities</h2>
+          {renderActivities()}
+        </div>
+      </div>
     </Layout>
   );
 };

@@ -102,16 +102,18 @@ const Users = () => {
             Add user
           </Link>
         </div>
-        {users?.length ? (
-          <MaterialReactTable
-            columns={columns}
-            data={users}
-            enablePagination
-            enableColumnOrdering
-          />
-        ) : (
-          <p className={style.emptyState}>No users to display</p>
-        )}
+        <div className={style.tableContainer}>
+          {users?.length ? (
+            <MaterialReactTable
+              columns={columns}
+              data={users}
+              enablePagination
+              enableColumnOrdering
+            />
+          ) : (
+            <p className={style.emptyState}>No users to display</p>
+          )}
+        </div>
       </div>
     </Layout>
   );

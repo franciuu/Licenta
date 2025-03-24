@@ -43,7 +43,8 @@ const Courses = () => {
           <h1 className={styles.coursesTitle}>List of Courses</h1>
           <button className={styles.addCourseBtn}>
             <Link to="/admin/courses/add" className={styles.addCourseBtnLink}>
-              Add new course
+              <span className={styles.addIcon}>+</span>
+              Add course
             </Link>
           </button>
         </div>

@@ -6,6 +6,7 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import Layout from "../Layout";
 import useAxiosCustom from "../../hooks/useAxiosCustom";
 import Loader from "../../components/Loader";
+import { getPersonalActivities } from "../../services/ActivityService";
 
 const localizer = momentLocalizer(moment);
 
@@ -16,16 +17,15 @@ const PersonalCalendar = () => {
   const axiosCustom = useAxiosCustom();
 
   useEffect(() => {
-    const getPersonalActivities = async () => {
+    const fetchActivities = async () => {
       setLoadingCount((prev) => prev + 1);
       try {
-        const response = await axiosCustom.get(`/activities/personal`);
-        const data = response.data;
+        const activitiesData = await getPersonalActivities(axiosCustom);
         const startDate = moment("2024-10-01");
         const endDate = moment("2025-06-04");
         let formattedData = [];
 
-        data.forEach((a) => {
+        activitiesData.forEach((a) => {
           let currentDate = startDate.clone();
 
           while (currentDate.isBefore(endDate)) {
@@ -56,7 +56,7 @@ const PersonalCalendar = () => {
       }
     };
 
-    getPersonalActivities();
+    fetchActivities();
   }, [axiosCustom]);
 
   const handleSelectEvent = (event) => {

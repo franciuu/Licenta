@@ -4,6 +4,7 @@ import useAxiosCustom from "../../hooks/useAxiosCustom";
 import { useParams } from "react-router-dom";
 import { MaterialReactTable } from "material-react-table";
 import Loader from "../../components/Loader";
+import { getAttendancesByActivity } from "../../services/AttendanceService";
 
 const ViewAttendance = () => {
   const [loadingCount, setLoadingCount] = useState(0);
@@ -12,11 +13,11 @@ const ViewAttendance = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    const getAttendances = async () => {
+    const fetchAttendances = async () => {
       setLoadingCount((prev) => prev + 1);
       try {
-        const response = await axiosCustom.get(`/attendances/${id}`);
-        setAttendances(response.data);
+        const attendancesData = await getAttendancesByActivity(axiosCustom, id);
+        setAttendances(attendancesData);
       } catch (error) {
         console.error(
           "Error fetching activities:",
@@ -26,7 +27,7 @@ const ViewAttendance = () => {
         setLoadingCount((prev) => prev - 1);
       }
     };
-    getAttendances();
+    fetchAttendances();
   }, [axiosCustom, id]);
 
   const columns = useMemo(

@@ -2,6 +2,7 @@ import useAxiosCustom from "../../hooks/useAxiosCustom";
 import Layout from "../Layout";
 import { useState } from "react";
 import { generateEmbeddings } from "../../services/EmbeddingsService";
+import styles from "../../styles/GenerateEmbeddings.module.css";
 
 const GenerateEmbeddings = () => {
   const axiosCustom = useAxiosCustom();
@@ -26,12 +27,14 @@ const GenerateEmbeddings = () => {
 
   return (
     <Layout>
-      <h1>Generate Student Embeddings</h1>
-      <button onClick={generate} disabled={loading}>
-        {loading ? "Generating..." : "Refresh Student Data"}
-      </button>
-      {successMsg && <p style={{ color: "green" }}>{successMsg}</p>}
-      {errorMsg && <p style={{ color: "red" }}>{errorMsg}</p>}
+      <div className={styles.container}>
+        <h1 className={styles.title}>Generate Student Embeddings</h1>
+        <button className={styles.button} onClick={generate} disabled={loading}>
+          {loading ? "Generating..." : "Refresh Student Data"}
+        </button>
+        {successMsg && <p className={styles.successMessage}>{successMsg}</p>}
+        {errorMsg && <p className={styles.errorMessage}>{errorMsg}</p>}
+      </div>
     </Layout>
   );
 };

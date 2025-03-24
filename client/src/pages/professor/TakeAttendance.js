@@ -4,6 +4,7 @@ import useAxiosCustom from "../../hooks/useAxiosCustom";
 import Layout from "../Layout";
 import style from "../../styles/TakeAttendance.module.css";
 import Loader from "../../components/Loader";
+import { getActivityById } from "../../services/ActivityService";
 
 const TakeAttendance = () => {
   const [loadingCount, setLoadingCount] = useState(0);
@@ -18,11 +19,11 @@ const TakeAttendance = () => {
   const intervalRef = useRef(null);
   const timeIntervalRef = useRef(null);
 
-  const getActivity = async () => {
+  const fetchActivity = async () => {
     setLoadingCount((prev) => prev + 1);
     try {
-      const response = await axiosCustom.get(`/activities/${id}`);
-      setActivity(response.data);
+      const activityData = await getActivityById(axiosCustom, id);
+      setActivity(activityData);
     } catch (error) {
       console.log(error);
     } finally {
@@ -107,7 +108,7 @@ const TakeAttendance = () => {
   };
 
   useEffect(() => {
-    getActivity();
+    fetchActivity();
     return () => {
       clearInterval(intervalRef.current);
       clearInterval(timeIntervalRef.current);
