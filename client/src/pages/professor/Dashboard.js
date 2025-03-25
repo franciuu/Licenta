@@ -1,4 +1,4 @@
-import React from "react";
+import { useState, useEffect } from "react";
 import { Icon } from "@chakra-ui/react";
 import { FaTasks, FaUserGraduate, FaChartBar } from "react-icons/fa";
 import {
@@ -17,16 +17,74 @@ import {
 } from "recharts";
 import Layout from "../Layout";
 import useAuth from "../../hooks/useAuth";
+import { getStudentsCount } from "../../services/StudentService";
+import {
+  getActivitiesCount,
+  getPersonalActivities,
+} from "../../services/ActivityService";
+import { getAttendanceTrendForActivity } from "../../services/AttendanceService";
 import styles from "../../styles/Dashboard.module.css";
+import useAxiosCustom from "../../hooks/useAxiosCustom";
 
 const Dashboard = () => {
+  const [studCount, setStudCount] = useState(0);
+  const [activCount, setActivCount] = useState(0);
+  const [lineData, setLineData] = useState([]);
+  const [activities, setActivities] = useState([]);
+  const [selectedActivity, setSelectedActivity] = useState("");
+  const axiosCustom = useAxiosCustom();
   const { auth } = useAuth();
-  const lineData = [
-    { name: "13/02/2025", value: 590 },
-    { name: "20/02/2025", value: 868 },
-    { name: "27/02/2025", value: 657 },
-    { name: "5/03/2025", value: 390 },
-  ];
+
+  useEffect(() => {
+    const fetchStudentCount = async () => {
+      try {
+        const studentCount = await getStudentsCount(axiosCustom);
+        setStudCount(studentCount);
+      } catch (error) {
+        console.error("Failed to fetch stud count", error);
+      }
+    };
+
+    const fetchActivitiesCount = async () => {
+      try {
+        const activCount = await getActivitiesCount(axiosCustom);
+        setActivCount(activCount);
+      } catch (error) {
+        console.error("Failed to fetch activ count", error);
+      }
+    };
+
+    const fetchActivities = async () => {
+      try {
+        const activitiesData = await getPersonalActivities(axiosCustom);
+        setActivities(activitiesData);
+        setSelectedActivity(activitiesData[0]?.uuid);
+      } catch (error) {
+        console.error("Failed to fetch activities data", error);
+      }
+    };
+
+    fetchActivities();
+    fetchActivitiesCount();
+    fetchStudentCount();
+  }, [axiosCustom]);
+
+  useEffect(() => {
+    const fetchLineChart = async () => {
+      if (!selectedActivity) return;
+      try {
+        const lineData = await getAttendanceTrendForActivity(
+          axiosCustom,
+          selectedActivity
+        );
+        setLineData(lineData);
+      } catch (error) {
+        console.error("Failed to fetch line chart data", error);
+      }
+    };
+
+    fetchLineChart();
+  }, [axiosCustom, selectedActivity]);
 
   const pieData = [
     { name: "Prezenti", value: 75 },
@@ -79,14 +137,14 @@ const Dashboard = () => {
                 <span className={styles.statLabel}>Nr total activitati</span>
                 <Icon as={FaTasks} className={styles.statIcon} />
               </div>
-              <div className={styles.statValue}>15</div>
+              <div className={styles.statValue}>{activCount}</div>
             </div>
             <div className={styles.statCard}>
               <div className={styles.statHeader}>
                 <span className={styles.statLabel}>Nr total studenti</span>
                 <Icon as={FaUserGraduate} className={styles.statIcon} />
               </div>
-              <div className={styles.statValue}>160</div>
+              <div className={styles.statValue}>{studCount}</div>
             </div>
             <div className={styles.statCard}>
               <div className={styles.statHeader}>
@@ -98,7 +156,6 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Top Right Section: Pie Chart */}
         <div className={styles.chartPie}>
           <div className={styles.chartHeader}>
             <div className={styles.chartTitle}>Curs x</div>
@@ -130,7 +187,6 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Bottom Left Section: Bar Chart */}
         <div className={styles.chartSeminar}>
           <div className={styles.chartHeader}>
             <div className={styles.chartTitle}>Seminar x</div>
@@ -163,12 +219,19 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Bottom Right Section: Line Chart */}
         <div className={styles.chartActivity}>
           <div className={styles.chartHeader}>
-            <div className={styles.chartTitle}>Activitatea x</div>
-            <select className={styles.chartSelect}>
-              <option>Select</option>
+            <div className={styles.chartTitle}>Weekly Attendance Trend</div>
+            <select
+              value={selectedActivity}
+              onChange={(e) => setSelectedActivity(e.target.value)}
+              className={styles.chartSelect}
+            >
+              {activities.map((a) => (
+                <option key={a.uuid} value={a.uuid}>
+                  {a.name}
+                </option>
+              ))}
             </select>
           </div>
           <div className={styles.chartContainer}>
@@ -178,12 +241,12 @@ const Dashboard = () => {
                 margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
               >
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
+                <XAxis dataKey="date" />
                 <YAxis />
                 <Tooltip />
                 <Line
                   type="monotone"
-                  dataKey="value"
+                  dataKey="presentCount"
                   stroke="#8E24AA"
                   strokeWidth={2}
                 />

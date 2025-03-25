@@ -14,6 +14,7 @@ import { Avatar } from "@chakra-ui/react";
 import style from "../styles/Sidebar.module.css";
 import useAuth from "../hooks/useAuth";
 import useAxiosCustom from "../hooks/useAxiosCustom";
+import { getPersonalActivities } from "../services/ActivityService";
 
 const Sidebar = () => {
   const [activities, setActivities] = useState([]);
@@ -23,13 +24,10 @@ const Sidebar = () => {
   useEffect(() => {
     const getActivities = async () => {
       try {
-        const response = await axiosCustom.get(`/activities/personal`);
-        setActivities(response.data);
+        const activitiesData = await getPersonalActivities(axiosCustom);
+        setActivities(activitiesData);
       } catch (error) {
-        console.error(
-          "Error fetching activities:",
-          error.response?.data || error.message
-        );
+        console.error("Failed to fetch activities data:", error);
       }
     };
 

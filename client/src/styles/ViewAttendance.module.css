@@ -1,0 +1,54 @@
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px 32px;
+  background-color: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(15px);
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(142, 68, 173, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.6);
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.subTitle {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+.datePicker {
+  margin: 20px 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.select {
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 2px solid rgba(142, 68, 173, 0.4);
+  font-size: 14px;
+  background-color: rgba(255, 255, 255, 0.4);
+  transition: all 0.3s ease;
+}
+
+.select:focus {
+  outline: none;
+  border-color: #8e44ad;
+  background-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 0 0 2px rgba(142, 68, 173, 0.2);
+}
+
+.noAttendanceMessage {
+  margin-top: 32px;
+  font-size: 16px;
+  font-style: italic;
+  color: #7c26a6;
+  text-align: center;
+}

@@ -21,33 +21,32 @@ const PersonalCalendar = () => {
       setLoadingCount((prev) => prev + 1);
       try {
         const activitiesData = await getPersonalActivities(axiosCustom);
-        const startDate = moment("2024-10-01");
-        const endDate = moment("2025-06-04");
+        console.log(activitiesData);
         let formattedData = [];
 
         activitiesData.forEach((a) => {
-          let currentDate = startDate.clone();
+          a.availableDates.forEach((dateStr) => {
+            const date = moment(dateStr, "YYYY-MM-DD");
 
-          while (currentDate.isBefore(endDate)) {
-            if (currentDate.day() === a.dayOfWeek) {
-              const start = currentDate
-                .hour(a.startTime.split(":")[0])
-                .minute(a.startTime.split(":")[1])
-                .toDate();
-              const end = currentDate
-                .hour(a.endTime.split(":")[0])
-                .minute(a.endTime.split(":")[1])
-                .toDate();
-              formattedData.push({
-                title: a.name,
-                start: start,
-                end: end,
-                originalData: a,
-              });
-            }
-            currentDate.add(1, "days");
-          }
+            const [startHour, startMinute] = a.startTime.split(":");
+            const [endHour, endMinute] = a.endTime.split(":");
+
+            const start = date
+              .clone()
+              .hour(startHour)
+              .minute(startMinute)
+              .toDate();
+            const end = date.clone().hour(endHour).minute(endMinute).toDate();
+
+            formattedData.push({
+              title: a.name,
+              start: start,
+              end: end,
+              originalData: a,
+            });
+          });
         });
+
         setMyEvents(formattedData);
       } catch (error) {
         console.log(error);

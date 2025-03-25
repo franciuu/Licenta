@@ -19,7 +19,16 @@ export const getActivityById = async (axiosCustom, id) => {
 export const getPersonalActivities = async (axiosCustom) => {
   try {
     const response = await axiosCustom.get("/activities/personal");
-    return response.data;
+    return response.data.activities;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getActivitiesCount = async (axiosCustom) => {
+  try {
+    const response = await axiosCustom.get("/activities/personal");
+    return response.data.count;
   } catch (error) {
     throw error;
   }
