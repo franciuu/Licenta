@@ -1,3 +1,5 @@
+import { axiosCustom } from "../api/axios";
+
 export const getActivitesByCourse = async (axiosCustom, id) => {
   try {
     const response = await axiosCustom.get(`/activities/course/${id}`);
@@ -20,6 +22,15 @@ export const getPersonalActivities = async (axiosCustom) => {
   try {
     const response = await axiosCustom.get("/activities/personal");
     return response.data.activities;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getLectures = async (axiosCustom) => {
+  try {
+    const response = await axiosCustom.get("/activities/lectures");
+    return response.data;
   } catch (error) {
     throw error;
   }

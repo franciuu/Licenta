@@ -58,18 +58,6 @@
   flex-direction: column;
 }
 
-.cardSubtitle {
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: #6c757d;
-  margin-bottom: 0.5rem;
-}
-
-.cardText {
-  margin-bottom: 1rem;
-  color: #333;
-}
-
 .viewButton {
   background-color: transparent;
   border: 1px solid #7e22ce;

@@ -4,6 +4,7 @@ import { FaTasks, FaUserGraduate, FaChartBar } from "react-icons/fa";
 import {
   LineChart,
   Line,
+  Legend,
   XAxis,
   YAxis,
   Tooltip,
@@ -21,17 +22,27 @@ import { getStudentsCount } from "../../services/StudentService";
 import {
   getActivitiesCount,
   getPersonalActivities,
+  getLectures,
 } from "../../services/ActivityService";
-import { getAttendanceTrendForActivity } from "../../services/AttendanceService";
+import {
+  getAttendanceTrendForActivity,
+  getAttendancePercentageForCourse,
+} from "../../services/AttendanceService";
 import styles from "../../styles/Dashboard.module.css";
 import useAxiosCustom from "../../hooks/useAxiosCustom";
 
 const Dashboard = () => {
   const [studCount, setStudCount] = useState(0);
   const [activCount, setActivCount] = useState(0);
+
   const [lineData, setLineData] = useState([]);
+  const [pieData, setPieData] = useState([]);
+
   const [activities, setActivities] = useState([]);
+  const [lectures, setLectures] = useState([]);
+
   const [selectedActivity, setSelectedActivity] = useState("");
+  const [selectedLecture, setSelectedLecture] = useState("");
   const axiosCustom = useAxiosCustom();
   const { auth } = useAuth();
 
@@ -64,6 +75,17 @@ const Dashboard = () => {
       }
     };
 
+    const fetchLectures = async () => {
+      try {
+        const lecturesData = await getLectures(axiosCustom);
+        setLectures(lecturesData);
+        setSelectedLecture(lecturesData[0]?.uuid);
+      } catch (error) {
+        console.error("Failed to fetch lectures data", error);
+      }
+    };
+
+    fetchLectures();
     fetchActivities();
     fetchActivitiesCount();
     fetchStudentCount();
@@ -86,10 +108,22 @@ const Dashboard = () => {
     fetchLineChart();
   }, [axiosCustom, selectedActivity]);
 
-  const pieData = [
-    { name: "Prezenti", value: 75 },
-    { name: "Absenti", value: 25 },
-  ];
+  useEffect(() => {
+    const fetchPieData = async () => {
+      if (!selectedLecture) return;
+      try {
+        const pieData = await getAttendancePercentageForCourse(
+          axiosCustom,
+          selectedLecture
+        );
+        setPieData(pieData);
+      } catch (error) {
+        console.error("Failed to fetch attendance percentage", error);
+      }
+    };
+
+    fetchPieData();
+  }, [axiosCustom, selectedLecture]);
 
   const barData = [
     { name: "1025", value: 300 },
@@ -98,7 +132,7 @@ const Dashboard = () => {
     { name: "1057", value: 350 },
   ];
 
-  const COLORS = ["#38A169", "#1E4034"];
+  const COLORS = ["#8e44ad", "#ce98e6"];
   const RADIAN = Math.PI / 180;
 
   const renderCustomizedLabel = ({
@@ -134,38 +168,50 @@ const Dashboard = () => {
           <div className={styles.statsWrapper}>
             <div className={styles.statCard}>
               <div className={styles.statHeader}>
-                <span className={styles.statLabel}>Nr total activitati</span>
+                <span className={styles.statLabel}>Total activities</span>
                 <Icon as={FaTasks} className={styles.statIcon} />
               </div>
               <div className={styles.statValue}>{activCount}</div>
             </div>
             <div className={styles.statCard}>
               <div className={styles.statHeader}>
-                <span className={styles.statLabel}>Nr total studenti</span>
+                <span className={styles.statLabel}>Total students</span>
                 <Icon as={FaUserGraduate} className={styles.statIcon} />
               </div>
               <div className={styles.statValue}>{studCount}</div>
-            </div>
-            <div className={styles.statCard}>
-              <div className={styles.statHeader}>
-                <span className={styles.statLabel}>Prezenta medie</span>
-                <Icon as={FaChartBar} className={styles.statIcon} />
-              </div>
-              <div className={styles.statValue}>80%</div>
             </div>
           </div>
         </div>
 
         <div className={styles.chartPie}>
           <div className={styles.chartHeader}>
-            <div className={styles.chartTitle}>Curs x</div>
-            <select className={styles.chartSelect}>
-              <option>Select</option>
+            <div className={styles.chartTitle}>
+              Average Attendance per Course
+            </div>
+            <select
+              value={selectedLecture}
+              onChange={(e) => setSelectedLecture(e.target.value)}
+              className={styles.chartSelect}
+            >
+              {lectures.map((l) => (
+                <option key={l.uuid} value={l.uuid}>
+                  {l.name}
+                </option>
+              ))}
             </select>
           </div>
           <div className={styles.chartContainer}>
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
+                <Legend
+                  layout="vertical"
+                  align="left"
+                  verticalAlign="middle"
+                  iconType="circle"
+                  formatter={(value) => (
+                    <span style={{ color: "#2d2d2d" }}>{value}</span>
+                  )}
+                />
                 <Pie
                   data={pieData}
                   cx="50%"

@@ -17,12 +17,6 @@ const ActivityCard = ({ info }) => {
         <Card.Title className={styles.cardTitle}>{info.name}</Card.Title>
       </div>
       <Card.Body className={styles.cardBody}>
-        <Card.Subtitle className={styles.cardSubtitle}>
-          {info.room}
-        </Card.Subtitle>
-        <Card.Text className={styles.cardText}>
-          {info.startTime} - {info.endTime}
-        </Card.Text>
         <button className={styles.viewButton}>
           <Link
             to={`/admin/activities/${info.uuid}`}

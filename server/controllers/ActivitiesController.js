@@ -18,6 +18,20 @@ export const getCourseActivities = async (req, res) => {
   }
 };
 
+export const getLectures = async (req, res) => {
+  try {
+    const response = await Activity.findAll({
+      where: {
+        idProf: req.user,
+        type: "lecture",
+      },
+    });
+    res.status(200).json(response);
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
+};
+
 export const getPersonalActivities = async (req, res) => {
   try {
     const response = await Activity.findAll({

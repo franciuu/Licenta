@@ -4,6 +4,7 @@ import {
   createActivity,
   getPersonalActivities,
   getActivityById,
+  getLectures,
 } from "../controllers/ActivitiesController.js";
 import { verifyRoles } from "../middlewares/verifyRole.js";
 import ROLES_LIST from "../config/rolesList.js";
@@ -15,6 +16,7 @@ router.get(
   verifyRoles(ROLES_LIST[1]),
   getPersonalActivities
 );
+router.get("/activities/lectures", verifyRoles(ROLES_LIST[1]), getLectures);
 router.post("/activities", verifyRoles(ROLES_LIST[0]), createActivity);
 router.get(
   "/activities/course/:id",

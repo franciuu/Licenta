@@ -21,3 +21,12 @@ export const getAttendanceTrendForActivity = async (axiosCustom, id) => {
     throw error;
   }
 };
+
+export const getAttendancePercentageForCourse = async (axiosCustom, id) => {
+  try {
+    const response = await axiosCustom.get(`/attendances/course/${id}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

@@ -2,6 +2,7 @@ import Student from "../models/Student.js";
 import Attendance from "../models/Attendance.js";
 import Activity from "../models/Activity.js";
 import Semester from "../models/Semester.js";
+import Enrollment from "../models/Enrollment.js";
 import { getActivityDates } from "../utils/dateUtils.js";
 
 export const getActivityAttendances = async (req, res) => {
@@ -77,6 +78,58 @@ export const getAttendanceTrendForActivity = async (req, res) => {
     );
 
     res.status(200).json(counts);
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
+};
+
+export const getAttendancePercentageForCourse = async (req, res) => {
+  try {
+    const activity = await Activity.findOne({
+      where: { uuid: req.params.id },
+      include: [
+        {
+          model: Semester,
+          attributes: ["startDate", "endDate"],
+        },
+      ],
+    });
+
+    if (!activity) {
+      return res.status(404).json({ msg: "Activity not found" });
+    }
+
+    const raw = activity.toJSON();
+    const today = new Date();
+
+    const allPastDates = getActivityDates(
+      raw.semester?.startDate,
+      raw.semester?.endDate,
+      raw.dayOfWeek
+    ).filter((date) => new Date(date) <= today);
+
+    const enrolledStudents = await Enrollment.count({
+      where: {
+        idActivity: activity.uuid,
+      },
+    });
+
+    const expectedTotal = enrolledStudents * allPastDates.length;
+
+    const actualPresences = await Attendance.count({
+      where: {
+        idActivity: activity.uuid,
+        date: allPastDates,
+      },
+    });
+
+    const presencePercentage = (actualPresences / expectedTotal) * 100;
+    const absencePercentage = 100 - presencePercentage;
+
+    return res.status(200).json([
+      { name: "Present", value: presencePercentage },
+      { name: "Absent", value: absencePercentage },
+    ]);
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }

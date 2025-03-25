@@ -113,18 +113,6 @@ const ActivityEnrollment = () => {
             <span className={styles.detailValue}>{activity.name}</span>
           </div>
           <div className={styles.detailRow}>
-            <span className={styles.detailLabel}>Start time:</span>
-            <span className={styles.detailValue}>{activity.startTime}</span>
-          </div>
-          <div className={styles.detailRow}>
-            <span className={styles.detailLabel}>End time:</span>
-            <span className={styles.detailValue}>{activity.endTime}</span>
-          </div>
-          <div className={styles.detailRow}>
-            <span className={styles.detailLabel}>Room:</span>
-            <span className={styles.detailValue}>{activity.room}</span>
-          </div>
-          <div className={styles.detailRow}>
             <span className={styles.detailLabel}>Professor:</span>
             <span className={styles.detailValue}>{activity.user?.name}</span>
           </div>
@@ -181,7 +169,9 @@ const ActivityEnrollment = () => {
               ))}
             </ul>
           ) : (
-            <p className={styles.emptyMessage}>Nu sunt</p>
+            <p className={styles.emptyMessage}>
+              You haven't added any students yet.
+            </p>
           )}
         </div>
       </div>
