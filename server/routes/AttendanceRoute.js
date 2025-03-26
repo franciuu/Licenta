@@ -2,7 +2,8 @@ import express from "express";
 import {
   getActivityAttendances,
   getAttendanceTrendForActivity,
-  getAttendancePercentageForCourse,
+  getAttendancePercentageForLecture,
+  getSeminarAttendancePercentageForCourse,
 } from "../controllers/AttendancesController.js";
 import { verifyRoles } from "../middlewares/verifyRole.js";
 import ROLES_LIST from "../config/rolesList.js";
@@ -22,7 +23,12 @@ router.get(
 router.get(
   "/attendances/course/:id",
   verifyRoles(ROLES_LIST[1]),
-  getAttendancePercentageForCourse
+  getAttendancePercentageForLecture
+);
+router.get(
+  "/attendances/lectures/:id",
+  verifyRoles(ROLES_LIST[1]),
+  getSeminarAttendancePercentageForCourse
 );
 
 export default router;

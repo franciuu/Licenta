@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Icon } from "@chakra-ui/react";
-import { FaTasks, FaUserGraduate, FaChartBar } from "react-icons/fa";
+import { FaTasks, FaUserGraduate } from "react-icons/fa";
 import {
   LineChart,
   Line,
@@ -26,8 +26,10 @@ import {
 } from "../../services/ActivityService";
 import {
   getAttendanceTrendForActivity,
-  getAttendancePercentageForCourse,
+  getAttendancePercentageForLecture,
+  getSeminarAttendancePercentageForCourse,
 } from "../../services/AttendanceService";
+import { getCourses } from "../../services/CourseService";
 import styles from "../../styles/Dashboard.module.css";
 import useAxiosCustom from "../../hooks/useAxiosCustom";
 
@@ -37,12 +39,16 @@ const Dashboard = () => {
 
   const [lineData, setLineData] = useState([]);
   const [pieData, setPieData] = useState([]);
+  const [barData, setBarData] = useState([]);
 
   const [activities, setActivities] = useState([]);
   const [lectures, setLectures] = useState([]);
+  const [courses, setCourses] = useState([]);
 
   const [selectedActivity, setSelectedActivity] = useState("");
   const [selectedLecture, setSelectedLecture] = useState("");
+  const [selectedCourse, setSelectedCourse] = useState("");
+
   const axiosCustom = useAxiosCustom();
   const { auth } = useAuth();
 
@@ -85,11 +91,39 @@ const Dashboard = () => {
       }
     };
 
+    const fetchCourses = async () => {
+      try {
+        const coursesData = await getCourses(axiosCustom);
+        setCourses(coursesData);
+        setSelectedCourse(coursesData[0]?.uuid);
+      } catch (error) {
+        console.error("Failed to fetch courses data", error);
+      }
+    };
+
+    fetchCourses();
     fetchLectures();
     fetchActivities();
     fetchActivitiesCount();
     fetchStudentCount();
   }, [axiosCustom]);
+
+  useEffect(() => {
+    const fetchBarChart = async () => {
+      if (!selectedCourse) return;
+      try {
+        const barData = await getSeminarAttendancePercentageForCourse(
+          axiosCustom,
+          selectedCourse
+        );
+        setBarData(barData);
+      } catch (error) {
+        console.error("Failed to fetch bar chart data", error);
+      }
+    };
+
+    fetchBarChart();
+  }, [axiosCustom, selectedCourse]);
 
   useEffect(() => {
     const fetchLineChart = async () => {
@@ -112,7 +146,7 @@ const Dashboard = () => {
     const fetchPieData = async () => {
       if (!selectedLecture) return;
       try {
-        const pieData = await getAttendancePercentageForCourse(
+        const pieData = await getAttendancePercentageForLecture(
           axiosCustom,
           selectedLecture
         );
@@ -124,13 +158,6 @@ const Dashboard = () => {
 
     fetchPieData();
   }, [axiosCustom, selectedLecture]);
-
-  const barData = [
-    { name: "1025", value: 300 },
-    { name: "1030", value: 400 },
-    { name: "1047", value: 300 },
-    { name: "1057", value: 350 },
-  ];
 
   const COLORS = ["#8e44ad", "#ce98e6"];
   const RADIAN = Math.PI / 180;
@@ -235,9 +262,19 @@ const Dashboard = () => {
 
         <div className={styles.chartSeminar}>
           <div className={styles.chartHeader}>
-            <div className={styles.chartTitle}>Seminar x</div>
-            <select className={styles.chartSelect}>
-              <option>Select</option>
+            <div className={styles.chartTitle}>
+              Seminar Attendance Comparison
+            </div>
+            <select
+              value={selectedCourse}
+              onChange={(e) => setSelectedCourse(e.target.value)}
+              className={styles.chartSelect}
+            >
+              {courses.map((c) => (
+                <option key={c.uuid} value={c.uuid}>
+                  {c.name}
+                </option>
+              ))}
             </select>
           </div>
           <div className={styles.chartContainer}>
@@ -247,10 +284,23 @@ const Dashboard = () => {
                 margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
               >
                 <CartesianGrid stroke="#f5f5f5" />
-                <XAxis dataKey="name" />
+                <XAxis
+                  dataKey="name"
+                  tickFormatter={(name) => name.split(" ").pop()}
+                />
                 <YAxis />
                 <Tooltip />
-                <Bar dataKey="value" barSize={25} fill="#8E24AA" />
+                <Bar
+                  dataKey="percentage"
+                  barSize={25}
+                  fill="#8E24AA"
+                  label={{
+                    position: "top",
+                    formatter: (value) => `${value}%`,
+                    fill: "#333",
+                    fontSize: 12,
+                  }}
+                />
                 <Line
                   type="monotone"
                   dataKey="value"
