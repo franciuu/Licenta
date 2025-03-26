@@ -1,6 +1,7 @@
 import axios from "axios";
 import markAttendance from "../services/attendanceService.js";
 import Student from "../models/Student.js";
+import Enrollment from "../models/Enrollment.js";
 
 export const triggerGenerateEmbeddings = async (req, res) => {
   try {
@@ -35,9 +36,26 @@ export const getRecognize = async (req, res) => {
         console.log(`Student recunoscut: ${student}`);
 
         const studentDb = await Student.findByPk(student);
-        const { created } = await markAttendance(student, activityId);
+        if (!studentDb) {
+          console.log(`Studentul nu există în baza de date`);
+          continue;
+        }
 
-        if (created && studentDb) {
+        const isEnrolled = await Enrollment.findOne({
+          where: {
+            idStudent: student,
+            idActivity: activityId,
+          },
+        });
+        if (!isEnrolled) {
+          console.log(
+            `Studentul ${student} nu este înscris la activitatea ${activityId}`
+          );
+          continue;
+        }
+
+        const { created } = await markAttendance(student, activityId);
+        if (created) {
           newRecognized.push({ uuid: student, name: studentDb.name });
         }
       } else {
