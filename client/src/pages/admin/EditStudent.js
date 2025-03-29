@@ -49,7 +49,9 @@ const EditStudent = () => {
         setImages(data.images || []);
 
         for (const key in data) {
-          if (key !== "images") setValue(key, data[key]);
+          if (key !== "images" && key !== "birthDate") {
+            setValue(key, data[key]);
+          }
         }
 
         if (data.birthDate) {
@@ -102,7 +104,9 @@ const EditStudent = () => {
     try {
       setUploading(true);
       const newImages = images.filter((img) => img instanceof File);
-      let imageUrls = student.images || [];
+      let imageUrls = (student.images || []).map((img) =>
+        typeof img === "string" ? img : img.imageUrl
+      );
 
       if (newImages.length > 0) {
         const uploaded = await uploadImages(newImages);
@@ -115,9 +119,10 @@ const EditStudent = () => {
       });
 
       if (response?.data) {
-        navigate("/students");
+        navigate("/admin/students");
       }
     } catch (err) {
+      console.log(err);
       setError(err.response?.data?.msg || "An unexpected error occurred");
     } finally {
       setUploading(false);

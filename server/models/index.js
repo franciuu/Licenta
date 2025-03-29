@@ -5,7 +5,7 @@ import User from "./User.js";
 import Course from "./Course.js";
 import Activity from "./Activity.js";
 import Attendance from "./Attendance.js";
-import SurveillanceCamera from "./SurveillanceCamera.js";
+// import SurveillanceCamera from "./SurveillanceCamera.js";
 import Image from "./Image.js";
 import Enrollment from "./Enrollment.js";
 import Semester from "./Semester.js";
@@ -33,11 +33,11 @@ Activity.belongsTo(Course, { foreignKey: "idCourse" });
 User.hasMany(Activity, { foreignKey: "idProf", onDelete: "CASCADE" });
 Activity.belongsTo(User, { foreignKey: "idProf" });
 
-SurveillanceCamera.hasMany(Activity, {
-  foreignKey: "idCamera",
-  onDelete: "CASCADE",
-});
-Activity.belongsTo(SurveillanceCamera, { foreignKey: "idCamera" });
+// SurveillanceCamera.hasMany(Activity, {
+//   foreignKey: "idCamera",
+//   onDelete: "CASCADE",
+// });
+// Activity.belongsTo(SurveillanceCamera, { foreignKey: "idCamera" });
 
 Student.hasMany(Image, { foreignKey: "idStudent", onDelete: "CASCADE" });
 Image.belongsTo(Student, { foreignKey: "idStudent" });
@@ -54,4 +54,4 @@ Semester.hasMany(Activity, {
 });
 Activity.belongsTo(Semester, { foreignKey: "idSemester" });
 
-export { db, Student, User, Course, Activity, Attendance, SurveillanceCamera };
+export { db, Student, User, Course, Activity, Attendance };

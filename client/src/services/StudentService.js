@@ -1,5 +1,3 @@
-import { axiosCustom } from "../api/axios";
-
 export const getStudents = async (axiosCustom) => {
   try {
     const response = await axiosCustom.get(`/students`);
