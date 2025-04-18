@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Row, Col } from "react-bootstrap";
 import Layout from "../Layout";
 import CourseCard from "../../components/CourseCard.js";
+import FilterBar from "../../components/FilterBar.js";
 import useAxiosCustom from "../../hooks/useAxiosCustom.js";
 import { getCourses } from "../../services/CourseService.js";
 import Loader from "../../components/Loader.js";
@@ -11,6 +12,11 @@ import styles from "../../styles/Courses.module.css";
 const Courses = () => {
   const [loadingCount, setLoadingCount] = useState(0);
   const [courses, setCourses] = useState([]);
+  const [filteredCourses, setFilteredCourses] = useState([]);
+  const [filters, setFilters] = useState({
+    name: "",
+    programLevel: "",
+  });
   const axiosCustom = useAxiosCustom();
 
   useEffect(() => {
@@ -19,6 +25,7 @@ const Courses = () => {
       try {
         const coursesData = await getCourses(axiosCustom);
         setCourses(coursesData);
+        setFilteredCourses(coursesData);
       } catch (error) {
         console.error("Failed to fetch courses data", error);
       } finally {
@@ -28,6 +35,29 @@ const Courses = () => {
 
     fetchCoursesData();
   }, [axiosCustom]);
+
+  useEffect(() => {
+    // Apply filters
+    let result = [...courses];
+
+    if (filters.name) {
+      result = result.filter((course) =>
+        course.name.toLowerCase().includes(filters.name.toLowerCase())
+      );
+    }
+
+    if (filters.programLevel) {
+      result = result.filter(
+        (course) => course.programLevel === filters.programLevel
+      );
+    }
+
+    setFilteredCourses(result);
+  }, [filters, courses]);
+
+  const handleFilterChange = (newFilters) => {
+    setFilters(newFilters);
+  };
 
   if (loadingCount > 0)
     return (
@@ -49,15 +79,22 @@ const Courses = () => {
           </button>
         </div>
 
-        {courses?.length ? (
+        <div className={styles.filterSection}>
+          <FilterBar onFilterChange={handleFilterChange} />
+          <span className={styles.resultsCount}>
+            Showing {filteredCourses.length} of {courses.length} courses
+          </span>
+        </div>
+
+        {filteredCourses?.length ? (
           <Row className={styles.coursesList}>
-            {courses.map((course) => (
+            {filteredCourses.map((course) => (
               <Col
                 key={course.uuid}
                 xs={12}
                 sm={6}
                 md={6}
-                lg={3}
+                lg={4}
                 className={styles.courseColumn}
               >
                 <div className={styles.courseCardWrapper}>
@@ -68,7 +105,9 @@ const Courses = () => {
           </Row>
         ) : (
           <div className={styles.noCourses}>
-            <p className={styles.noCoursesText}>No courses to display</p>
+            <p className={styles.noCoursesText}>
+              No courses match your filters
+            </p>
           </div>
         )}
       </div>

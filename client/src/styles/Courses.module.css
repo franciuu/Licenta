@@ -54,7 +54,7 @@
 }
 
 .coursesList {
-  margin-top: 1rem;
+  margin-top: 0.75rem;
 }
 
 .courseColumn {
@@ -63,6 +63,7 @@
 
 .courseCardWrapper {
   transition: transform 0.3s ease;
+  height: 100%;
 }
 
 .courseCardWrapper:hover {
@@ -82,6 +83,23 @@
   font-size: 1.1rem;
 }
 
+.filterSection {
+  margin-bottom: 1rem;
+}
+
+.resultsCount {
+  font-size: 0.95rem;
+  color: #666;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.courseGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
 @media (max-width: 768px) {
   .coursesHeader {
     flex-direction: column;
@@ -91,5 +109,11 @@
 
   .addCourseBtn {
     width: 100%;
+  }
+}
+
+@media (max-width: 576px) {
+  .courseGrid {
+    grid-template-columns: 1fr;
   }
 }

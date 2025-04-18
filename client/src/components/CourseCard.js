@@ -13,10 +13,8 @@ const CourseCard = ({ info }) => {
         className={styles.cardImage}
       />
       <Card.Body className={styles.cardBody}>
-        <Card.Title className={styles.cardTitle}>{info.name}</Card.Title>
-        <Card.Subtitle className={styles.cardSubtitle}>
-          {info.programLevel}
-        </Card.Subtitle>
+        <h2 className={styles.cardTitle}>{info.name}</h2>
+        <h3 className={styles.cardSubtitle}>{info.programLevel}</h3>
         <button className={styles.viewButton}>
           <Link to={`/admin/courses/${info.uuid}`} className={styles.viewLink}>
             View

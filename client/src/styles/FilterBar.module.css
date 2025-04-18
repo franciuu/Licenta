@@ -1,0 +1,56 @@
+.filterBar {
+  background-color: white;
+  border-radius: 8px;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  width: 100%;
+}
+
+.inputWrapper {
+  position: relative;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #7c26a6;
+  z-index: 2;
+}
+
+.searchInput {
+  padding-left: 35px;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+  height: 35px;
+  transition: all 0.3s ease;
+}
+
+.searchInput:focus {
+  border-color: #7c26a6;
+  box-shadow: 0 0 0 3px rgba(124, 38, 166, 0.2);
+}
+
+.selectInput {
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+  height: 35px;
+  transition: all 0.3s ease;
+  background-position: right 0.75rem center;
+}
+
+.selectInput:focus {
+  border-color: #7c26a6;
+  box-shadow: 0 0 0 3px rgba(124, 38, 166, 0.2);
+}
+
+@media (max-width: 768px) {
+  .filterBar {
+    padding: 1rem;
+  }
+}

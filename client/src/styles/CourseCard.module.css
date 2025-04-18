@@ -15,13 +15,13 @@
 }
 
 .cardImage {
-  height: 170px;
+  height: 160px;
   object-fit: cover;
 }
 
 .cardBody {
   background-color: #f8f9fa;
-  padding: 1.1rem;
+  padding: 1rem;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
@@ -36,7 +36,7 @@
 
 .cardSubtitle {
   font-size: 0.9rem;
-  color: #666;
+  color: #a0a0a0;
   margin-bottom: 1rem;
 }
 
