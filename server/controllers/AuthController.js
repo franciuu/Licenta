@@ -16,7 +16,7 @@ export const login = async (req, res) => {
   }
 
   const match = await argon2.verify(user.password, req.body.password);
-  if (!match) return res.status(400).json({ msg: "Wrong Password" });
+  if (!match) return res.status(401).json({ msg: "Wrong Password" });
   const name = user.name;
   const role = user.role;
   const accessToken = jwt.sign(

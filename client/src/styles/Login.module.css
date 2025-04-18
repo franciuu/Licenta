@@ -138,11 +138,17 @@
   padding: 0.5rem 0;
 }
 
+.error {
+  color: #e74c3c;
+  font-size: 12px;
+  margin-top: 4px;
+  margin-bottom: 0;
+}
+
 .errorMessage {
   color: #f44336;
   font-size: 0.85rem;
   text-align: center;
-  margin-bottom: 1rem;
 }
 
 .btn {

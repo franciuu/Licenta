@@ -1,3 +1,5 @@
+import { Op } from "sequelize";
+
 import Activity from "../models/Activity.js";
 import User from "../models/User.js";
 import Course from "../models/Course.js";
@@ -126,6 +128,22 @@ export const createActivity = async (req, res) => {
     type,
   } = req.body;
   try {
+    const existingActivities = await Activity.findOne({
+      where: {
+        idSemester,
+        dayOfWeek,
+        [Op.or]: [{ idProf }, { room }],
+        [Op.and]: [
+          { startTime: { [Op.lt]: endTime } },
+          { endTime: { [Op.gt]: startTime } },
+        ],
+      },
+    });
+    if (existingActivities) {
+      return res.status(409).json({
+        msg: "The specified time range overlaps with an existing activity. Please choose a non‑overlapping time slot.",
+      });
+    }
     await Activity.create({
       name: name,
       startTime: startTime,

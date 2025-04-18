@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import useAxiosCustom from "../../hooks/useAxiosCustom";
-import Layout from "../Layout";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+
+import useAxiosCustom from "../../hooks/useAxiosCustom";
+import Layout from "../Layout";
 import styles from "../../styles/AddUser.module.css";
 
 const addUserSchema = Yup.object().shape({
@@ -34,7 +35,7 @@ const AddUser = () => {
     resolver: yupResolver(addUserSchema),
   });
 
-  const addUser = async (data) => {
+  const onSubmit = async (data) => {
     try {
       const response = await axiosCustom.post("/users", data);
       if (response?.data) {
@@ -49,7 +50,8 @@ const AddUser = () => {
     <Layout>
       <div className={styles.container}>
         <h1 className={styles.title}>Add User</h1>
-        <form onSubmit={handleSubmit(addUser)}>
+
+        <form onSubmit={handleSubmit(onSubmit)}>
           {error && <p className={styles.errorMessage}>{error}</p>}
 
           <div className={styles.formColumns}>
@@ -59,7 +61,6 @@ const AddUser = () => {
                 <div className={styles.input}>
                   <input
                     {...register("name")}
-                    type="text"
                     id="name"
                     placeholder="e.g. John Doe"
                   />

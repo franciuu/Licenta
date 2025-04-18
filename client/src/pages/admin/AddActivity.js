@@ -1,5 +1,9 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import * as Yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+
 import Layout from "../Layout.js";
 import useAxiosCustom from "../../hooks/useAxiosCustom.js";
 import { getCourses } from "../../services/CourseService.js";
@@ -9,166 +13,163 @@ import { getSemesters } from "../../services/AcademicYearService.js";
 import Loader from "../../components/Loader.js";
 import styles from "../../styles/AddActivity.module.css";
 
+const addActivitySchema = Yup.object().shape({
+  name: Yup.string().required("Name is required"),
+  idCourse: Yup.string().required("Course is required"),
+  idProf: Yup.string().required("Professor is required"),
+  idSemester: Yup.string().required("Semester is required"),
+  room: Yup.string().required("Room is required"),
+  dayOfWeek: Yup.string().required("Day of week is required"),
+  type: Yup.string().required("Type is required"),
+  startTime: Yup.string().required("Start time is required"),
+  endTime: Yup.string().required("End time is required"),
+});
+
 const AddActivity = () => {
+  const [error, setError] = useState(null);
   const [loadingCount, setLoadingCount] = useState(0);
   const [courses, setCourses] = useState([]);
   const [profs, setProfs] = useState([]);
   const [semesters, setSemesters] = useState([]);
-  const [formData, setFormData] = useState({
-    name: "",
-    startTime: "",
-    endTime: "",
-    room: "2013A",
-    idCourse: "",
-    idProf: "",
-    dayOfWeek: "0",
-    idSemester: "",
-    type: "seminar",
-  });
   const axiosCustom = useAxiosCustom();
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(addActivitySchema),
+    defaultValues: {
+      name: "",
+      startTime: "",
+      endTime: "",
+      room: "2013A",
+      idCourse: "",
+      idProf: "",
+      dayOfWeek: "0",
+      idSemester: "",
+      type: "seminar",
+    },
+  });
+
+  const onSubmit = async (data) => {
     setLoadingCount((prev) => prev + 1);
+    setError(null);
     try {
-      const activityData = await createActivity(axiosCustom, formData);
+      const activityData = await createActivity(axiosCustom, data);
       if (activityData) {
-        navigate(`/admin/courses/${formData.idCourse}`);
+        navigate(`/admin/courses/${data.idCourse}`);
       }
-    } catch (error) {
-      console.error("Failed to create activity", error);
+    } catch (err) {
+      setError(err.response?.data?.msg || "An unexpected error occurred");
     } finally {
       setLoadingCount((prev) => prev - 1);
     }
   };
 
   useEffect(() => {
-    const fetchCourses = async () => {
+    const loadAll = async () => {
       setLoadingCount((prev) => prev + 1);
       try {
-        const coursesData = await getCourses(axiosCustom);
-        setCourses(coursesData);
-        setFormData((prev) => ({
-          ...prev,
-          idCourse: coursesData[0]?.uuid || "",
-        }));
-      } catch (error) {
-        console.error("Failed to fetch courses data", error);
-      } finally {
-        setLoadingCount((prev) => prev - 1);
-      }
-    };
+        const [semData, coursesData, profsData] = await Promise.all([
+          getSemesters(axiosCustom),
+          getCourses(axiosCustom),
+          getProfessors(axiosCustom),
+        ]);
 
-    const fetchProfs = async () => {
-      setLoadingCount((prev) => prev + 1);
-      try {
-        const profsData = await getProfessors(axiosCustom);
-        setProfs(profsData);
-        setFormData((prev) => ({
-          ...prev,
-          idProf: profsData[0]?.uuid || "",
-        }));
-      } catch (error) {
-        console.error("Failed to fetch professors data", error);
-      } finally {
-        setLoadingCount((prev) => prev - 1);
-      }
-    };
-
-    const fetchSemesters = async () => {
-      setLoadingCount((prev) => prev + 1);
-      try {
-        const semData = await getSemesters(axiosCustom);
         setSemesters(semData);
-        setFormData((prev) => ({
-          ...prev,
+        setCourses(coursesData);
+        setProfs(profsData);
+
+        reset({
+          name: "",
+          startTime: "",
+          endTime: "",
+          room: "2013A",
+          idCourse: coursesData[0]?.uuid || "",
+          idProf: profsData[0]?.uuid || "",
+          dayOfWeek: "0",
           idSemester: semData[0]?.uuid || "",
-        }));
-        console.log(semData);
-      } catch (error) {
-        console.error("Failed to fetch semesters data", error);
+          type: "seminar",
+        });
+      } catch (err) {
+        console.error("Failed to fetch initial data", err);
       } finally {
         setLoadingCount((prev) => prev - 1);
       }
     };
 
-    fetchSemesters();
-    fetchCourses();
-    fetchProfs();
-  }, [axiosCustom]);
+    loadAll();
+  }, [axiosCustom, reset]);
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.id]: e.target.value });
-  };
-
-  if (loadingCount > 0)
+  if (loadingCount > 0) {
     return (
       <Layout>
         <Loader />
       </Layout>
     );
+  }
 
   return (
     <Layout>
       <div className={styles.addActivityContainer}>
         <h2 className={styles.addActivityTitle}>Add Activity</h2>
-        <form onSubmit={handleSubmit}>
-          {/* Full width Name field */}
+
+        <form onSubmit={handleSubmit(onSubmit)}>
+          {error && <p className={styles.errorMessage}>{error}</p>}
+
           <div className={styles.formGroupFullWidth}>
             <label htmlFor="name">Name: </label>
             <input
+              {...register("name")}
               id="name"
               placeholder="e.g. Baze de date, Tip-S, 1092"
-              value={formData.name}
-              onChange={handleChange}
-              required
             />
+            {errors.name && (
+              <p className={styles.error}>{errors.name.message}</p>
+            )}
           </div>
 
           <div className={styles.formColumns}>
-            {/* Left Column */}
             <div className={styles.formColumn}>
               <div className={styles.formGroup}>
                 <label htmlFor="idCourse">Course: </label>
-                <select
-                  id="idCourse"
-                  value={formData.idCourse}
-                  onChange={handleChange}
-                >
+                <select {...register("idCourse")} id="idCourse">
                   {courses.map((c) => (
                     <option key={c.uuid} value={c.uuid}>
                       {c.name}
                     </option>
                   ))}
                 </select>
+                {errors.idCourse && (
+                  <p className={styles.error}>{errors.idCourse.message}</p>
+                )}
               </div>
 
               <div className={styles.formGroup}>
                 <label htmlFor="room">Room: </label>
-                <select id="room" value={formData.room} onChange={handleChange}>
+                <select {...register("room")} id="room">
                   <option value="2013A">2013A</option>
                   <option value="2001D">2001D</option>
                 </select>
+                {errors.room && (
+                  <p className={styles.error}>{errors.room.message}</p>
+                )}
               </div>
 
               <div className={styles.formGroup}>
                 <label htmlFor="startTime">Start time:</label>
-                <input
-                  id="startTime"
-                  type="time"
-                  value={formData.startTime}
-                  onChange={handleChange}
-                />
+                <input {...register("startTime")} id="startTime" type="time" />
+                {errors.startTime && (
+                  <p className={styles.error}>{errors.startTime.message}</p>
+                )}
               </div>
 
               <div className={styles.formGroup}>
                 <label htmlFor="dayOfWeek">Day of week: </label>
-                <select
-                  id="dayOfWeek"
-                  value={formData.dayOfWeek}
-                  onChange={handleChange}
-                >
+                <select {...register("dayOfWeek")} id="dayOfWeek">
                   <option value="0">Sunday</option>
                   <option value="1">Monday</option>
                   <option value="2">Tuesday</option>
@@ -177,57 +178,58 @@ const AddActivity = () => {
                   <option value="5">Friday</option>
                   <option value="6">Saturday</option>
                 </select>
+                {errors.dayOfWeek && (
+                  <p className={styles.error}>{errors.dayOfWeek.message}</p>
+                )}
               </div>
             </div>
 
-            {/* Right Column */}
             <div className={styles.formColumn}>
               <div className={styles.formGroup}>
                 <label htmlFor="type">Type: </label>
-                <select id="type" value={formData.type} onChange={handleChange}>
+                <select {...register("type")} id="type">
                   <option value="seminar">Seminar</option>
                   <option value="lecture">Lecture</option>
                 </select>
+                {errors.type && (
+                  <p className={styles.error}>{errors.type.message}</p>
+                )}
               </div>
 
               <div className={styles.formGroup}>
                 <label htmlFor="idProf">Professor: </label>
-                <select
-                  id="idProf"
-                  value={formData.idProf}
-                  onChange={handleChange}
-                >
+                <select {...register("idProf")} id="idProf">
                   {profs.map((p) => (
                     <option key={p.uuid} value={p.uuid}>
                       {p.name}
                     </option>
                   ))}
                 </select>
+                {errors.idProf && (
+                  <p className={styles.error}>{errors.idProf.message}</p>
+                )}
               </div>
 
               <div className={styles.formGroup}>
                 <label htmlFor="endTime">End time:</label>
-                <input
-                  id="endTime"
-                  type="time"
-                  value={formData.endTime}
-                  onChange={handleChange}
-                />
+                <input {...register("endTime")} id="endTime" type="time" />
+                {errors.endTime && (
+                  <p className={styles.error}>{errors.endTime.message}</p>
+                )}
               </div>
 
               <div className={styles.formGroup}>
                 <label htmlFor="idSemester">Semester: </label>
-                <select
-                  id="idSemester"
-                  value={formData.idSemester}
-                  onChange={handleChange}
-                >
+                <select {...register("idSemester")} id="idSemester">
                   {semesters.map((s) => (
                     <option key={s.uuid} value={s.uuid}>
                       {s.name} - {s.academic_year.name}
                     </option>
                   ))}
                 </select>
+                {errors.idSemester && (
+                  <p className={styles.error}>{errors.idSemester.message}</p>
+                )}
               </div>
             </div>
           </div>

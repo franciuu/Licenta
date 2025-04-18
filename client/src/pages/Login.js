@@ -1,13 +1,23 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import useAuth from "../hooks/useAuth";
 import axios from "axios";
+import { useForm } from "react-hook-form";
+import * as Yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 
+import useAuth from "../hooks/useAuth";
 import logo from "../assets/logo.png";
 import style from "../styles/Login.module.css";
 
 import { FaUserShield, FaLongArrowAltRight } from "react-icons/fa";
 import { BsFillShieldLockFill } from "react-icons/bs";
+
+const loginSchema = Yup.object().shape({
+  email: Yup.string()
+    .email("Invalid email format")
+    .required("Email is required"),
+  password: Yup.string().required("Password is required"),
+});
 
 const Login = () => {
   const { setAuth, persist, setPersist } = useAuth();
@@ -15,26 +25,28 @@ const Login = () => {
   const location = useLocation();
   const from = location.state?.from.pathname;
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState(null);
   const redirectByRole = {
     admin: "/admin/academic",
     professor: "/professor/dashboard",
   };
 
-  useEffect(() => {
-    setError("");
-  }, [email, password]);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    resolver: yupResolver(loginSchema),
+  });
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const onSubmit = async (data) => {
+    setError(null);
     try {
       const response = await axios.post(
         "http://localhost:5000/login",
         {
-          email,
-          password,
+          email: data.email,
+          password: data.password,
         },
         {
           headers: { "Content-Type": "application/json" },
@@ -42,20 +54,19 @@ const Login = () => {
         }
       );
       const accessToken = response?.data?.accessToken;
-      const role = response.data.role;
-      const name = response.data.name;
-      setAuth({ email, name, password, role, accessToken });
-      setEmail("");
-      setPassword("");
+      const role = response?.data?.role;
+      const name = response?.data?.name;
+      setAuth({ email: data.email, name, role, accessToken });
       navigate(redirectByRole[role] || from, { replace: true });
     } catch (error) {
       if (!error?.response) {
-        console.log(error);
+        console.log(error.response);
         setError("Server is not responding. Please try again later.");
-      } else if (error.response?.status === 400) {
-        setError("Missing username or password");
-      } else if (error.response?.status === 404) {
-        setError("Unauthorized");
+      } else if (
+        error.response.status === 401 ||
+        error.response.status === 404
+      ) {
+        setError("Invalid username or password.");
       } else {
         setError("An unexpected error occurred. Please try again later.");
       }
@@ -86,8 +97,9 @@ const Login = () => {
             <img src={logo} alt="logo" className={style.logo} />
             <h2 className={style.welcomeText}>Welcome back!</h2>
           </div>
+
           {error && <p className={style.errorMessage}>{error}</p>}
-          <form onSubmit={handleSubmit} className={style.form}>
+          <form onSubmit={handleSubmit(onSubmit)} className={style.form}>
             <div className={style.inputDiv}>
               <label htmlFor="email" className={style.label}>
                 Email:
@@ -95,16 +107,17 @@ const Login = () => {
               <div className={style.input}>
                 <FaUserShield className={style.icon} />
                 <input
+                  {...register("email")}
                   type="email"
                   id="email"
-                  value={email}
-                  autoComplete="off"
                   placeholder="Email"
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
+                  autoComplete="off"
                   className={style.inputField}
                 />
               </div>
+              {errors.email && (
+                <p className={style.error}>{errors.email.message}</p>
+              )}
             </div>
 
             <div className={style.inputDiv}>
@@ -114,18 +127,19 @@ const Login = () => {
               <div className={style.input}>
                 <BsFillShieldLockFill className={style.icon} />
                 <input
+                  {...register("password")}
                   type="password"
                   id="password"
-                  value={password}
                   placeholder="Password"
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
                   className={style.inputField}
                 />
               </div>
+              {errors.password && (
+                <p className={style.error}>{errors.password.message}</p>
+              )}
             </div>
 
-            <button type="submit" className={style.btn}>
+            <button type="submit" disabled={isSubmitting} className={style.btn}>
               <span className={style.loginText}>Login</span>
               <FaLongArrowAltRight className={style.btnIcon} />
             </button>
@@ -142,9 +156,7 @@ const Login = () => {
 
             <div className={style.forgotPassword}>
               Forgot your password?
-              {/* <a className={style.forgotPasswordLink}>
-                Click Here
-              </a> */}
+              <a className={style.forgotPasswordLink}>Click Here</a>
             </div>
           </form>
         </div>
