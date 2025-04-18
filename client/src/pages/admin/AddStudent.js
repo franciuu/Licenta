@@ -33,7 +33,6 @@ const AddStudent = () => {
     register,
     handleSubmit,
     formState: { errors },
-    setValue,
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {},
@@ -96,7 +95,7 @@ const AddStudent = () => {
         <h1 className={styles.title}>Add Student</h1>
         {error && <div className={styles.errorMessage}>{error}</div>}
         <div className={styles.formWrapper}>
-          <form onSubmit={handleSubmit((data) => addStudent({ ...data }))}>
+          <form onSubmit={handleSubmit(addStudent)}>
             <div className={styles.formColumns}>
               <div className={styles.formColumn}>
                 <div className={styles.inputDiv}>

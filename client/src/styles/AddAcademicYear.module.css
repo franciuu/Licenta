@@ -146,3 +146,19 @@
     margin-bottom: 8px;
   }
 }
+
+.error {
+  color: #e74c3c;
+  font-size: 12px;
+  margin-top: 4px;
+  margin-bottom: 0;
+}
+
+.errorMessage {
+  background-color: rgba(231, 76, 60, 0.1);
+  color: #e74c3c;
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  border-left: 3px solid #e74c3c;
+}
