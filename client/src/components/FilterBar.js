@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import { Form, Row, Col } from "react-bootstrap";
 import styles from "../styles/FilterBar.module.css";

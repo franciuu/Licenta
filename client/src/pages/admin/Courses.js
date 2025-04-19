@@ -37,7 +37,6 @@ const Courses = () => {
   }, [axiosCustom]);
 
   useEffect(() => {
-    // Apply filters
     let result = [...courses];
 
     if (filters.name) {

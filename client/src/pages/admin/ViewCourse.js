@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
-import { Container, Row, Col } from "react-bootstrap";
-import useAxiosCustom from "../../hooks/useAxiosCustom";
 import { useNavigate, useParams } from "react-router-dom";
+import { Container, Row, Col } from "react-bootstrap";
+import Swal from "sweetalert2";
+
+import useAxiosCustom from "../../hooks/useAxiosCustom";
 import Layout from "../Layout";
 import ActivityCard from "../../components/ActivityCard.js";
-import Swal from "sweetalert2";
 import { getCourseById } from "../../services/CourseService.js";
 import { getActivitesByCourse } from "../../services/ActivityService.js";
 import Loader from "../../components/Loader.js";
@@ -18,7 +19,7 @@ const ViewCourse = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const deleteCourse = (uuid) => {
+  const onDelete = (uuid) => {
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -33,7 +34,7 @@ const ViewCourse = () => {
           await axiosCustom.delete(`/courses/${uuid}`);
           Swal.fire({
             title: "Deleted!",
-            text: "User has been deleted.",
+            text: "Course has been deleted.",
             icon: "success",
           });
           navigate("/admin/courses");
@@ -44,37 +45,37 @@ const ViewCourse = () => {
     });
   };
 
+  const fetchCourseData = async () => {
+    setLoadingCount((prev) => prev + 1);
+    try {
+      const courseData = await getCourseById(axiosCustom, id);
+      setCourse(courseData);
+    } catch (error) {
+      if (error.response?.status === 404) {
+        navigate("/404");
+      }
+      console.error("Failed to fetch course data", error);
+    } finally {
+      setLoadingCount((prev) => prev - 1);
+    }
+  };
+
+  const fetchActivitiesData = async () => {
+    setLoadingCount((prev) => prev + 1);
+    try {
+      const activitiesData = await getActivitesByCourse(axiosCustom, id);
+      setActivities(activitiesData);
+    } catch (error) {
+      console.error("Failed to fetch activities data", error);
+    } finally {
+      setLoadingCount((prev) => prev - 1);
+    }
+  };
+
   useEffect(() => {
-    const fetchCourseData = async () => {
-      setLoadingCount((prev) => prev + 1);
-      try {
-        const courseData = await getCourseById(axiosCustom, id);
-        setCourse(courseData);
-      } catch (error) {
-        if (error.response?.status === 404) {
-          navigate("/404");
-        }
-        console.error("Failed to fetch course data", error);
-      } finally {
-        setLoadingCount((prev) => prev - 1);
-      }
-    };
-
-    const fetchActivitiesData = async () => {
-      setLoadingCount((prev) => prev + 1);
-      try {
-        const activitiesData = await getActivitesByCourse(axiosCustom, id);
-        setActivities(activitiesData);
-      } catch (error) {
-        console.error("Failed to fetch activities data", error);
-      } finally {
-        setLoadingCount((prev) => prev - 1);
-      }
-    };
-
     fetchCourseData();
     fetchActivitiesData();
-  }, [navigate, axiosCustom, id]);
+  }, []);
 
   const renderActivities = () => {
     if (activities.length === 0) {
@@ -91,7 +92,7 @@ const ViewCourse = () => {
         <Row>
           {activities.map((activ) => (
             <Col key={activ.uuid} xs={12} sm={6} md={6} lg={3} className="mb-4">
-              <ActivityCard info={activ} />
+              <ActivityCard info={activ} onDeleted={fetchActivitiesData} />
             </Col>
           ))}
         </Row>
@@ -116,7 +117,7 @@ const ViewCourse = () => {
           </div>
           <button
             className={styles.deleteButton}
-            onClick={() => deleteCourse(course.uuid)}
+            onClick={() => onDelete(course.uuid)}
           >
             Delete course
           </button>

@@ -5,6 +5,7 @@ import {
   getPersonalActivities,
   getActivityById,
   getLectures,
+  deleteActivity,
 } from "../controllers/ActivitiesController.js";
 import { verifyRoles } from "../middlewares/verifyRole.js";
 import ROLES_LIST from "../config/rolesList.js";
@@ -28,5 +29,6 @@ router.get(
   verifyRoles(ROLES_LIST[0], ROLES_LIST[1]),
   getActivityById
 );
+router.delete("/activities/:id", verifyRoles(ROLES_LIST[0]), deleteActivity);
 
 export default router;

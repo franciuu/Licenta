@@ -32,7 +32,7 @@ export const createCourse = async (req, res) => {
     });
     res.status(201).json({ msg: "Successful" });
   } catch (error) {
-    res.status(400).json({ msg: error.message });
+    res.status(500).json({ msg: error.message });
   }
 };
 
@@ -42,11 +42,11 @@ export const deleteCourse = async (req, res) => {
       where: { uuid: req.params.id },
     });
     if (!course) {
-      res.status(404).json({ msg: "Course not found" });
+      return res.status(404).json({ msg: "Course not found" });
     }
     await course.destroy();
     res.status(200).json({ msg: "Course deleted" });
   } catch (error) {
-    res.status(400).json({ msg: error.message });
+    res.status(500).json({ msg: error.message });
   }
 };

@@ -160,3 +160,18 @@ export const createActivity = async (req, res) => {
     res.status(500).json({ msg: error.message });
   }
 };
+
+export const deleteActivity = async (req, res) => {
+  try {
+    const activity = await Activity.findOne({
+      where: { uuid: req.params.id },
+    });
+    if (!activity) {
+      return res.status(404).json({ msg: "Activity not found" });
+    }
+    await activity.destroy();
+    res.status(200).json({ msg: "Activity deleted" });
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
+};
