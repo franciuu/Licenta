@@ -1,32 +1,84 @@
-.container {
-  max-width: 900px;
+.pageContainer {
   margin: 0 auto;
-  padding: 24px 32px;
-  background-color: rgba(255, 255, 255, 0.5);
-  backdrop-filter: blur(15px);
-  border-radius: 12px;
-  box-shadow: 0 0 20px rgba(142, 68, 173, 0.2);
-  border: 2px solid rgba(255, 255, 255, 0.6);
+  padding: 2rem 1rem;
 }
 
-.title {
-  font-size: 24px;
+.titleContainer {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.pageTitle {
+  font-size: 1.875rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--gray-700);
+}
+
+.pageSubtitle {
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: var(--gray-500);
+  margin-top: 0;
+}
+
+.attendanceCard,
+.studentsCard {
+  background-color: var(--white);
+  border-radius: var(--radius);
+  border: 1px solid var(--purple-200);
+  overflow: hidden;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow);
+}
+
+.cardHeader {
+  background: var(--primary-gradient);
+  padding: 1.25rem;
+  border-bottom: 1px solid var(--purple-200);
+  color: var(--white);
+}
+
+.cardTitle {
+  font-size: 1.25rem;
   font-weight: 600;
-  color: #333;
-  margin-bottom: 8px;
+  color: var(--white);
+  margin: 0;
 }
 
-.subTitle {
-  font-size: 16px;
-  color: #666;
-  margin-bottom: 4px;
+.cardTitleWithButton {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--white);
+  margin: 0;
 }
 
-.datePicker {
-  margin: 20px 0 24px;
+.cardContent {
+  padding: 1.5rem;
+}
+
+.cardDescription {
+  margin-top: 0.5rem;
+  margin-bottom: 0;
+  color: var(--white);
+  opacity: 0.9;
+  font-size: 0.875rem;
+}
+
+.dateSelectorContainer {
+  margin-bottom: 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 0.5rem;
+}
+
+.dateSelectorLabel {
+  font-weight: 500;
+  color: var(--purple-700);
+  font-size: 0.875rem;
 }
 
 .select {
@@ -45,10 +97,242 @@
   box-shadow: 0 0 0 2px rgba(142, 68, 173, 0.2);
 }
 
-.noAttendanceMessage {
-  margin-top: 32px;
-  font-size: 16px;
-  font-style: italic;
-  color: #7c26a6;
-  text-align: center;
+.formCheckbox {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(142, 68, 173, 0.4);
+  border-radius: 4px;
+  cursor: pointer;
+  accent-color: var(--primary-purple);
+  transition: all 0.3s ease;
+}
+
+.formCheckbox:checked {
+  background-color: var(--primary-purple);
+  border-color: var(--primary-purple);
+}
+
+.checkboxLabel {
+  margin-left: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.sendEmailButton {
+  background: var(--primary-gradient);
+  color: var(--white);
+  border: none;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.sendEmailButton:hover {
+  opacity: 0.9;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.sendEmailButton:disabled {
+  background: var(--gray-300);
+  cursor: not-allowed;
+}
+
+.buttonIcon {
+  width: 1rem;
+  height: 1rem;
+  margin-right: 0.5rem;
+}
+
+.alertInfo {
+  display: flex;
+  padding: 1rem;
+  border-radius: var(--radius-sm);
+  margin-bottom: 1rem;
+  background-color: var(--blue-50);
+  border: 1px solid var(--blue-300);
+}
+
+.alertIcon {
+  width: 1rem;
+  height: 1rem;
+  color: var(--primary-blue);
+  margin-right: 0.5rem;
+}
+
+.alertDescription {
+  margin: 0;
+  color: var(--blue-600);
+  font-size: 0.875rem;
+}
+
+.attendanceList {
+  margin-top: 1rem;
+}
+
+.attendanceListContainer {
+  border: 1px solid var(--blue-200);
+  border-radius: var(--radius-sm);
+  padding: 1rem;
+  background-color: var(--white);
+}
+
+.attendanceListTitle {
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: var(--blue-700);
+}
+
+.attendanceItems {
+  display: grid;
+  gap: 0.5rem;
+  max-height: 300px;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--blue-400) var(--blue-100);
+}
+
+.attendanceItems::-webkit-scrollbar {
+  width: 8px;
+}
+
+.attendanceItems::-webkit-scrollbar-track {
+  background: var(--blue-100);
+  border-radius: 4px;
+}
+
+.attendanceItems::-webkit-scrollbar-thumb {
+  background-color: var(--blue-400);
+  border-radius: 4px;
+}
+
+.attendanceItem {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem;
+  border-radius: var(--radius-sm);
+  background-color: var(--blue-50);
+  border: 1px solid var(--blue-100);
+}
+
+.checkIcon {
+  width: 1rem;
+  height: 1rem;
+  color: var(--primary-blue);
+  margin-right: 0.5rem;
+}
+
+.studentsListContainer {
+  border: 1px solid var(--blue-200);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.studentsListHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  background: linear-gradient(to right, var(--purple-100), var(--blue-100));
+  border-bottom: 1px solid var(--blue-200);
+}
+
+.selectAllContainer {
+  display: flex;
+  align-items: center;
+}
+
+.selectionCount {
+  font-size: 0.875rem;
+  color: var(--blue-700);
+}
+
+.studentsList {
+  display: flex;
+  flex-direction: column;
+}
+
+.studentsList.scrollable {
+  max-height: 400px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--blue-400) var(--blue-100);
+}
+
+.studentsList.scrollable::-webkit-scrollbar {
+  width: 8px;
+}
+
+.studentsList.scrollable::-webkit-scrollbar-track {
+  background: var(--blue-100);
+  border-radius: 4px;
+}
+
+.studentsList.scrollable::-webkit-scrollbar-thumb {
+  background-color: var(--blue-400);
+  border-radius: 4px;
+}
+
+.studentItem {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid var(--blue-100);
+  height: 80px; /* Fixed height for each student item */
+}
+
+.studentItem:last-child {
+  border-bottom: none;
+}
+
+.studentItem:hover {
+  background-color: var(--blue-50);
+}
+
+.studentDetails {
+  margin-left: 1rem;
+  flex: 1;
+}
+
+.studentName {
+  font-weight: 500;
+}
+
+.arrivalTime {
+  font-size: 0.875rem;
+  color: var(--blue-600);
+}
+
+.attendanceCountContainer {
+  display: flex;
+  align-items: center;
+}
+
+.attendanceCount {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--blue-700);
+  margin-right: 0.5rem;
+}
+
+.attendanceComplete {
+  display: inline-flex;
+  align-items: center;
+  background-color: var(--blue-100);
+  color: var(--blue-800);
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.25rem 0.625rem;
+  border-radius: var(--radius-full);
+}
+
+.completeIcon {
+  width: 0.75rem;
+  height: 0.75rem;
+  margin-right: 0.25rem;
 }

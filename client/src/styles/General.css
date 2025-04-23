@@ -1,18 +1,70 @@
 @import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Manrope:wght@200..800&display=swap");
 
 :root {
-  --background-main: #d0e0f0;
-  --background-card: #b5cfe6;
-  --button-primary: #7d95b0;
-  --button-hover: #5a7898;
-  --text-main: #4a6f91;
-  --text-secondary: #a3b1c6;
-  --border: #90b3d2;
-  --table-header: #7d95b0;
-  --table-background: #ffffff;
-  --table-border: #90b3d2;
-  --table-row-even: #b5cfe6;
-  --loader-color: #5a7898;
+  --primary-purple: #8e44ad;
+  --primary-blue: #3498db;
+  --primary-gradient: linear-gradient(
+    135deg,
+    var(--primary-purple),
+    var(--primary-blue)
+  );
+
+  --purple-50: #f5f0ff;
+  --purple-100: #ede0ff;
+  --purple-200: #d8c2f2;
+  --purple-300: #c4a4e8;
+  --purple-400: #b085de;
+  --purple-500: #9c66d4;
+  --purple-600: #8e44ad;
+  --purple-700: #7d3c98;
+  --purple-800: #6c3483;
+  --purple-900: #5b2c6f;
+
+  --blue-50: #e8f4fd;
+  --blue-100: #d1e9fb;
+  --blue-200: #a3d3f7;
+  --blue-300: #75bdf3;
+  --blue-400: #47a7ef;
+  --blue-500: #3498db;
+  --blue-600: #2980b9;
+  --blue-700: #236897;
+  --blue-800: #1c5075;
+  --blue-900: #153853;
+
+  --white: #fefefe;
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
+  --black: #090909;
+
+  --success: #10b981;
+  --warning: #f59e0b;
+  --error: #ef4444;
+  --info: #3b82f6;
+
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+  --radius-sm: 0.25rem;
+  --radius: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-full: 9999px;
+
+  --transition-fast: 150ms;
+  --transition: 200ms;
+  --transition-slow: 300ms;
 }
 
 *,
@@ -58,7 +110,6 @@ h6 {
   overflow: hidden;
 }
 
-/* Header Styles */
 .rbc-toolbar {
   padding: 14px 16px;
   background: linear-gradient(90deg, #9c27b0 0%, #6a1b9a 100%);
@@ -111,14 +162,12 @@ h6 {
   text-align: center;
 }
 
-/* Day numbers */
 .rbc-date-cell {
   text-align: center;
   padding: 4px 0;
   font-weight: 500;
 }
 
-/* Time Grid Styles */
 .rbc-time-header {
   border-bottom: none;
   background-color: #fcfcfc;
@@ -233,4 +282,22 @@ h6 {
   text-transform: uppercase;
   font-size: 0.85rem;
   letter-spacing: 0.5px;
+}
+
+html::-webkit-scrollbar {
+  width: 10px;
+}
+
+html::-webkit-scrollbar-track {
+  background: var(--purple-100);
+}
+
+html::-webkit-scrollbar-thumb {
+  background-color: var(--purple-400);
+  border-radius: 10px;
+}
+
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--purple-400) var(--purple-100);
 }
