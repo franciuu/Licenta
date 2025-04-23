@@ -4,6 +4,7 @@ import {
   getAttendanceTrendForActivity,
   getAttendancePercentageForLecture,
   getSeminarAttendancePercentageForCourse,
+  getAttendanceCount,
 } from "../controllers/AttendancesController.js";
 import { verifyRoles } from "../middlewares/verifyRole.js";
 import ROLES_LIST from "../config/rolesList.js";
@@ -29,6 +30,11 @@ router.get(
   "/attendances/lectures/:id",
   verifyRoles(ROLES_LIST[1]),
   getSeminarAttendancePercentageForCourse
+);
+router.get(
+  "/attendances/counts/:id",
+  verifyRoles(ROLES_LIST[1]),
+  getAttendanceCount
 );
 
 export default router;

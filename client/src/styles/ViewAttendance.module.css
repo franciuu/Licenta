@@ -119,7 +119,7 @@
 }
 
 .sendEmailButton {
-  background: var(--primary-gradient);
+  background-color: var(--purple-900);
   color: var(--white);
   border: none;
   border-radius: 8px;
@@ -301,6 +301,7 @@
 
 .studentName {
   font-weight: 500;
+  color: var(--gray-700);
 }
 
 .arrivalTime {
@@ -335,4 +336,91 @@
   width: 0.75rem;
   height: 0.75rem;
   margin-right: 0.25rem;
+}
+
+@media (max-width: 768px) {
+  .cardContent {
+    padding: 1rem;
+  }
+
+  .studentsListHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .studentItem {
+    flex-direction: column;
+    align-items: flex-start;
+    height: auto;
+    padding: 0.75rem;
+  }
+
+  .studentDetails {
+    margin-left: 0;
+    margin-top: 0.5rem;
+  }
+
+  .attendanceCountContainer {
+    margin-top: 0.5rem;
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .cardTitleWithButton {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .sendEmailButton {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .attendanceItems {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .pageTitle {
+    font-size: 1.5rem;
+  }
+
+  .pageSubtitle {
+    font-size: 1rem;
+  }
+
+  .cardTitle {
+    font-size: 1rem;
+  }
+
+  .select {
+    font-size: 12px;
+    padding: 8px 12px;
+  }
+
+  .formCheckbox {
+    width: 14px;
+    height: 14px;
+  }
+
+  .studentName {
+    font-size: 0.9rem;
+  }
+
+  .studentEmail {
+    font-size: 0.75rem;
+    word-break: break-all;
+  }
+
+  .attendanceCount {
+    font-size: 0.75rem;
+  }
+
+  .attendanceComplete {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+  }
 }

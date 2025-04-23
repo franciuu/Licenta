@@ -43,6 +43,15 @@ export const getStudentByEmail = async (axiosCustom, email) => {
   }
 };
 
+export const getActivityStudents = async (axiosCustom, id) => {
+  try {
+    const response = await axiosCustom.get(`/students/activity/${id}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const createStudent = async (axiosCustom, formData, imageUrls) => {
   try {
     const response = await axiosCustom.post("/students", {

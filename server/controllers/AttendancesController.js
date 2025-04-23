@@ -4,6 +4,7 @@ import Activity from "../models/Activity.js";
 import Semester from "../models/Semester.js";
 import Enrollment from "../models/Enrollment.js";
 import { getActivityDates } from "../utils/dateUtils.js";
+import db from "../config/database.js";
 
 export const getActivityAttendances = async (req, res) => {
   const { date } = req.query;
@@ -189,6 +190,33 @@ export const getSeminarAttendancePercentageForCourse = async (req, res) => {
       })
     );
     res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
+};
+
+export const getAttendanceCount = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const [results] = await db.query(
+      `SELECT s.uuid AS idStudent, COUNT(a.idStudent) AS count
+      FROM enrollments e
+      JOIN students s ON e.idStudent = s.uuid
+      LEFT JOIN attendances a 
+        ON a.idStudent = s.uuid AND a.idActivity = ?
+      WHERE e.idActivity = ?
+      GROUP BY s.uuid
+      `,
+      {
+        replacements: [id, id],
+      }
+    );
+    const countsByStudent = {};
+    results.forEach((row) => {
+      countsByStudent[row.idStudent] = row.count;
+    });
+    res.status(200).json(countsByStudent);
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }

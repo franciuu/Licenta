@@ -92,6 +92,25 @@ export const getStudentByEmail = async (req, res) => {
   }
 };
 
+export const getActivityStudents = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const response = await Enrollment.findAll({
+      where: { idActivity: id },
+      include: [
+        {
+          model: Student,
+        },
+      ],
+    });
+    const students = response.map((enrollment) => enrollment.student);
+    res.status(200).json(students);
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
+};
+
 export const createStudent = async (req, res) => {
   const { name, birthDate, email, studyYear, images } = req.body;
 
@@ -124,7 +143,7 @@ export const updateStudent = async (req, res) => {
     },
   });
   if (!student) {
-    res.status(404).json({ msg: "Student not found" });
+    return res.status(404).json({ msg: "Student not found" });
   }
   try {
     await student.update({
@@ -154,7 +173,7 @@ export const deleteStudent = async (req, res) => {
       where: { uuid: req.params.id },
     });
     if (!student) {
-      res.status(404).json({ msg: "Student not found" });
+      return res.status(404).json({ msg: "Student not found" });
     }
 
     const images = await Image.findAll({ where: { idStudent: student.uuid } });

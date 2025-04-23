@@ -31,6 +31,15 @@ export const getAttendancePercentageForLecture = async (axiosCustom, id) => {
   }
 };
 
+export const getAttendanceCount = async (axiosCustom, id) => {
+  try {
+    const response = await axiosCustom.get(`/attendances/counts/${id}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const getSeminarAttendancePercentageForCourse = async (
   axiosCustom,
   id

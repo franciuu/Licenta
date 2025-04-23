@@ -1,12 +1,17 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import dateFormat from "dateformat";
+import { FiAlertCircle, FiCheck, FiMail } from "react-icons/fi";
+
 import Layout from "../Layout";
 import useAxiosCustom from "../../hooks/useAxiosCustom";
-import { useParams, useNavigate } from "react-router-dom";
 import Loader from "../../components/Loader";
-import { getAttendancesByActivityAndDate } from "../../services/AttendanceService";
+import {
+  getAttendancesByActivityAndDate,
+  getAttendanceCount,
+} from "../../services/AttendanceService";
 import { getActivityById } from "../../services/ActivityService";
-import { FiAlertCircle, FiCheck, FiMail } from "react-icons/fi";
+import { getActivityStudents } from "../../services/StudentService";
 import styles from "../../styles/ViewAttendance.module.css";
 
 const ViewAttendance = () => {
@@ -14,91 +19,18 @@ const ViewAttendance = () => {
   const [activity, setActivity] = useState({});
   const [selectedDate, setSelectedDate] = useState("");
   const [attendances, setAttendances] = useState([]);
+  const [attendancesCount, setAttendancesCount] = useState([]);
+  const [students, setStudents] = useState([]);
   const [selectedStudents, setSelectedStudents] = useState([]);
   const axiosCustom = useAxiosCustom();
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const MOCK_STUDENTS = [
-    {
-      id: 1,
-      name: "Popescu Ion",
-      email: "popescu.ion@example.com",
-      attendances: [true, true, false, true, true, false],
-    },
-    {
-      id: 2,
-      name: "Ionescu Maria",
-      email: "ionescu.maria@example.com",
-      attendances: [true, false, true, true, false, true],
-    },
-    {
-      id: 3,
-      name: "Dumitrescu Andrei",
-      email: "dumitrescu.andrei@example.com",
-      attendances: [true, true, true, false, true, true],
-    },
-    {
-      id: 4,
-      name: "Constantinescu Elena",
-      email: "constantinescu.elena@example.com",
-      attendances: [true, true, true, true, true, true],
-    },
-    {
-      id: 5,
-      name: "Popa Alexandru",
-      email: "popa.alexandru@example.com",
-      attendances: [true, false, true, true, false, false],
-    },
-    {
-      id: 6,
-      name: "Stanescu Mihai",
-      email: "stanescu.mihai@example.com",
-      attendances: [true, true, false, false, true, false],
-    },
-    {
-      id: 7,
-      name: "Georgescu Ana",
-      email: "georgescu.ana@example.com",
-      attendances: [true, true, true, true, false, true],
-    },
-    {
-      id: 8,
-      name: "Vasilescu Radu",
-      email: "vasilescu.radu@example.com",
-      attendances: [true, false, false, true, true, true],
-    },
-    {
-      id: 9,
-      name: "Marinescu Diana",
-      email: "marinescu.diana@example.com",
-      attendances: [true, true, true, false, false, true],
-    },
-    {
-      id: 10,
-      name: "Diaconu Cristian",
-      email: "diaconu.cristian@example.com",
-      attendances: [true, true, true, true, true, false],
-    },
-    {
-      id: 11,
-      name: "Stoica Alina",
-      email: "stoica.alina@example.com",
-      attendances: [true, false, true, true, true, true],
-    },
-    {
-      id: 12,
-      name: "Munteanu Victor",
-      email: "munteanu.victor@example.com",
-      attendances: [true, true, false, true, false, true],
-    },
-  ];
-
   const handleSelectAllStudents = () => {
-    if (selectedStudents.length === MOCK_STUDENTS.length) {
+    if (selectedStudents.length === students.length) {
       setSelectedStudents([]);
     } else {
-      setSelectedStudents(MOCK_STUDENTS.map((student) => student.id));
+      setSelectedStudents(students.map((student) => student.uuid));
     }
   };
 
@@ -108,12 +40,6 @@ const ViewAttendance = () => {
     } else {
       setSelectedStudents([...selectedStudents, studentId]);
     }
-  };
-
-  const getAttendanceCount = (studentId) => {
-    const student = MOCK_STUDENTS.find((s) => s.id === studentId);
-    if (!student) return 0;
-    return 6;
   };
 
   useEffect(() => {
@@ -133,7 +59,34 @@ const ViewAttendance = () => {
       }
     };
 
+    const fetchStudents = async () => {
+      setLoadingCount((prev) => prev + 1);
+      try {
+        const studentsData = await getActivityStudents(axiosCustom, id);
+        setStudents(studentsData);
+      } catch (error) {
+        console.error("Failed to fetch students data", error);
+      } finally {
+        setLoadingCount((prev) => prev - 1);
+      }
+    };
+
+    const fetchCounts = async () => {
+      setLoadingCount((prev) => prev + 1);
+      try {
+        const countsData = await getAttendanceCount(axiosCustom, id);
+        setAttendancesCount(countsData);
+      } catch (error) {
+        console.error("Failed to fetch attendance count data", error);
+      } finally {
+        setLoadingCount((prev) => prev - 1);
+      }
+    };
+
     fetchActivity();
+    fetchStudents();
+    fetchCounts();
+    console.log(students);
   }, [axiosCustom, id]);
 
   useEffect(() => {
@@ -156,7 +109,7 @@ const ViewAttendance = () => {
     };
 
     fetchAttendances();
-  }, [selectedDate, axiosCustom, id]);
+  }, [selectedDate]);
 
   if (loadingCount > 0)
     return (
@@ -220,18 +173,17 @@ const ViewAttendance = () => {
                       Present students:
                     </h3>
                     <div className={styles.attendanceItems}>
-                      {attendances.map((student) => (
-                        <div
-                          key={student.uuid}
-                          className={styles.attendanceItem}
-                        >
+                      {attendances.map((student, index) => (
+                        <div key={index} className={styles.attendanceItem}>
                           <FiCheck className={styles.checkIcon} />
-                          <div className={styles.studentName}>
-                            {student.name}
+                          <div>
+                            <div className={styles.studentName}>
+                              {student.name}
+                            </div>
+                            <div
+                              className={styles.arrivalTime}
+                            >{`Arrival Time: ${student.arrivalTime}`}</div>
                           </div>
-                          <div
-                            className={styles.arrivalTime}
-                          >{`Arrival Time: ${student.arrivalTime}`}</div>
                         </div>
                       ))}
                     </div>
@@ -258,7 +210,7 @@ const ViewAttendance = () => {
                 disabled={selectedStudents.length === 0}
                 className={styles.sendEmailButton}
               >
-                <FiMail />
+                <FiMail className={styles.buttonIcon} />
                 Send Mail ({selectedStudents.length})
               </button>
             </div>
@@ -274,7 +226,7 @@ const ViewAttendance = () => {
                   <input
                     type="checkbox"
                     id="selectAll"
-                    checked={selectedStudents.length === MOCK_STUDENTS.length}
+                    checked={selectedStudents.length === students.length}
                     onChange={handleSelectAllStudents}
                     className={styles.formCheckbox}
                   ></input>
@@ -283,18 +235,18 @@ const ViewAttendance = () => {
                   </label>
                 </div>
                 <div className="selectionCount">
-                  {selectedStudents.length} din {MOCK_STUDENTS.length} selectați
+                  {selectedStudents.length} of {students.length} selected
                 </div>
               </div>
 
               <div className={`${styles.studentsList} ${styles.scrollable}`}>
-                {MOCK_STUDENTS.map((student) => (
-                  <div key={student.id} className={styles.studentItem}>
+                {students.map((student) => (
+                  <div key={student.uuid} className={styles.studentItem}>
                     <input
                       type="checkbox"
-                      id={`student-${student.id}`}
-                      checked={selectedStudents.includes(student.id)}
-                      onChange={() => handleStudentSelect(student.id)}
+                      id={`student-${student.uuid}`}
+                      checked={selectedStudents.includes(student.uuid)}
+                      onChange={() => handleStudentSelect(student.uuid)}
                       className={styles.formCheckbox}
                     />
                     <div className={styles.studentDetails}>
@@ -303,10 +255,10 @@ const ViewAttendance = () => {
                     </div>
                     <div className={styles.attendanceCountContainer}>
                       <span className={styles.attendanceCount}>
-                        Prezențe: {getAttendanceCount(student.id)}/
+                        Prezențe: {attendancesCount[student.uuid]}/
                         {activity.availableDates?.length}
                       </span>
-                      {getAttendanceCount(student.id) ===
+                      {attendancesCount[student.uuid] ===
                         activity.availableDates?.length && (
                         <span className={styles.attendanceComplete}>
                           <FiCheck className={styles.completeIcon} />

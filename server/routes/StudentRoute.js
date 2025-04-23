@@ -7,6 +7,7 @@ import {
   deleteStudent,
   updateStudent,
   getPersonalStudents,
+  getActivityStudents,
 } from "../controllers/StudentsController.js";
 import { verifyRoles } from "../middlewares/verifyRole.js";
 import ROLES_LIST from "../config/rolesList.js";
@@ -21,6 +22,11 @@ router.get(
 );
 router.get("/students/search", verifyRoles(ROLES_LIST[0]), getStudentByEmail);
 router.post("/students", verifyRoles(ROLES_LIST[0]), createStudent);
+router.get(
+  "/students/activity/:id",
+  verifyRoles(ROLES_LIST[1]),
+  getActivityStudents
+);
 router.get(
   "/students/:id",
   verifyRoles(ROLES_LIST[0], ROLES_LIST[1]),
