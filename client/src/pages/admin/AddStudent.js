@@ -1,12 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import * as Yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+
 import useAxiosCustom from "../../hooks/useAxiosCustom";
 import Layout from "../Layout";
 import { createStudent } from "../../services/StudentService";
 import styles from "../../styles/AddStudent.module.css";
-import { useForm } from "react-hook-form";
-import * as Yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
 
 const schema = Yup.object().shape({
   name: Yup.string().required("Name is required"),

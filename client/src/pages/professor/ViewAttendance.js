@@ -12,6 +12,8 @@ import {
 } from "../../services/AttendanceService";
 import { getActivityById } from "../../services/ActivityService";
 import { getActivityStudents } from "../../services/StudentService";
+import { sendMail } from "../../services/MailService";
+import useAuth from "../../hooks/useAuth";
 import styles from "../../styles/ViewAttendance.module.css";
 
 const ViewAttendance = () => {
@@ -25,20 +27,47 @@ const ViewAttendance = () => {
   const axiosCustom = useAxiosCustom();
   const navigate = useNavigate();
   const { id } = useParams();
+  const { auth } = useAuth();
 
   const handleSelectAllStudents = () => {
     if (selectedStudents.length === students.length) {
       setSelectedStudents([]);
     } else {
-      setSelectedStudents(students.map((student) => student.uuid));
+      setSelectedStudents(students);
     }
   };
 
-  const handleStudentSelect = (studentId) => {
-    if (selectedStudents.includes(studentId)) {
-      setSelectedStudents(selectedStudents.filter((id) => id !== studentId));
+  const handleStudentSelect = (student) => {
+    if (selectedStudents.find((s) => s.uuid === student.uuid)) {
+      setSelectedStudents(
+        selectedStudents.filter((s) => s.uuid !== student.uuid)
+      );
     } else {
-      setSelectedStudents([...selectedStudents, studentId]);
+      setSelectedStudents([...selectedStudents, student]);
+    }
+  };
+
+  const onSend = async (
+    selectedStudents,
+    attendancesCount,
+    activityName,
+    professorName,
+    professorEmail
+  ) => {
+    try {
+      const mailData = await sendMail(
+        axiosCustom,
+        selectedStudents,
+        attendancesCount,
+        activityName,
+        professorName,
+        professorEmail
+      );
+      if (mailData) {
+        alert("E ok!");
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -110,6 +139,10 @@ const ViewAttendance = () => {
 
     fetchAttendances();
   }, [selectedDate]);
+
+  useEffect(() => {
+    setSelectedStudents([]);
+  }, [id]);
 
   if (loadingCount > 0)
     return (
@@ -209,6 +242,15 @@ const ViewAttendance = () => {
                 type="button"
                 disabled={selectedStudents.length === 0}
                 className={styles.sendEmailButton}
+                onClick={() =>
+                  onSend(
+                    selectedStudents,
+                    attendancesCount,
+                    activity.name,
+                    auth?.name,
+                    auth?.email
+                  )
+                }
               >
                 <FiMail className={styles.buttonIcon} />
                 Send Mail ({selectedStudents.length})
@@ -245,8 +287,10 @@ const ViewAttendance = () => {
                     <input
                       type="checkbox"
                       id={`student-${student.uuid}`}
-                      checked={selectedStudents.includes(student.uuid)}
-                      onChange={() => handleStudentSelect(student.uuid)}
+                      checked={selectedStudents.some(
+                        (s) => s.uuid === student.uuid
+                      )}
+                      onChange={() => handleStudentSelect(student)}
                       className={styles.formCheckbox}
                     />
                     <div className={styles.studentDetails}>
