@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+
 import Layout from "../Layout";
 import { getActivityById } from "../../services/ActivityService";
 import useAxiosCustom from "../../hooks/useAxiosCustom";
@@ -10,7 +12,6 @@ import {
   createEnrollment,
   getActivityEnrollments,
 } from "../../services/EnrollmentService";
-import { toast } from "react-toastify";
 import styles from "../../styles/ActivityEnrollment.module.css";
 
 const ActivityEnrollment = () => {

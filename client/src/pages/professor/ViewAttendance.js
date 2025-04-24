@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import dateFormat from "dateformat";
 import { FiAlertCircle, FiCheck, FiMail } from "react-icons/fi";
+import { toast } from "react-toastify";
 
 import Layout from "../Layout";
 import useAxiosCustom from "../../hooks/useAxiosCustom";
@@ -24,6 +25,7 @@ const ViewAttendance = () => {
   const [attendancesCount, setAttendancesCount] = useState([]);
   const [students, setStudents] = useState([]);
   const [selectedStudents, setSelectedStudents] = useState([]);
+  const [sending, setSending] = useState(false);
   const axiosCustom = useAxiosCustom();
   const navigate = useNavigate();
   const { id } = useParams();
@@ -55,6 +57,7 @@ const ViewAttendance = () => {
     professorEmail
   ) => {
     try {
+      setSending(true);
       const mailData = await sendMail(
         axiosCustom,
         selectedStudents,
@@ -63,11 +66,19 @@ const ViewAttendance = () => {
         professorName,
         professorEmail
       );
+      setSelectedStudents([]);
       if (mailData) {
-        alert("E ok!");
+        toast.success("Emails sent successfully!", {
+          position: "top-right",
+        });
       }
     } catch (error) {
+      toast.error("Failed to send emails. Please try again later.", {
+        position: "top-right",
+      });
       console.error(error);
+    } finally {
+      setSending(false);
     }
   };
 
@@ -240,7 +251,7 @@ const ViewAttendance = () => {
               <span>Students List</span>
               <button
                 type="button"
-                disabled={selectedStudents.length === 0}
+                disabled={selectedStudents.length === 0 || sending}
                 className={styles.sendEmailButton}
                 onClick={() =>
                   onSend(
@@ -253,7 +264,9 @@ const ViewAttendance = () => {
                 }
               >
                 <FiMail className={styles.buttonIcon} />
-                Send Mail ({selectedStudents.length})
+                {sending
+                  ? "Sending..."
+                  : `Send Mail (${selectedStudents.length})`}
               </button>
             </div>
             <p className={styles.cardDescription}>
