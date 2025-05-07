@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import useAxiosCustom from "../../hooks/useAxiosCustom";
-import Layout from "../Layout";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+
+import useAxiosCustom from "../../hooks/useAxiosCustom";
+import { updateStudent, getStudentById } from "../../services/StudentService";
+import Layout from "../Layout";
+import Uploader from "../../components/Uploader";
 import styles from "../../styles/EditStudent.module.css";
 
 const schema = Yup.object().shape({
@@ -25,59 +28,47 @@ const EditStudent = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const axiosCustom = useAxiosCustom();
-  const [student, setStudent] = useState(null);
+  const [files, setFiles] = useState([]);
+  const [initialUrls, setInitialUrls] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [images, setImages] = useState([]);
-  const [uploading, setUploading] = useState(false);
 
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
-    setValue,
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: {},
   });
 
   useEffect(() => {
     const fetchStudent = async () => {
       try {
-        const response = await axiosCustom.get(`/students/${id}`);
-        const data = response.data;
-        setStudent(data);
-        setImages(data.images || []);
-
-        for (const key in data) {
-          if (key !== "images" && key !== "birthDate") {
-            setValue(key, data[key]);
-          }
-        }
-
-        if (data.birthDate) {
-          const formattedValue = new Date(data.birthDate)
-            .toISOString()
-            .split("T")[0];
-          setValue("birthDate", formattedValue);
-        }
+        const data = await getStudentById(axiosCustom, id);
+        reset({
+          name: data.name,
+          birthDate: data.birthDate.split("T")[0],
+          email: data.email,
+          studyYear: data.studyYear,
+        });
+        setInitialUrls(data.images.map((img) => img.imageUrl));
       } catch (err) {
-        setError("Error fetching student data");
+        console.error(err);
+        setError("Eroare la încărcarea studentului");
       }
     };
-
     fetchStudent();
-  }, [id, axiosCustom, setValue]);
+  }, [id, reset, axiosCustom]);
 
-  const handleFileChange = (e) => {
-    const newFiles = Array.from(e.target.files);
-    setImages((prevState) => [...prevState, ...newFiles]);
-  };
-
-  const uploadImages = async (images) => {
+  const uploadImages = async (files) => {
     const { data } = await axiosCustom.get("/cloudinary-signature");
-    const uploadedImageUrls = [];
+    const uploaded = [];
 
-    for (const file of images) {
+    for (const pondFile of files) {
+      const file = pondFile.file;
+      if (!file) continue;
+
       const formData = new FormData();
       formData.append("file", file);
       formData.append("api_key", data.api_key);
@@ -94,42 +85,41 @@ const EditStudent = () => {
       );
 
       const fileData = await response.json();
-      uploadedImageUrls.push(fileData.secure_url);
+      uploaded.push(fileData.secure_url);
     }
 
-    return uploadedImageUrls;
+    return uploaded;
   };
 
-  const updateStudent = async (data) => {
+  const onSubmit = async (formData) => {
+    const existingUrls = files
+      .filter(
+        (f) => typeof f.source === "string" && f.source.startsWith("http")
+      )
+      .map((f) => f.source);
+    const deletedImages = initialUrls.filter(
+      (url) => !existingUrls.includes(url)
+    );
+    const newFiles = files.filter(
+      (f) => f?.file && !existingUrls.includes(f.source)
+    );
+    const uploaded = await uploadImages(newFiles);
+
     try {
-      setUploading(true);
-      const newImages = images.filter((img) => img instanceof File);
-      let imageUrls = (student.images || []).map((img) =>
-        typeof img === "string" ? img : img.imageUrl
-      );
-
-      if (newImages.length > 0) {
-        const uploaded = await uploadImages(newImages);
-        imageUrls = [...imageUrls, ...uploaded];
-      }
-
-      const response = await axiosCustom.put(`/students/${id}`, {
-        ...data,
-        images: imageUrls,
+      setLoading(true);
+      await updateStudent(axiosCustom, id, {
+        ...formData,
+        uploadedImages: uploaded,
+        deletedImages: deletedImages,
       });
-
-      if (response?.data) {
-        navigate("/admin/students");
-      }
+      navigate("/admin/students");
     } catch (err) {
       console.log(err);
       setError(err.response?.data?.msg || "An unexpected error occurred");
     } finally {
-      setUploading(false);
+      setLoading(false);
     }
   };
-
-  if (!student) return <div className={styles.loader}>Loading...</div>;
 
   return (
     <Layout>
@@ -137,7 +127,7 @@ const EditStudent = () => {
         <h1 className={styles.title}>Edit Student</h1>
         {error && <div className={styles.errorMessage}>{error}</div>}
         <div className={styles.formWrapper}>
-          <form onSubmit={handleSubmit((data) => updateStudent({ ...data }))}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <div className={styles.formColumns}>
               <div className={styles.formColumn}>
                 <div className={styles.inputDiv}>
@@ -182,11 +172,12 @@ const EditStudent = () => {
                 </div>
 
                 <div className={styles.inputDiv}>
-                  <label>Study Year: </label>
+                  <label label="studyYear">Study Year: </label>
                   <div className={styles.input}>
                     <input
                       {...register("studyYear")}
                       type="number"
+                      id="studyYear"
                       placeholder="e.g. 1"
                     />
                   </div>
@@ -198,39 +189,17 @@ const EditStudent = () => {
             </div>
 
             <div className={styles.inputDiv}>
-              <label>Upload images:</label>
-              <div className={styles.input}>
-                <input
-                  id="upload"
-                  type="file"
-                  accept="image/*"
-                  multiple
-                  onChange={handleFileChange}
-                  className={styles.fileInput}
-                />
-              </div>
-              {images.length > 0 && (
-                <div className={styles.imagesContainer}>
-                  <p className={styles.imagesTitle}>Selected images:</p>
-                  {images.map((img, index) => (
-                    <div key={index} className={styles.imageItem}>
-                      {img.imageUrl ? (
-                        <img
-                          className={styles.imagePreview}
-                          src={img.imageUrl}
-                          alt="Existing image"
-                        />
-                      ) : (
-                        <p>{img.name}</p>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              )}
+              <label id="upload">Upload images:</label>
+              <Uploader
+                id="upload"
+                files={files}
+                setFiles={setFiles}
+                initialUrls={initialUrls}
+              />
             </div>
 
-            <button className={styles.btn} type="submit" disabled={uploading}>
-              {uploading ? "Uploading..." : "Save"}
+            <button className={styles.btn} type="submit" disabled={loading}>
+              {loading ? "Uploading..." : "Save"}
             </button>
           </form>
         </div>

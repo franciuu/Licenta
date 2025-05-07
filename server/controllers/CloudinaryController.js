@@ -4,7 +4,6 @@ export const generateSignedUrl = async (req, res) => {
   try {
     const timestamp = Math.round(new Date().getTime() / 1000);
 
-    // Generăm semnătura
     const signature = cloudinary.utils.api_sign_request(
       {
         timestamp: timestamp,

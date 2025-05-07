@@ -72,3 +72,12 @@ export const deleteStudent = async (axiosCustom, id) => {
     throw error;
   }
 };
+
+export const updateStudent = async (axiosCustom, id, formData) => {
+  try {
+    const response = await axiosCustom.put(`/students/${id}`, formData);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

@@ -7,6 +7,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import useAxiosCustom from "../../hooks/useAxiosCustom";
 import Layout from "../Layout";
 import { createStudent } from "../../services/StudentService";
+import Uploader from "../../components/Uploader";
 import styles from "../../styles/AddStudent.module.css";
 
 const schema = Yup.object().shape({
@@ -26,9 +27,9 @@ const schema = Yup.object().shape({
 const AddStudent = () => {
   const navigate = useNavigate();
   const axiosCustom = useAxiosCustom();
+  const [files, setFiles] = useState([]);
   const [error, setError] = useState(null);
-  const [images, setImages] = useState([]);
-  const [uploading, setUploading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const {
     register,
@@ -36,19 +37,16 @@ const AddStudent = () => {
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: {},
   });
 
-  const handleFileChange = (e) => {
-    const newFiles = Array.from(e.target.files);
-    setImages((prevState) => [...prevState, ...newFiles]);
-  };
-
-  const uploadImages = async (images) => {
+  const uploadImages = async (files) => {
     const { data } = await axiosCustom.get("/cloudinary-signature");
-    const uploadedImageUrls = [];
+    const uploaded = [];
 
-    for (const file of images) {
+    for (const pondFile of files) {
+      const file = pondFile.file;
+      if (!file) continue;
+
       const formData = new FormData();
       formData.append("file", file);
       formData.append("api_key", data.api_key);
@@ -65,28 +63,23 @@ const AddStudent = () => {
       );
 
       const fileData = await response.json();
-      uploadedImageUrls.push(fileData.secure_url);
+      uploaded.push(fileData.secure_url);
     }
 
-    return uploadedImageUrls;
+    return uploaded;
   };
 
-  const addStudent = async (data) => {
+  const addStudent = async (formData) => {
     try {
-      setUploading(true);
-      let imageUrls = [];
-      if (images.length > 0) {
-        imageUrls = await uploadImages(images);
-      }
-      const studentData = await createStudent(axiosCustom, data, imageUrls);
-      if (studentData) {
-        navigate("/admin/students");
-      }
+      setLoading(true);
+      const imageUrls = await uploadImages(files);
+      await createStudent(axiosCustom, formData, imageUrls);
+      navigate("/admin/students");
     } catch (error) {
       setError(error.response?.data?.msg);
       console.error("Failed to create user", error);
     } finally {
-      setUploading(false);
+      setLoading(false);
     }
   };
 
@@ -141,11 +134,12 @@ const AddStudent = () => {
                 </div>
 
                 <div className={styles.inputDiv}>
-                  <label>Study Year: </label>
+                  <label htmlFor="studyYear">Study Year: </label>
                   <div className={styles.input}>
                     <input
                       {...register("studyYear")}
                       type="number"
+                      id="studyYear"
                       placeholder="e.g. 1"
                     />
                   </div>
@@ -157,39 +151,16 @@ const AddStudent = () => {
             </div>
 
             <div className={styles.inputDiv}>
-              <label>Upload images:</label>
-              <div className={styles.input}>
-                <input
-                  id="upload"
-                  type="file"
-                  accept="image/*"
-                  multiple
-                  onChange={handleFileChange}
-                  className={styles.fileInput}
-                />
-              </div>
-              {images.length > 0 && (
-                <div className={styles.imagesContainer}>
-                  <p className={styles.imagesTitle}>Selected images:</p>
-                  {images.map((img, index) => (
-                    <div key={index} className={styles.imageItem}>
-                      {img.imageUrl ? (
-                        <img
-                          className={styles.imagePreview}
-                          src={img.imageUrl}
-                          alt="Existing image"
-                        />
-                      ) : (
-                        <p>{img.name}</p>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              )}
+              <label htmlFor="upload">Upload images:</label>
+              <Uploader
+                files={files}
+                setFiles={setFiles}
+                id="upload"
+              ></Uploader>
             </div>
 
-            <button className={styles.btn} type="submit" disabled={uploading}>
-              {uploading ? "Uploading..." : "Save"}
+            <button className={styles.btn} type="submit" disabled={loading}>
+              {loading ? "Uploading..." : "Save"}
             </button>
           </form>
         </div>

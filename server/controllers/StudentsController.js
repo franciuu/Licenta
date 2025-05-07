@@ -136,29 +136,45 @@ export const createStudent = async (req, res) => {
 };
 
 export const updateStudent = async (req, res) => {
-  const { name, birthDate, email, studyYear, images } = req.body;
-  const student = await Student.findOne({
-    where: {
-      uuid: req.params.id,
-    },
-  });
-  if (!student) {
-    return res.status(404).json({ msg: "Student not found" });
-  }
+  const {
+    name,
+    birthDate,
+    email,
+    studyYear,
+    uploadedImages = [],
+    deletedImages = [],
+  } = req.body;
+
   try {
+    const student = await Student.findOne({
+      where: {
+        uuid: req.params.id,
+      },
+    });
+    if (!student) {
+      return res.status(404).json({ msg: "Student not found" });
+    }
+
     await student.update({
-      name: name,
-      birthDate: birthDate,
-      email: email,
-      studyYear: studyYear,
+      name,
+      birthDate,
+      email,
+      studyYear,
     });
 
-    let uploadedImages = images.map((imageUrl) => ({
-      idStudent: student.uuid,
-      imageUrl: imageUrl,
-    }));
+    for (const url of deletedImages) {
+      const parts = url.split("/");
+      const file = parts[parts.length - 1];
+      const publicId = `students/${file.split(".")[0]}`;
+      await cloudinary.uploader.destroy(publicId);
+      await Image.destroy({
+        where: { idStudent: student.uuid, imageUrl: url },
+      });
+    }
 
-    await Image.bulkCreate(uploadedImages);
+    for (const url of uploadedImages) {
+      await Image.create({ idStudent: student.uuid, imageUrl: url });
+    }
     res.status(200).json({ msg: "Student updated" });
   } catch (error) {
     res.status(400).json({
