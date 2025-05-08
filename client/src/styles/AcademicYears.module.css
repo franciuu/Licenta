@@ -1,28 +1,32 @@
+/* Add these styles to your AcademicYears.module.css file */
+
 .container {
   padding: 20px;
   max-width: 1200px;
   margin: 0 auto;
 }
 
-.pageTitle {
-  font-size: 2rem;
-  font-weight: 600;
-  color: #333;
-  margin: 0;
-  line-height: 1.2;
-  align-self: center;
-}
-
-.titleContainer {
+.headerSection {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
-  gap: 1rem;
-  min-height: 50px;
+  margin-bottom: 30px;
 }
 
-.addButton {
+.pageTitle {
+  font-size: 28px;
+  font-weight: bold;
+  margin: 0;
+  color: #1a1a1a;
+}
+
+.pageSubtitle {
+  margin: 5px 0 0 0;
+  color: #666;
+  font-size: 16px;
+}
+
+.btn {
   text-decoration: none;
   background: linear-gradient(135deg, #7c26a6 0%, #9d3fbf 100%);
   color: white;
@@ -41,122 +45,85 @@
   align-self: center;
 }
 
-.addButton:hover {
+.btn:hover {
   background: linear-gradient(135deg, #9d3fbf 0%, #7c26a6 100%);
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.addButton:active {
+.btn:active {
   transform: translateY(0);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.addIcon {
-  font-size: 1.2rem;
-  line-height: 1;
+.cardsContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
 }
 
-.accordionContainer {
-  margin-top: 20px;
+.yearCard {
+  border: 1px solid #e5e7eb;
   border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  padding: 20px;
+  background-color: white;
 }
 
-.yearHeader {
-  background: linear-gradient(135deg, #7c26a6 0%, #9d3fbf 100%);
-  color: white;
-  padding: 15px 20px;
+.yearTitle {
+  display: flex;
+  align-items: center;
+  font-size: 20px;
   font-weight: 600;
+  margin-bottom: 20px;
+  color: #1a1a1a;
+}
+
+.graduationIcon {
+  margin-right: 10px;
+  color: #7c26a6;
+}
+
+.dateInfo {
+  margin-bottom: 20px;
+}
+
+.dateRow {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.calendarIcon {
+  margin-right: 10px;
+  color: #6b7280;
+}
+
+.cardActions {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.detailsButton {
+  background-color: transparent;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 14px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  margin-right: auto;
+}
+
+.editButton,
+.deleteButton {
+  background-color: transparent;
   border: none;
-  width: 100%;
-  text-align: left;
-  border-radius: 4px;
-  margin-bottom: 0;
+  cursor: pointer;
+  padding: 6px;
+  margin-left: 10px;
 }
 
-.yearHeader:hover {
-  background: linear-gradient(135deg, #9d3fbf 0%, #7c26a6 100%);
-}
-
-.yearName {
-  font-size: 1.2rem;
-  font-weight: 700;
-}
-
-.yearDuration {
-  display: flex;
-  align-items: center;
-  font-size: 0.9rem;
-}
-
-.yearDuration::before {
-  content: "Academic Period:";
-  margin-right: 8px;
-  opacity: 0.9;
-}
-
-.yearDates {
-  font-weight: 500;
-}
-
-.semesterItem {
-  padding: 15px 20px;
-  background-color: #f5f5ff;
-  border-bottom: 1px solid #e0e0f0;
-  display: flex;
-  justify-content: space-between;
-  transition: background-color 0.3s ease;
-}
-
-.semesterItem:last-child {
-  border-bottom: none;
-}
-
-.semesterItem:hover {
-  background-color: #e8e8ff;
-}
-
-.semesterName {
-  font-weight: 500;
-  color: #444;
-}
-
-.semesterDates {
-  color: #666;
-  font-size: 0.9rem;
-}
-
-.semesterDates::before {
-  content: "Semester Period:";
-  margin-right: 8px;
-  opacity: 0.8;
-}
-
-@media (max-width: 768px) {
-  .titleContainer {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 15px;
-  }
-
-  .yearHeader {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-  }
-
-  .yearDuration,
-  .semesterDates {
-    font-size: 0.8rem;
-  }
+.editIcon,
+.deleteIcon {
+  font-size: 18px;
 }

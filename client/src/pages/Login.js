@@ -23,7 +23,7 @@ const Login = () => {
   const { setAuth, persist, setPersist } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const from = location.state?.from.pathname;
+  const from = location.state?.from?.pathname || "/";
 
   const [error, setError] = useState(null);
   const redirectByRole = {
@@ -94,11 +94,16 @@ const Login = () => {
         </div>
         <div className={style.right}>
           <div className={style.headerDiv}>
-            <img src={logo} alt="logo" className={style.logo} />
+            <img
+              src={logo || "/placeholder.svg"}
+              alt="Vision Roster Logo"
+              className={style.logo}
+            />
             <h2 className={style.welcomeText}>Welcome back!</h2>
           </div>
 
-          {error && <p className={style.errorMessage}>{error}</p>}
+          {error && <div className={style.errorMessage}>{error}</div>}
+
           <form onSubmit={handleSubmit(onSubmit)} className={style.form}>
             <div className={style.inputDiv}>
               <label htmlFor="email" className={style.label}>
@@ -110,13 +115,16 @@ const Login = () => {
                   {...register("email")}
                   type="email"
                   id="email"
-                  placeholder="Email"
+                  placeholder="Enter your email"
                   autoComplete="off"
                   className={style.inputField}
+                  aria-invalid={errors.email ? "true" : "false"}
                 />
               </div>
               {errors.email && (
-                <p className={style.error}>{errors.email.message}</p>
+                <p className={style.error} role="alert">
+                  {errors.email.message}
+                </p>
               )}
             </div>
 
@@ -130,18 +138,31 @@ const Login = () => {
                   {...register("password")}
                   type="password"
                   id="password"
-                  placeholder="Password"
+                  placeholder="Enter your password"
                   className={style.inputField}
+                  autoComplete="off"
+                  aria-invalid={errors.password ? "true" : "false"}
                 />
               </div>
               {errors.password && (
-                <p className={style.error}>{errors.password.message}</p>
+                <p className={style.error} role="alert">
+                  {errors.password.message}
+                </p>
               )}
             </div>
 
-            <button type="submit" disabled={isSubmitting} className={style.btn}>
-              <span className={style.loginText}>Login</span>
-              <FaLongArrowAltRight className={style.btnIcon} />
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className={style.btn}
+              aria-busy={isSubmitting}
+            >
+              <span className={style.loginText}>
+                {isSubmitting ? "Logging in..." : "Login"}
+              </span>
+              {!isSubmitting && (
+                <FaLongArrowAltRight className={style.btnIcon} />
+              )}
             </button>
 
             <div className={style.checkboxContainer}>
@@ -156,7 +177,9 @@ const Login = () => {
 
             <div className={style.forgotPassword}>
               Forgot your password?
-              <a className={style.forgotPasswordLink}>Click Here</a>
+              <a href="#reset-password" className={style.forgotPasswordLink}>
+                Click Here
+              </a>
             </div>
           </form>
         </div>

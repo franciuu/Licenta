@@ -2,6 +2,7 @@ import express from "express";
 import {
   createAcademicYear,
   createSemester,
+  createPeriod,
   getAcademicYears,
   getSemesters,
 } from "../controllers/AcademicYearController.js";
@@ -13,5 +14,6 @@ router.get("/academic-years", verifyRoles(ROLES_LIST[0]), getAcademicYears);
 router.get("/semesters", verifyRoles(ROLES_LIST[0]), getSemesters);
 router.post("/academic-years", verifyRoles(ROLES_LIST[0]), createAcademicYear);
 router.post("/semesters", verifyRoles(ROLES_LIST[0]), createSemester);
+router.post("/periods", verifyRoles(ROLES_LIST[0]), createPeriod);
 
 export default router;

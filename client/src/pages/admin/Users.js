@@ -98,7 +98,7 @@ const Users = () => {
         <div className={style.pageHeader}>
           <h1 className={style.pageTitle}>List of Users</h1>
           <Link to="/admin/users/add" className={style.btn}>
-            <span className={style.addIcon}>+</span>
+            <span>+</span>
             Add user
           </Link>
         </div>

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 
@@ -62,6 +62,27 @@ const addAcademicYearSchema = Yup.object().shape({
       "Second semester end cannot be after academic year end"
     )
     .required("Second semester end date is required"),
+  periods: Yup.array().of(
+    Yup.object().shape({
+      name: Yup.string().required("Period name is required"),
+      startDate: Yup.date()
+        .nullable()
+        .min(
+          Yup.ref("../../yearStartDate"),
+          "Period start cannot be before academic year start"
+        )
+        .max(Yup.ref("endDate"), "Period start must be before its end date")
+        .required("Period start date is required"),
+      endDate: Yup.date()
+        .nullable()
+        .min(Yup.ref("startDate"), "Period end must be after its start date")
+        .max(
+          Yup.ref("../../yearEndDate"),
+          "Period end cannot be after academic year end"
+        )
+        .required("Period end date is required"),
+    })
+  ),
 });
 
 const AddAcademicYear = () => {
@@ -72,6 +93,7 @@ const AddAcademicYear = () => {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: yupResolver(addAcademicYearSchema),
@@ -85,7 +107,13 @@ const AddAcademicYear = () => {
       secondSemesterName: "Sem II",
       secondStartDate: null,
       secondEndDate: null,
+      periods: [{ name: "", startDate: null, endDate: null }],
     },
+  });
+
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "periods",
   });
 
   const onSubmit = async (data) => {
@@ -117,6 +145,20 @@ const AddAcademicYear = () => {
       await Promise.all(
         semestersPayload.map((sem) => axiosCustom.post("/semesters", sem))
       );
+
+      if (data.periods && data.periods.length > 0) {
+        const periodsPayload = data.periods.map((period) => ({
+          name: period.name,
+          startDate: period.startDate,
+          endDate: period.endDate,
+          idAcademicYear,
+          type: "period",
+        }));
+
+        await Promise.all(
+          periodsPayload.map((period) => axiosCustom.post("/periods", period))
+        );
+      }
 
       navigate("/admin/academic");
     } catch (err) {
@@ -251,6 +293,92 @@ const AddAcademicYear = () => {
                 </div>
               </div>
             </div>
+          </div>
+
+          <div className={styles.periodsSection}>
+            <div className={styles.periodsSectionHeader}>
+              <h3 className={styles.semesterTitle}>Periods</h3>
+              <button
+                type="button"
+                className={styles.addPeriodButton}
+                onClick={() =>
+                  append({ name: "", startDate: null, endDate: null })
+                }
+              >
+                + Add Period
+              </button>
+            </div>
+
+            {fields.map((field, index) => (
+              <div key={field.id} className={styles.periodItem}>
+                <div className={styles.periodHeader}>
+                  <h4 className={styles.periodNumber}>Period {index + 1}</h4>
+                  {index > 0 && (
+                    <button
+                      type="button"
+                      className={styles.removePeriodButton}
+                      onClick={() => remove(index)}
+                    >
+                      Remove
+                    </button>
+                  )}
+                </div>
+
+                <div className={styles.formColumns}>
+                  <div className={styles.formColumn}>
+                    <div className={styles.formGroup}>
+                      <label htmlFor={`periods.${index}.name`}>Name:</label>
+                      <input
+                        id={`periods.${index}.name`}
+                        {...register(`periods.${index}.name`)}
+                        placeholder="e.g. Winter Vacation"
+                      />
+                      {errors.periods?.[index]?.name && (
+                        <p className={styles.error}>
+                          {errors.periods[index].name.message}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className={styles.formColumn}>
+                    <div className={styles.formGroup}>
+                      <label htmlFor={`periods.${index}.startDate`}>
+                        Start Date:
+                      </label>
+                      <input
+                        type="date"
+                        id={`periods.${index}.startDate`}
+                        {...register(`periods.${index}.startDate`)}
+                      />
+                      {errors.periods?.[index]?.startDate && (
+                        <p className={styles.error}>
+                          {errors.periods[index].startDate.message}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className={styles.formColumn}>
+                    <div className={styles.formGroup}>
+                      <label htmlFor={`periods.${index}.endDate`}>
+                        End Date:
+                      </label>
+                      <input
+                        type="date"
+                        id={`periods.${index}.endDate`}
+                        {...register(`periods.${index}.endDate`)}
+                      />
+                      {errors.periods?.[index]?.endDate && (
+                        <p className={styles.error}>
+                          {errors.periods[index].endDate.message}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
 
           <div className={styles.formActions}>
