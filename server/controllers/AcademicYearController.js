@@ -1,3 +1,5 @@
+import { parseISO, isBefore, isAfter } from "date-fns";
+
 import AcademicYear from "../models/AcademicYear.js";
 import Semester from "../models/Semester.js";
 import Period from "../models/Period.js";
@@ -10,6 +12,7 @@ import {
 
 export const createAcademicYear = async (req, res) => {
   const { name, startDate, endDate } = req.body;
+  console.log("Year: " + startDate);
   try {
     const year = await AcademicYear.create({
       name: name,
@@ -25,13 +28,24 @@ export const createAcademicYear = async (req, res) => {
 export const createSemester = async (req, res) => {
   const { name, startDate, endDate, idAcademicYear } = req.body;
   try {
-    await Semester.create({
-      name: name,
-      startDate: startDate,
-      endDate: endDate,
-      idAcademicYear: idAcademicYear,
+    const year = await AcademicYear.findByPk(idAcademicYear);
+    if (!year) {
+      return res.status(404).json({ msg: "Academic year not found" });
+    }
+
+    if (startDate < year.startDate || endDate > year.endDate) {
+      return res.status(400).json({
+        msg: "Semester must be within the academic year boundaries",
+      });
+    }
+
+    const semester = await Semester.create({
+      name,
+      startDate,
+      endDate,
+      idAcademicYear,
     });
-    res.status(201).json({ msg: "Successful" });
+    res.status(201).json({ uuid: semester.uuid });
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }
@@ -39,8 +53,9 @@ export const createSemester = async (req, res) => {
 
 export const createPeriod = async (req, res) => {
   try {
-    const { type, startDate, endDate, idSemester, idAcademicYear } = req.body;
+    const { startDate, endDate, idSemester, idAcademicYear, type } = req.body;
 
+    console.log("Controller " + startDate);
     const inputError = validatePeriodInput({
       startDate,
       endDate,
@@ -79,11 +94,11 @@ export const createPeriod = async (req, res) => {
     }
 
     await Period.create({
-      type,
       startDate,
       endDate,
       idSemester: idSemester || null,
       idAcademicYear,
+      type: type,
     });
     res.status(201).json({ msg: "Successful" });
   } catch (error) {

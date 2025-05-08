@@ -1,11 +1,12 @@
 import { Op } from "sequelize";
 import Semester from "../models/Semester.js";
 import Period from "../models/Period.js";
+import { parseISO, isBefore, isAfter, addDays, format } from "date-fns";
 
 export function validatePeriodInput({ startDate, endDate, idAcademicYear }) {
   if (!idAcademicYear) return "An academic year must be specified!";
   if (!startDate || !endDate) return "Both dates must be specified";
-  if (new Date(startDate) >= new Date(endDate))
+  if (!isBefore(parseISO(startDate), parseISO(endDate)))
     return "Start date must be before end date";
   return null;
 }
@@ -15,8 +16,8 @@ export async function validateSemesterPeriod(idSemester, startDate, endDate) {
   if (!semester) return { code: 404, message: "Semestrul nu există!" };
 
   if (
-    new Date(startDate) < new Date(semester.startDate) ||
-    new Date(endDate) > new Date(semester.endDate)
+    isBefore(parseISO(startDate), parseISO(semester.startDate)) ||
+    isAfter(parseISO(endDate), parseISO(semester.endDate))
   ) {
     return {
       code: 400,
@@ -44,30 +45,26 @@ export async function validateIntersemesterPeriod(
   }
   const [firstSemester, secondSemester] = semesters;
 
-  const requiredStart = addDays(firstSemester.endDate, 1);
-  const requiredEnd = addDays(secondSemester.startDate, -1);
+  const requiredStart = addDays(parseISO(firstSemester.endDate), 1);
+  const requiredEnd = addDays(parseISO(secondSemester.startDate), -1);
 
-  if (
-    new Date(startDate).toISOString().slice(0, 10) !==
-    requiredStart.toISOString().slice(0, 10)
-  ) {
+  if (startDate !== format(requiredStart, "yyyy-MM-dd")) {
     return {
       code: 400,
-      message: `Vacanța intersemestrială trebuie să înceapă pe ${requiredStart
-        .toISOString()
-        .slice(0, 10)}!`,
+      message: `Vacanța intersemestrială trebuie să înceapă pe ${format(
+        requiredStart,
+        "yyyy-MM-dd"
+      )}!`,
     };
   }
 
-  if (
-    new Date(endDate).toISOString().slice(0, 10) !==
-    requiredEnd.toISOString().slice(0, 10)
-  ) {
+  if (endDate !== format(requiredEnd, "yyyy-MM-dd")) {
     return {
       code: 400,
-      message: `Vacanța intersemestrială trebuie să se termine pe ${requiredEnd
-        .toISOString()
-        .slice(0, 10)}!`,
+      message: `Vacanța intersemestrială trebuie să se termine pe ${format(
+        requiredEnd,
+        "yyyy-MM-dd"
+      )}!`,
     };
   }
   return null;

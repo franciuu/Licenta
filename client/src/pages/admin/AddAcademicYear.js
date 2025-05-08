@@ -18,6 +18,7 @@ const addAcademicYearSchema = Yup.object().shape({
     .nullable()
     .min(Yup.ref("yearStartDate"), "Academic year end must be after start date")
     .required("End date is required"),
+  firstSemesterName: Yup.string().default("Sem I"),
   firstStartDate: Yup.date()
     .nullable()
     .min(
@@ -40,6 +41,7 @@ const addAcademicYearSchema = Yup.object().shape({
       "First semester end cannot be after academic year end"
     )
     .required("First semester end date is required"),
+  secondSemesterName: Yup.string().default("Sem II"),
   secondStartDate: Yup.date()
     .nullable()
     .min(
@@ -64,22 +66,16 @@ const addAcademicYearSchema = Yup.object().shape({
     .required("Second semester end date is required"),
   periods: Yup.array().of(
     Yup.object().shape({
-      name: Yup.string().required("Period name is required"),
+      type: Yup.string()
+        .oneOf(["vacation", "exams"])
+        .required("Type is required"),
       startDate: Yup.date()
         .nullable()
-        .min(
-          Yup.ref("../../yearStartDate"),
-          "Period start cannot be before academic year start"
-        )
         .max(Yup.ref("endDate"), "Period start must be before its end date")
         .required("Period start date is required"),
       endDate: Yup.date()
         .nullable()
         .min(Yup.ref("startDate"), "Period end must be after its start date")
-        .max(
-          Yup.ref("../../yearEndDate"),
-          "Period end cannot be after academic year end"
-        )
         .required("Period end date is required"),
     })
   ),
@@ -89,6 +85,13 @@ const AddAcademicYear = () => {
   const navigate = useNavigate();
   const axiosCustom = useAxiosCustom();
   const [error, setError] = useState(null);
+  const formatLocalDate = (dateStr) => {
+    if (!dateStr) return null;
+    const date = new Date(dateStr);
+    const offset = date.getTimezoneOffset();
+    date.setMinutes(date.getMinutes() - offset); // compensăm fusul orar local
+    return date.toISOString().split("T")[0]; // păstrăm doar YYYY-MM-DD
+  };
 
   const {
     register,
@@ -107,7 +110,7 @@ const AddAcademicYear = () => {
       secondSemesterName: "Sem II",
       secondStartDate: null,
       secondEndDate: null,
-      periods: [{ name: "", startDate: null, endDate: null }],
+      periods: [{ type: "vacation", startDate: null, endDate: null }],
     },
   });
 
@@ -118,11 +121,12 @@ const AddAcademicYear = () => {
 
   const onSubmit = async (data) => {
     setError(null);
+    console.log(data);
     try {
       const yearPayload = {
         name: data.yearName,
-        startDate: data.yearStartDate,
-        endDate: data.yearEndDate,
+        startDate: formatLocalDate(data.yearStartDate),
+        endDate: formatLocalDate(data.yearEndDate),
       };
       const response = await axiosCustom.post("/academic-years", yearPayload);
       const idAcademicYear = response.data.uuid;
@@ -130,39 +134,46 @@ const AddAcademicYear = () => {
       const semestersPayload = [
         {
           name: data.firstSemesterName,
-          startDate: data.firstStartDate,
-          endDate: data.firstEndDate,
+          startDate: formatLocalDate(data.firstStartDate),
+          endDate: formatLocalDate(data.firstEndDate),
           idAcademicYear,
         },
         {
           name: data.secondSemesterName,
-          startDate: data.secondStartDate,
-          endDate: data.secondEndDate,
+          startDate: formatLocalDate(data.secondStartDate),
+          endDate: formatLocalDate(data.secondEndDate),
           idAcademicYear,
         },
       ];
 
-      await Promise.all(
+      const semestersResponses = await Promise.all(
         semestersPayload.map((sem) => axiosCustom.post("/semesters", sem))
       );
+      const firstSemesterId = semestersResponses[0].data.uuid;
+      const secondSemesterId = semestersResponses[1].data.uuid;
 
       if (data.periods && data.periods.length > 0) {
-        const periodsPayload = data.periods.map((period) => ({
-          name: period.name,
-          startDate: period.startDate,
-          endDate: period.endDate,
-          idAcademicYear,
-          type: "period",
-        }));
+        const periodsPayload = data.periods.map((period) => {
+          let idSemester = null;
+          if (period.semesterRef === "first") idSemester = firstSemesterId;
+          if (period.semesterRef === "second") idSemester = secondSemesterId;
+          return {
+            type: period.type,
+            startDate: formatLocalDate(period.startDate),
+            endDate: formatLocalDate(period.endDate),
+            idAcademicYear,
+            idSemester,
+          };
+        });
 
         await Promise.all(
           periodsPayload.map((period) => axiosCustom.post("/periods", period))
         );
       }
-
       navigate("/admin/academic");
     } catch (err) {
       setError(err.response?.data?.msg || "An unexpected error occurred");
+      console.log(err.response?.data?.msg);
     }
   };
 
@@ -302,7 +313,7 @@ const AddAcademicYear = () => {
                 type="button"
                 className={styles.addPeriodButton}
                 onClick={() =>
-                  append({ name: "", startDate: null, endDate: null })
+                  append({ type: "vacation", startDate: null, endDate: null })
                 }
               >
                 + Add Period
@@ -327,17 +338,35 @@ const AddAcademicYear = () => {
                 <div className={styles.formColumns}>
                   <div className={styles.formColumn}>
                     <div className={styles.formGroup}>
-                      <label htmlFor={`periods.${index}.name`}>Name:</label>
-                      <input
-                        id={`periods.${index}.name`}
-                        {...register(`periods.${index}.name`)}
-                        placeholder="e.g. Winter Vacation"
-                      />
-                      {errors.periods?.[index]?.name && (
+                      <label htmlFor={`periods.${index}.type`}>Type:</label>
+                      <select
+                        id={`periods.${index}.type`}
+                        {...register(`periods.${index}.type`)}
+                      >
+                        <option value="vacation">Vacation</option>
+                        <option value="exams">Exams</option>
+                      </select>
+                      {errors.periods?.[index]?.type && (
                         <p className={styles.error}>
-                          {errors.periods[index].name.message}
+                          {errors.periods[index].type.message}
                         </p>
                       )}
+                    </div>
+                  </div>
+
+                  <div className={styles.formColumn}>
+                    <div className={styles.formGroup}>
+                      <label htmlFor={`periods.${index}.semesterRef`}>
+                        Associate with:
+                      </label>
+                      <select
+                        id={`periods.${index}.semesterRef`}
+                        {...register(`periods.${index}.semesterRef`)}
+                      >
+                        <option value="">Intersemestrial</option>
+                        <option value="first">Semestrul 1</option>
+                        <option value="second">Semestrul 2</option>
+                      </select>
                     </div>
                   </div>
 

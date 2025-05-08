@@ -49,20 +49,6 @@
   background-color: rgba(255, 255, 255, 0.6);
 }
 
-.semesterSection {
-  margin-top: 24px;
-  margin-bottom: 20px;
-}
-
-.semesterTitle {
-  font-size: 18px;
-  color: #8e44ad;
-  margin-bottom: 16px;
-  font-weight: 500;
-  padding-left: 8px;
-  border-left: 3px solid #8e44ad;
-}
-
 .formColumns {
   display: flex;
   gap: 20px;
@@ -118,33 +104,18 @@
   background-color: rgba(229, 229, 229, 0.7);
 }
 
-@media (max-width: 600px) {
-  .addAcademicYearContainer {
-    padding: 15px;
-    margin: 0 10px;
-  }
+.semesterSection {
+  margin-top: 24px;
+  margin-bottom: 20px;
+}
 
-  .formColumns {
-    flex-direction: column;
-    gap: 0;
-  }
-
-  .formGroup input,
-  .formGroup select {
-    font-size: 13px;
-    padding: 8px 10px;
-  }
-
-  .formActions {
-    flex-direction: column;
-  }
-
-  .submitButton,
-  .cancelButton {
-    width: 100%;
-    margin-right: 0;
-    margin-bottom: 8px;
-  }
+.semesterTitle {
+  font-size: 18px;
+  color: #8e44ad;
+  margin-bottom: 16px;
+  font-weight: 500;
+  padding-left: 8px;
+  border-left: 3px solid #8e44ad;
 }
 
 .error {
@@ -163,8 +134,7 @@
   border-left: 3px solid #e74c3c;
 }
 
-/* Add these styles to your existing CSS file */
-
+/* Perioade */
 .periodsSection {
   margin-top: 30px;
   margin-bottom: 20px;
@@ -231,7 +201,35 @@
   background-color: rgba(231, 76, 60, 0.2);
 }
 
+/* Responsive */
 @media (max-width: 600px) {
+  .addAcademicYearContainer {
+    padding: 15px;
+    margin: 0 10px;
+  }
+
+  .formColumns {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .formGroup input,
+  .formGroup select {
+    font-size: 13px;
+    padding: 8px 10px;
+  }
+
+  .formActions {
+    flex-direction: column;
+  }
+
+  .submitButton,
+  .cancelButton {
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 8px;
+  }
+
   .periodsSectionHeader {
     flex-direction: column;
     align-items: flex-start;
