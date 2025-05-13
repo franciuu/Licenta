@@ -9,6 +9,7 @@ import {
   FaChalkboardTeacher,
   FaCalendarAlt,
   FaUniversity,
+  FaCamera,
 } from "react-icons/fa";
 import { Avatar } from "@chakra-ui/react";
 import style from "../styles/Sidebar.module.css";
@@ -55,6 +56,18 @@ const Sidebar = () => {
               >
                 <FaUniversity className={style.icon} />
                 <span className={style.label}>Academic</span>
+              </NavLink>
+            </li>
+
+            <li className={style.sidebarItem}>
+              <NavLink
+                to="/admin/rooms"
+                className={({ isActive }) =>
+                  `${style.itemText} ${isActive ? style.active : ""}`
+                }
+              >
+                <FaCamera className={style.icon} />
+                <span className={style.label}>Rooms & Cameras</span>
               </NavLink>
             </li>
 

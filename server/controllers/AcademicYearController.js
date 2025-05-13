@@ -1,23 +1,33 @@
-import { parseISO, isBefore, isAfter } from "date-fns";
-
 import AcademicYear from "../models/AcademicYear.js";
 import Semester from "../models/Semester.js";
 import Period from "../models/Period.js";
 import {
-  validatePeriodInput,
-  validateSemesterPeriod,
-  validateIntersemesterPeriod,
-  isPeriodOverlapping,
+  validateAcademicYearInput,
+  validateSemesterInput,
+  validateAcademicPeriodInput,
 } from "../validators/AcademicYearValidator.js";
 
+//data de inceput trebuie sa fie inaintea datei de sfarsit
+//anul universitar nou nu trebuie sa se suprapuna cu cei existenti
+//nume unic si obligatoriu
 export const createAcademicYear = async (req, res) => {
   const { name, startDate, endDate } = req.body;
-  console.log("Year: " + startDate);
   try {
+    const validationError = await validateAcademicYearInput({
+      name,
+      startDate,
+      endDate,
+    });
+    if (validationError) {
+      return res
+        .status(validationError.code)
+        .json({ msg: validationError.message });
+    }
+
     const year = await AcademicYear.create({
-      name: name,
-      startDate: startDate,
-      endDate: endDate,
+      name,
+      startDate,
+      endDate,
     });
     res.status(201).json({ uuid: year.uuid });
   } catch (error) {
@@ -25,18 +35,23 @@ export const createAcademicYear = async (req, res) => {
   }
 };
 
+//campuri obligatorii
+//ordinea datelor
+//incadrare in an universitar
+//sa nu se suprapuna semestrele
 export const createSemester = async (req, res) => {
   const { name, startDate, endDate, idAcademicYear } = req.body;
   try {
-    const year = await AcademicYear.findByPk(idAcademicYear);
-    if (!year) {
-      return res.status(404).json({ msg: "Academic year not found" });
-    }
-
-    if (startDate < year.startDate || endDate > year.endDate) {
-      return res.status(400).json({
-        msg: "Semester must be within the academic year boundaries",
-      });
+    const validationError = await validateSemesterInput({
+      name,
+      startDate,
+      endDate,
+      idAcademicYear,
+    });
+    if (validationError) {
+      return res
+        .status(validationError.code)
+        .json({ msg: validationError.message });
     }
 
     const semester = await Semester.create({
@@ -51,46 +66,27 @@ export const createSemester = async (req, res) => {
   }
 };
 
+//validare date obligatorii si ordine date
+//tipul perioadei
+//existenta anului universitar
+//data de inceput trebuie sa fie inaintea datei de sfarsit
+//daca nu exista semestru se valideaza vacanta intersemestriala
+//vacantele nu trebuie sa se suprapuna
 export const createPeriod = async (req, res) => {
   try {
     const { startDate, endDate, idSemester, idAcademicYear, type } = req.body;
 
-    console.log("Controller " + startDate);
-    const inputError = validatePeriodInput({
+    const validationError = await validateAcademicPeriodInput({
       startDate,
       endDate,
       idAcademicYear,
+      idSemester,
+      type,
     });
-    if (inputError) return res.status(400).json({ msg: inputError });
-
-    let validationError = null;
-    if (idSemester) {
-      validationError = await validateSemesterPeriod(
-        idSemester,
-        startDate,
-        endDate
-      );
-    } else {
-      validationError = await validateIntersemesterPeriod(
-        idAcademicYear,
-        startDate,
-        endDate
-      );
-    }
     if (validationError) {
       return res
         .status(validationError.code)
         .json({ msg: validationError.message });
-    }
-    const overlap = await isPeriodOverlapping({
-      startDate,
-      endDate,
-      idAcademicYear,
-    });
-    if (overlap) {
-      return res.status(400).json({
-        msg: "Overlaps with another period",
-      });
     }
 
     await Period.create({
@@ -98,7 +94,7 @@ export const createPeriod = async (req, res) => {
       endDate,
       idSemester: idSemester || null,
       idAcademicYear,
-      type: type,
+      type,
     });
     res.status(201).json({ msg: "Successful" });
   } catch (error) {

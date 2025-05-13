@@ -10,6 +10,7 @@ import Enrollment from "./Enrollment.js";
 import Semester from "./Semester.js";
 import Period from "./Period.js";
 import AcademicYear from "./AcademicYear.js";
+import Room from "./Room.js";
 
 Student.hasMany(Attendance, {
   foreignKey: "idStudent",
@@ -29,6 +30,9 @@ Enrollment.belongsTo(Activity, { foreignKey: "idActivity" });
 
 Course.hasMany(Activity, { foreignKey: "idCourse", onDelete: "CASCADE" });
 Activity.belongsTo(Course, { foreignKey: "idCourse" });
+
+Room.hasMany(Activity, { foreignKey: "idRoom", onDelete: "CASCADE" });
+Activity.belongsTo(Room, { foreignKey: "idRoom" });
 
 User.hasMany(Activity, { foreignKey: "idProf", onDelete: "CASCADE" });
 Activity.belongsTo(User, { foreignKey: "idProf" });

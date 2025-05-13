@@ -127,3 +127,16 @@
 .deleteIcon {
   font-size: 18px;
 }
+
+.noYears {
+  background-color: white;
+  border-radius: 8px;
+  padding: 2rem;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.noYearsText {
+  color: #666;
+  font-size: 1.1rem;
+}

@@ -48,17 +48,21 @@ const Activity = db.define(
         },
       },
     },
-    room: {
+    type: {
+      type: DataTypes.ENUM("lecture", "seminar"),
+      allowNull: false,
+      defaultValue: "seminar",
+    },
+    idRoom: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notEmpty: true,
       },
-    },
-    type: {
-      type: DataTypes.ENUM("lecture", "seminar"),
-      allowNull: false,
-      defaultValue: "seminar",
+      references: {
+        model: "rooms",
+        key: "uuid",
+      },
     },
   },
   {

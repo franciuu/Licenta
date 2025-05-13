@@ -18,6 +18,7 @@ import AddAcademicYear from "./pages/admin/AddAcademicYear.js";
 import ViewStudent from "./pages/admin/ViewStudent.js";
 import Students from "./pages/admin/Students.js";
 import AddStudent from "./pages/admin/AddStudent.js";
+import RoomsCameras from "./pages/admin/RoomsCameras.js";
 
 import Dashboard from "./pages/professor/Dashboard.js";
 import TakeAttendance from "./pages/professor/TakeAttendance.js";
@@ -97,6 +98,7 @@ function App() {
               path="/admin/generate"
               element={<GenerateEmbeddings />}
             ></Route>
+            <Route path="/admin/rooms" element={<RoomsCameras />}></Route>
           </Route>
         </Route>
 

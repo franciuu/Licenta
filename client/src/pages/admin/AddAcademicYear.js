@@ -9,39 +9,38 @@ import useAxiosCustom from "../../hooks/useAxiosCustom";
 import styles from "../../styles/AddAcademicYear.module.css";
 
 const addAcademicYearSchema = Yup.object().shape({
-  yearName: Yup.string().required("Name is required"),
+  yearName: Yup.string()
+    .required("The name of the academic year is mandatory.")
+    .trim(),
+
   yearStartDate: Yup.date()
-    .nullable()
-    .max(Yup.ref("yearEndDate"), "Academic year start must be before end date")
-    .required("Start date is required"),
+    .required("Start date is required.")
+    .typeError("The start date must be a valid date."),
+
   yearEndDate: Yup.date()
-    .nullable()
-    .min(Yup.ref("yearStartDate"), "Academic year end must be after start date")
-    .required("End date is required"),
-  firstSemesterName: Yup.string().default("Sem I"),
-  firstStartDate: Yup.date()
-    .nullable()
+    .required("End date is required.")
+    .typeError("The end date must be a valid date.")
     .min(
       Yup.ref("yearStartDate"),
-      "First semester start cannot be before academic year start"
-    )
-    .max(
-      Yup.ref("firstEndDate"),
-      "First semester start must be before its end date"
-    )
-    .required("First semester start date is required"),
+      "Academic year end must be after start date."
+    ),
+
+  firstSemesterName: Yup.string().default("Sem I"),
+
+  firstStartDate: Yup.date()
+    .required("Start date is required.")
+    .typeError("The start date must be a valid date."),
+
   firstEndDate: Yup.date()
-    .nullable()
+    .required("The end date is required.")
+    .typeError("The end date must be a valid date.")
     .min(
       Yup.ref("firstStartDate"),
-      "First semester end must be after its start date"
-    )
-    .max(
-      Yup.ref("yearEndDate"),
-      "First semester end cannot be after academic year end"
-    )
-    .required("First semester end date is required"),
+      "The end date must be after the start date."
+    ),
+
   secondSemesterName: Yup.string().default("Sem II"),
+
   secondStartDate: Yup.date()
     .nullable()
     .min(
@@ -53,6 +52,7 @@ const addAcademicYearSchema = Yup.object().shape({
       "Second semester start must be before its end date"
     )
     .required("Second semester start date is required"),
+
   secondEndDate: Yup.date()
     .nullable()
     .min(
@@ -64,19 +64,25 @@ const addAcademicYearSchema = Yup.object().shape({
       "Second semester end cannot be after academic year end"
     )
     .required("Second semester end date is required"),
+
   periods: Yup.array().of(
     Yup.object().shape({
       type: Yup.string()
         .oneOf(["vacation", "exams"])
-        .required("Type is required"),
+        .required("Type is required."),
+
       startDate: Yup.date()
-        .nullable()
-        .max(Yup.ref("endDate"), "Period start must be before its end date")
-        .required("Period start date is required"),
+        .required("The start date of the period is mandatory.")
+        .typeError("The period start date must be a valid date."),
+
       endDate: Yup.date()
-        .nullable()
-        .min(Yup.ref("startDate"), "Period end must be after its start date")
-        .required("Period end date is required"),
+        .required("The end date of the period is mandatory.")
+        .typeError("The period end date must be a valid date.")
+        .min(
+          Yup.ref("startDate"),
+          "The end date of the period must be after the start date."
+        ),
+      semesterRef: Yup.string().oneOf(["", "first", "second"]),
     })
   ),
 });

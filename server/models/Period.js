@@ -8,31 +8,32 @@ const Period = db.define(
       type: DataTypes.STRING,
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
-      allowNull: false,
-      validate: {
-        notEmpty: true,
-      },
     },
     type: {
       type: DataTypes.ENUM("vacation", "exams"),
       allowNull: false,
       defaultValue: "vacation",
+      validate: {
+        isIn: [["vacation", "exams"]],
+      },
     },
     startDate: {
       type: DataTypes.DATEONLY,
       allowNull: false,
       validate: {
-        notEmpty: true,
+        isDate: true,
       },
     },
     endDate: {
       type: DataTypes.DATEONLY,
       allowNull: false,
       validate: {
-        notEmpty: true,
+        isDate: true,
         isAfterStart(value) {
-          if (this.startDate && value <= this.startDate) {
-            throw new Error("endDate trebuie să fie după startDate");
+          if (value <= this.startDate) {
+            throw new Error(
+              "Data de sfârșit trebuie să fie după data de început."
+            );
           }
         },
       },

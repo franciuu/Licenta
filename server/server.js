@@ -15,6 +15,7 @@ import AttendanceRoute from "./routes/AttendanceRoute.js";
 import EnrollmentRoute from "./routes/EnrollmentRoute.js";
 import AcademicYearRoute from "./routes/AcademicYearRoute.js";
 import MailRoute from "./routes/MailRoute.js";
+import RoomRoute from "./routes/RoomRoute.js";
 
 import "./models/index.js";
 import { verifyJWT } from "./middlewares/verifyJWT.js";
@@ -60,6 +61,7 @@ app.use(AIRoute);
 app.use(EnrollmentRoute);
 app.use(AcademicYearRoute);
 app.use(MailRoute);
+app.use(RoomRoute);
 
 app.listen(process.env.PORT, () => {
   console.log("server started on port 5000");

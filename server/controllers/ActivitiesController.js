@@ -120,7 +120,7 @@ export const createActivity = async (req, res) => {
     name,
     startTime,
     endTime,
-    room,
+    idRoom,
     idCourse,
     idProf,
     dayOfWeek,
@@ -132,7 +132,7 @@ export const createActivity = async (req, res) => {
       where: {
         idSemester,
         dayOfWeek,
-        [Op.or]: [{ idProf }, { room }],
+        [Op.or]: [{ idProf }, { idRoom }],
         [Op.and]: [
           { startTime: { [Op.lt]: endTime } },
           { endTime: { [Op.gt]: startTime } },
@@ -145,15 +145,15 @@ export const createActivity = async (req, res) => {
       });
     }
     await Activity.create({
-      name: name,
-      startTime: startTime,
-      endTime: endTime,
-      room: room,
-      idCourse: idCourse,
-      idProf: idProf,
-      dayOfWeek: dayOfWeek,
-      idSemester: idSemester,
-      type: type,
+      name,
+      startTime,
+      endTime,
+      idRoom,
+      idCourse,
+      idProf,
+      dayOfWeek,
+      idSemester,
+      type,
     });
     res.status(201).json({ msg: "Successful" });
   } catch (error) {

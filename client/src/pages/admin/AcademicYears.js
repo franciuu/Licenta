@@ -39,37 +39,45 @@ const AcademicYears = () => {
           </Link>
         </div>
 
-        <div className={styles.cardsContainer}>
-          {years.map((y) => (
-            <div key={y.uuid} className={styles.yearCard}>
-              <div className={styles.yearTitle}>
-                <FaGraduationCap className={styles.graduationIcon} />
-                <span>{y.name}</span>
-              </div>
-
-              <div className={styles.dateInfo}>
-                <div className={styles.dateRow}>
-                  <FaCalendar className={styles.calendarIcon} />
-                  <span>Start: {y.startDate}</span>
+        {years?.length ? (
+          <div className={styles.cardsContainer}>
+            {years.map((y) => (
+              <div key={y.uuid} className={styles.yearCard}>
+                <div className={styles.yearTitle}>
+                  <FaGraduationCap className={styles.graduationIcon} />
+                  <span>{y.name}</span>
                 </div>
-                <div className={styles.dateRow}>
-                  <FaCalendar className={styles.calendarIcon} />
-                  <span>End: {y.endDate}</span>
+
+                <div className={styles.dateInfo}>
+                  <div className={styles.dateRow}>
+                    <FaCalendar className={styles.calendarIcon} />
+                    <span>Start: {y.startDate}</span>
+                  </div>
+                  <div className={styles.dateRow}>
+                    <FaCalendar className={styles.calendarIcon} />
+                    <span>End: {y.endDate}</span>
+                  </div>
+                </div>
+
+                <div className={styles.cardActions}>
+                  <button className={styles.detailsButton}>Details</button>
+                  <button className={styles.editButton}>
+                    <MdOutlineEdit className={styles.editIcon} />
+                  </button>
+                  <button className={styles.deleteButton}>
+                    <FaTrashCan className={styles.deleteIcon} />
+                  </button>
                 </div>
               </div>
-
-              <div className={styles.cardActions}>
-                <button className={styles.detailsButton}>Details</button>
-                <button className={styles.editButton}>
-                  <MdOutlineEdit className={styles.editIcon} />
-                </button>
-                <button className={styles.deleteButton}>
-                  <FaTrashCan className={styles.deleteIcon} />
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <div className={styles.noYears}>
+            <p className={styles.noYearsText}>
+              No academic years have been registered yet.
+            </p>
+          </div>
+        )}
       </div>
     </Layout>
   );

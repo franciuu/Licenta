@@ -8,10 +8,6 @@ const Semester = db.define(
       type: DataTypes.STRING,
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
-      allowNull: false,
-      validate: {
-        notEmpty: true,
-      },
     },
     name: {
       type: DataTypes.STRING,
@@ -24,14 +20,29 @@ const Semester = db.define(
       type: DataTypes.DATEONLY,
       allowNull: false,
       validate: {
-        notEmpty: true,
+        isDate: true,
       },
     },
     endDate: {
       type: DataTypes.DATEONLY,
       allowNull: false,
       validate: {
-        notEmpty: true,
+        isDate: true,
+        isAfterStart(value) {
+          if (value <= this.startDate) {
+            throw new Error(
+              "Data de sfârșit trebuie să fie după data de început."
+            );
+          }
+        },
+      },
+    },
+    idAcademicYear: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      references: {
+        model: "academic_years",
+        key: "uuid",
       },
     },
   },

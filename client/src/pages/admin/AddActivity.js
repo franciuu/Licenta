@@ -10,6 +10,7 @@ import { getCourses } from "../../services/CourseService.js";
 import { getProfessors } from "../../services/UserService.js";
 import { createActivity } from "../../services/ActivityService.js";
 import { getSemesters } from "../../services/AcademicYearService.js";
+import { getRooms } from "../../services/RoomService.js";
 import Loader from "../../components/Loader.js";
 import styles from "../../styles/AddActivity.module.css";
 
@@ -18,7 +19,7 @@ const addActivitySchema = Yup.object().shape({
   idCourse: Yup.string().required("Course is required"),
   idProf: Yup.string().required("Professor is required"),
   idSemester: Yup.string().required("Semester is required"),
-  room: Yup.string().required("Room is required"),
+  idRoom: Yup.string().required("Room is required"),
   dayOfWeek: Yup.string().required("Day of week is required"),
   type: Yup.string().required("Type is required"),
   startTime: Yup.string().required("Start time is required"),
@@ -31,6 +32,7 @@ const AddActivity = () => {
   const [courses, setCourses] = useState([]);
   const [profs, setProfs] = useState([]);
   const [semesters, setSemesters] = useState([]);
+  const [rooms, setRooms] = useState([]);
   const axiosCustom = useAxiosCustom();
   const navigate = useNavigate();
 
@@ -45,7 +47,7 @@ const AddActivity = () => {
       name: "",
       startTime: "",
       endTime: "",
-      room: "2013A",
+      idRoom: "",
       idCourse: "",
       idProf: "",
       dayOfWeek: "0",
@@ -73,21 +75,23 @@ const AddActivity = () => {
     const loadAll = async () => {
       setLoadingCount((prev) => prev + 1);
       try {
-        const [semData, coursesData, profsData] = await Promise.all([
+        const [semData, coursesData, profsData, roomsData] = await Promise.all([
           getSemesters(axiosCustom),
           getCourses(axiosCustom),
           getProfessors(axiosCustom),
+          getRooms(axiosCustom),
         ]);
 
         setSemesters(semData);
         setCourses(coursesData);
         setProfs(profsData);
+        setRooms(roomsData);
 
         reset({
           name: "",
           startTime: "",
           endTime: "",
-          room: "2013A",
+          idRoom: roomsData[0]?.uuid || "",
           idCourse: coursesData[0]?.uuid || "",
           idProf: profsData[0]?.uuid || "",
           dayOfWeek: "0",
@@ -149,13 +153,16 @@ const AddActivity = () => {
               </div>
 
               <div className={styles.formGroup}>
-                <label htmlFor="room">Room: </label>
-                <select {...register("room")} id="room">
-                  <option value="2013A">2013A</option>
-                  <option value="2001D">2001D</option>
+                <label htmlFor="idRoom">Room: </label>
+                <select {...register("idRoom")} id="idRoom">
+                  {rooms.map((r) => (
+                    <option key={r.uuid} value={r.uuid}>
+                      {r.name}
+                    </option>
+                  ))}
                 </select>
-                {errors.room && (
-                  <p className={styles.error}>{errors.room.message}</p>
+                {errors.idRoom && (
+                  <p className={styles.error}>{errors.idRoom.message}</p>
                 )}
               </div>
 

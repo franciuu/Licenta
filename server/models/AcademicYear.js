@@ -8,14 +8,11 @@ const AcademicYear = db.define(
       type: DataTypes.STRING,
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
-      allowNull: false,
-      validate: {
-        notEmpty: true,
-      },
     },
     name: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
       validate: {
         notEmpty: true,
       },
@@ -24,14 +21,21 @@ const AcademicYear = db.define(
       type: DataTypes.DATEONLY,
       allowNull: false,
       validate: {
-        notEmpty: true,
+        isDate: true,
       },
     },
     endDate: {
       type: DataTypes.DATEONLY,
       allowNull: false,
       validate: {
-        notEmpty: true,
+        isDate: true,
+        isAfterStart(value) {
+          if (value <= this.startDate) {
+            throw new Error(
+              "Data de sfârșit trebuie să fie după data de început."
+            );
+          }
+        },
       },
     },
   },
