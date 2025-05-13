@@ -8,10 +8,6 @@ const Activity = db.define(
       type: DataTypes.STRING,
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
-      allowNull: false,
-      validate: {
-        notEmpty: true,
-      },
     },
     name: {
       type: DataTypes.STRING,
@@ -42,8 +38,10 @@ const Activity = db.define(
       validate: {
         notEmpty: true,
         isLaterThanStartTime(value) {
-          if (this.startTime && value <= this.startTime) {
-            throw new Error("End time trebuie să fie după start time!");
+          if (value <= this.startTime) {
+            throw new Error(
+              "Ora de sfârșit trebuie să fie după ora de început!"
+            );
           }
         },
       },
@@ -52,6 +50,39 @@ const Activity = db.define(
       type: DataTypes.ENUM("lecture", "seminar"),
       allowNull: false,
       defaultValue: "seminar",
+    },
+    idCourse: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+      references: {
+        model: "courses",
+        key: "uuid",
+      },
+    },
+    idProf: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+      references: {
+        model: "users",
+        key: "uuid",
+      },
+    },
+    idSemester: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+      references: {
+        model: "semesters",
+        key: "uuid",
+      },
     },
     idRoom: {
       type: DataTypes.STRING,

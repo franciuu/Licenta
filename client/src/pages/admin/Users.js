@@ -1,8 +1,9 @@
-import Layout from "../Layout.js";
 import { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { MaterialReactTable } from "material-react-table";
 import Swal from "sweetalert2";
+
+import Layout from "../Layout.js";
 import useAxiosCustom from "../../hooks/useAxiosCustom";
 import { getUsers, deleteUser } from "../../services/UserService.js";
 import Loader from "../../components/Loader.js";
@@ -45,7 +46,7 @@ const Users = () => {
             icon: "success",
           });
         } catch (error) {
-          console.error("Failed to delete student", error);
+          console.error("Failed to delete user", error);
         }
       }
     });

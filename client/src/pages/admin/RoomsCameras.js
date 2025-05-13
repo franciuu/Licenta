@@ -1,25 +1,74 @@
-"use client";
+import { useState, useEffect } from "react";
+import Swal from "sweetalert2";
 
-import { useState } from "react";
-import { Box, Flex, Heading, Text } from "@chakra-ui/react";
-
+import useAxiosCustom from "../../hooks/useAxiosCustom";
 import RoomsList from "../../components/RoomsList";
 import CamerasList from "../../components/CamerasList";
 import AddCameraForm from "../../components/AddCamera";
 import Layout from "../Layout";
 import style from "../../styles/RoomsCameras.module.css";
+import AddRoomForm from "../../components/AddRoomForm";
+import { createRoom, getRooms, deleteRoom } from "../../services/RoomService";
 
 const RoomsCameras = () => {
   const [activeTab, setActiveTab] = useState("rooms");
+  const [rooms, setRooms] = useState([]);
+  const axiosCustom = useAxiosCustom();
+
+  const fetchRooms = async () => {
+    try {
+      const roomsData = await getRooms(axiosCustom);
+      setRooms(roomsData);
+    } catch (error) {
+      console.error("Failed to fetch rooms data", error);
+    }
+  };
+
+  const handleAddRoom = async (name) => {
+    try {
+      await createRoom(axiosCustom, name);
+      await fetchRooms();
+    } catch (error) {
+      console.error("Failed to create room", error);
+    }
+  };
+
+  const onDeleteRoom = (uuid) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await deleteRoom(axiosCustom, uuid);
+          fetchRooms();
+          Swal.fire({
+            title: "Deleted!",
+            text: "Room has been deleted.",
+            icon: "success",
+          });
+        } catch (error) {
+          console.error("Failed to delete room", error);
+        }
+      }
+    });
+  };
+
+  useEffect(() => {
+    fetchRooms();
+  }, []);
 
   return (
     <Layout>
-      <Box className={style.container}>
-        <Heading as="h1" className={style.mb6}>
-          Faculty Surveillance Management
-        </Heading>
+      <div className={style.container}>
+        <h1 className={style.mb6}>Faculty Surveillance Management</h1>
 
-        <Flex
+        <div
           className={`${style.flex} ${style.flexWrap} ${style.gap2} ${style.mb6}`}
         >
           <button
@@ -46,54 +95,49 @@ const RoomsCameras = () => {
           >
             Add Camera
           </button>
-        </Flex>
+        </div>
 
-        <Box
+        <div
           className={`${style.tabContent} ${
             activeTab === "rooms" ? style.active : ""
           }`}
         >
-          <Flex
+          <div
             className={`${style.flex} ${style.mb4} ${style.itemsCenter} ${style.justifyBetween}`}
           >
-            <Heading as="h2" className={style.text2xl}>
-              Faculty Rooms
-            </Heading>
-          </Flex>
-          <RoomsList />
-        </Box>
+            <h2 className={style.text2xl}>Faculty Rooms</h2>
+          </div>
+          <AddRoomForm onAddRoom={handleAddRoom} />
+          <RoomsList rooms={rooms} onDeleteRoom={onDeleteRoom} />
+        </div>
 
-        <Box
+        <div
           className={`${style.tabContent} ${
             activeTab === "cameras" ? style.active : ""
           }`}
         >
-          <Flex
+          <div
             className={`${style.flex} ${style.mb4} ${style.itemsCenter} ${style.justifyBetween}`}
           >
-            <Heading as="h2" className={style.text2xl}>
-              Surveillance Cameras
-            </Heading>
-          </Flex>
+            <h2 className={style.text2xl}>Surveillance Cameras</h2>
+          </div>
           <CamerasList />
-        </Box>
+        </div>
 
-        <Box
+        <div
           className={`${style.tabContent} ${
             activeTab === "add" ? style.active : ""
           }`}
         >
-          <Box className={style.mb4}>
-            <Heading as="h2" className={style.text2xl}>
-              Add New Camera
-            </Heading>
-            <Text className={style.textMuted}>
+          <div className={style.mb4}>
+            <h2 className={style.text2xl}>Add New Camera</h2>
+            <p className={style.textMuted}>
               Register a new surveillance camera and associate it with a room
-            </Text>
-          </Box>
+            </p>
+          </div>
           <AddCameraForm />
-        </Box>
-      </Box>
+        </div>
+      </div>
     </Layout>
   );
 };

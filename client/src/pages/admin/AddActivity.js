@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
@@ -15,15 +15,15 @@ import Loader from "../../components/Loader.js";
 import styles from "../../styles/AddActivity.module.css";
 
 const addActivitySchema = Yup.object().shape({
-  name: Yup.string().required("Name is required"),
-  idCourse: Yup.string().required("Course is required"),
-  idProf: Yup.string().required("Professor is required"),
-  idSemester: Yup.string().required("Semester is required"),
-  idRoom: Yup.string().required("Room is required"),
-  dayOfWeek: Yup.string().required("Day of week is required"),
-  type: Yup.string().required("Type is required"),
-  startTime: Yup.string().required("Start time is required"),
-  endTime: Yup.string().required("End time is required"),
+  name: Yup.string().required("Name is required."),
+  idCourse: Yup.string().required("Course is required."),
+  idProf: Yup.string().required("Professor is required."),
+  idSemester: Yup.string().required("Semester is required."),
+  idRoom: Yup.string().required("Room is required."),
+  dayOfWeek: Yup.string().required("Day of week is required."),
+  type: Yup.string().required("Type is required."),
+  startTime: Yup.string().required("Start time is required."),
+  endTime: Yup.string().required("End time is required."),
 });
 
 const AddActivity = () => {
@@ -60,6 +60,7 @@ const AddActivity = () => {
     setLoadingCount((prev) => prev + 1);
     setError(null);
     try {
+      console.log(data);
       const activityData = await createActivity(axiosCustom, data);
       if (activityData) {
         navigate(`/admin/courses/${data.idCourse}`);
