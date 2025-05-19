@@ -8,7 +8,6 @@ import useAxiosCustom from "../../hooks/useAxiosCustom.js";
 import { getStudents, deleteStudent } from "../../services/StudentService.js";
 import Layout from "../Layout.js";
 import Loader from "../../components/Loader.js";
-import styles from "../../styles/Students.module.css";
 
 const Students = () => {
   const [loadingCount, setLoadingCount] = useState(0);
@@ -83,15 +82,25 @@ const Students = () => {
         enableSorting: false,
         enableColumnFilter: false,
         Cell: ({ row }) => (
-          <div className={styles.actionButtonContainer}>
-            <button className={`${styles.actionButton} ${styles.viewButton}`}>
-              <Link to={`/admin/students/${row.original.uuid}`}>View</Link>
+          <div className="flex gap-2">
+            <button className="px-4 py-1.5 bg-green-100 text-green-600 rounded-md text-sm font-medium hover:bg-green-200 transition-all duration-200 hover:-translate-y-0.5">
+              <Link
+                to={`/admin/students/${row.original.uuid}`}
+                className="block w-full h-full"
+              >
+                View
+              </Link>
             </button>
-            <button className={`${styles.actionButton} ${styles.editButton}`}>
-              <Link to={`/admin/students/edit/${row.original.uuid}`}>Edit</Link>
+            <button className="px-4 py-1.5 bg-sky-100 text-blue-500 rounded-md text-sm font-medium hover:bg-sky-200 transition-all duration-200 hover:-translate-y-0.5">
+              <Link
+                to={`/admin/students/edit/${row.original.uuid}`}
+                className="block w-full h-full"
+              >
+                Edit
+              </Link>
             </button>
             <button
-              className={`${styles.actionButton} ${styles.deleteButton}`}
+              className="px-4 py-1.5 bg-red-100 text-red-500 rounded-md text-sm font-medium hover:bg-red-200 transition-all duration-200 hover:-translate-y-0.5"
               onClick={() => onDeleteStudent(row.original.uuid)}
             >
               Delete
@@ -106,21 +115,28 @@ const Students = () => {
   if (loadingCount > 0)
     return (
       <Layout>
-        <Loader />
+        <div className="p-4 sm:p-5 h-full flex flex-col overflow-hidden">
+          <Loader />
+        </div>
       </Layout>
     );
 
   return (
     <Layout>
-      <div className={styles.studentsContainer}>
-        <div className={styles.pageHeader}>
-          <h1 className={styles.pageTitle}>Student List</h1>
-          <Link to="/admin/students/add" className={styles.btn}>
-            <span className={styles.addIcon}>+</span>
+      <div className="p-4 sm:p-5 h-full flex flex-col overflow-hidden">
+        <div className="flex justify-between items-center mb-4 py-2">
+          <h1 className="text-3xl font-bold text-gray-800 mb-2">
+            Student List
+          </h1>
+          <Link
+            to="/admin/students/add"
+            className="bg-gradient-to-r from-purple-800 to-purple-600 hover:from-purple-600 hover:to-purple-800 text-white font-semibold py-2 px-4 rounded shadow hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 active:shadow transition-all duration-300 flex items-center gap-2 h-10 self-start mb-4"
+          >
+            <span>+</span>
             Add student
           </Link>
         </div>
-        <div className={styles.tableContainer}>
+        <div className="flex-1 overflow-auto bg-white rounded-lg">
           {students?.length ? (
             <MaterialReactTable
               columns={columns}
@@ -129,7 +145,7 @@ const Students = () => {
               enableColumnOrdering
             />
           ) : (
-            <div className={styles.emptyState}>
+            <div className="text-center py-12 bg-white rounded-xl shadow-lg text-slate-500 text-lg">
               <p>No students to display</p>
             </div>
           )}
@@ -138,4 +154,5 @@ const Students = () => {
     </Layout>
   );
 };
+
 export default Students;

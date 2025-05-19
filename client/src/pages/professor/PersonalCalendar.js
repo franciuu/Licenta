@@ -21,7 +21,6 @@ const PersonalCalendar = () => {
       setLoadingCount((prev) => prev + 1);
       try {
         const activitiesData = await getPersonalActivities(axiosCustom);
-        console.log(activitiesData);
         let formattedData = [];
 
         activitiesData.forEach((a) => {

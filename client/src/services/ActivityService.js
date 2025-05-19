@@ -19,7 +19,7 @@ export const getActivityById = async (axiosCustom, id) => {
 export const getPersonalActivities = async (axiosCustom) => {
   try {
     const response = await axiosCustom.get("/activities/personal");
-    return response.data.activities;
+    return response.data;
   } catch (error) {
     throw error;
   }

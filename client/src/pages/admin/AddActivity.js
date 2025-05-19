@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
@@ -14,7 +14,6 @@ import { getRooms } from "../../services/RoomService.js";
 import Loader from "../../components/Loader.js";
 import styles from "../../styles/AddActivity.module.css";
 
-// Helper pentru comparație ore
 const timeToMinutes = (t) => {
   if (!t) return 0;
   const [h, m] = t.split(":").map(Number);
@@ -62,22 +61,17 @@ const AddActivity = () => {
   const [rooms, setRooms] = useState([]);
   const axiosCustom = useAxiosCustom();
   const navigate = useNavigate();
-
-  // Default values doar după ce datele sunt încărcate
-  const defaultValues = useMemo(
-    () => ({
-      name: "",
-      startTime: "",
-      endTime: "",
-      idRoom: rooms[0]?.uuid || "",
-      idCourse: courses[0]?.uuid || "",
-      idProf: profs[0]?.uuid || "",
-      dayOfWeek: "0",
-      idSemester: semesters[0]?.uuid || "",
-      type: "seminar",
-    }),
-    [courses, profs, semesters, rooms]
-  );
+  const [defaultValues, setDefaultValues] = useState({
+    name: "",
+    startTime: "",
+    endTime: "",
+    idRoom: "",
+    idCourse: "",
+    idProf: "",
+    dayOfWeek: "0",
+    idSemester: "",
+    type: "seminar",
+  });
 
   const {
     register,
@@ -89,11 +83,10 @@ const AddActivity = () => {
     defaultValues,
   });
 
-  // Încarcă datele la montare
   useEffect(() => {
-    let isMounted = true;
     const loadAll = async () => {
       setLoading(true);
+      setError(null);
       try {
         const [semData, coursesData, profsData, roomsData] = await Promise.all([
           getSemesters(axiosCustom),
@@ -101,12 +94,23 @@ const AddActivity = () => {
           getProfessors(axiosCustom),
           getRooms(axiosCustom),
         ]);
-        if (!isMounted) return;
         setSemesters(semData);
         setCourses(coursesData);
         setProfs(profsData);
         setRooms(roomsData);
-        // Reset doar după ce ai datele!
+
+        setDefaultValues({
+          name: "",
+          startTime: "",
+          endTime: "",
+          idRoom: roomsData[0]?.uuid || "",
+          idCourse: coursesData[0]?.uuid || "",
+          idProf: profsData[0]?.uuid || "",
+          dayOfWeek: "0",
+          idSemester: semData[0]?.uuid || "",
+          type: "seminar",
+        });
+
         reset({
           name: "",
           startTime: "",
@@ -119,17 +123,13 @@ const AddActivity = () => {
           type: "seminar",
         });
       } catch (err) {
-        if (!isMounted) return;
         setError("Failed to fetch initial data.");
         console.error("Failed to fetch initial data", err);
       } finally {
-        if (isMounted) setLoading(false);
+        setLoading(false);
       }
     };
     loadAll();
-    return () => {
-      isMounted = false;
-    };
   }, [axiosCustom, reset]);
 
   const onSubmit = async (data) => {

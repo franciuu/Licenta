@@ -62,21 +62,17 @@ export const getPersonalActivities = async (req, res) => {
       endDate: p.endDate,
     }));
 
-    const result = response.map((activity) => {
-      const raw = activity.toJSON();
-      const availableDates = getActivityDates(
-        raw.semester?.startDate,
-        raw.semester?.endDate,
-        raw.dayOfWeek,
+    const result = response.map((activity) => ({
+      ...activity.toJSON(),
+      availableDates: getActivityDates(
+        activity.semester?.startDate,
+        activity.semester?.endDate,
+        activity.dayOfWeek,
         excludedPeriods
-      );
-      return {
-        ...raw,
-        availableDates,
-      };
-    });
+      ),
+    }));
 
-    res.status(200).json({ activities: result, count: result.length });
+    res.status(200).json(result);
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }

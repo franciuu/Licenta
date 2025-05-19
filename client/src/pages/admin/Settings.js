@@ -11,7 +11,6 @@ import { createRoom, getRooms, deleteRoom } from "../../services/RoomService";
 import AddRoomForm from "../../components/AddRoomForm";
 import RoomsList from "../../components/RoomsList";
 import AcademicYearsList from "../../components/AcademicYearsList";
-import styles from "../../styles/AcademicYears.module.css";
 
 const Settings = () => {
   const [years, setYears] = useState([]);
@@ -94,10 +93,8 @@ const Settings = () => {
 
   return (
     <Layout>
-      <div className="max-w-[1200px] mx-auto my-8 px-4">
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-800 mb-2">Settings</h1>
-        </div>
+      <div className="mx-auto my-8 px-4">
+        <h1 className="text-3xl font-bold text-gray-800 mb-2">Settings</h1>
         <div className="mb-10">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-semibold text-gray-700">
@@ -105,7 +102,7 @@ const Settings = () => {
             </h2>
             <Link
               to="/admin/academic/add"
-              className="bg-purple-600 text-white px-4 py-2 rounded-md text-sm font-medium flex items-center gap-1 hover:bg-purple-700 transition-colors shadow-sm"
+              className="bg-gradient-to-r from-purple-800 to-purple-600 hover:from-purple-600 hover:to-purple-800 text-white font-semibold py-2 px-4 rounded shadow hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 active:shadow transition-all duration-300 flex items-center gap-2 h-10 self-start mb-4"
             >
               <span>+</span>
               <span>Add Academic Year</span>

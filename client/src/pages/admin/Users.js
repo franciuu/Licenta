@@ -7,7 +7,6 @@ import Layout from "../Layout.js";
 import useAxiosCustom from "../../hooks/useAxiosCustom";
 import { getUsers, deleteUser } from "../../services/UserService.js";
 import Loader from "../../components/Loader.js";
-import style from "../../styles/Users.module.css";
 
 const Users = () => {
   const [loadingCount, setLoadingCount] = useState(0);
@@ -67,13 +66,18 @@ const Users = () => {
         enableSorting: false,
         enableColumnFilter: false,
         Cell: ({ row }) => (
-          <div className={style.actionButtonContainer}>
-            <button className={`${style.actionButton} ${style.editButton}`}>
-              <Link to={`/admin/users/edit/${row.original.uuid}`}>Edit</Link>
+          <div className="flex gap-2">
+            <button className="w-24 px-4 py-1.5 bg-sky-100 text-blue-500 rounded-md text-sm font-medium hover:bg-sky-200 transition-all duration-200 hover:-translate-y-0.5">
+              <Link
+                to={`/admin/users/edit/${row.original.uuid}`}
+                className="block w-full h-full"
+              >
+                Edit
+              </Link>
             </button>
             <button
               onClick={() => onDeleteUser(row.original.uuid)}
-              className={`${style.actionButton} ${style.deleteButton}`}
+              className="w-24 px-4 py-1.5 bg-red-100 text-red-500 rounded-md text-sm font-medium hover:bg-red-200 transition-all duration-200 hover:-translate-y-0.5"
             >
               Delete
             </button>
@@ -87,7 +91,7 @@ const Users = () => {
   if (loadingCount > 0)
     return (
       <Layout>
-        <div className={style.usersContainer}>
+        <div className="p-4 sm:p-5 h-full flex flex-col overflow-hidden">
           <Loader />
         </div>
       </Layout>
@@ -95,15 +99,20 @@ const Users = () => {
 
   return (
     <Layout>
-      <div className={style.usersContainer}>
-        <div className={style.pageHeader}>
-          <h1 className={style.pageTitle}>List of Users</h1>
-          <Link to="/admin/users/add" className={style.btn}>
+      <div className="p-4 sm:p-5 h-full flex flex-col overflow-hidden">
+        <div className="flex justify-between items-center mb-4 py-2">
+          <h1 className="text-3xl font-bold text-gray-800 mb-2">
+            List of Users
+          </h1>
+          <Link
+            to="/admin/users/add"
+            className="bg-gradient-to-r from-purple-800 to-purple-600 hover:from-purple-600 hover:to-purple-800 text-white font-semibold py-2 px-4 rounded shadow hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 active:shadow transition-all duration-300 flex items-center gap-2 h-10 self-center"
+          >
             <span>+</span>
             Add user
           </Link>
         </div>
-        <div className={style.tableContainer}>
+        <div className="flex-1 overflow-auto bg-white rounded-lg">
           {users?.length ? (
             <MaterialReactTable
               columns={columns}
@@ -112,7 +121,9 @@ const Users = () => {
               enableColumnOrdering
             />
           ) : (
-            <p className={style.emptyState}>No users to display</p>
+            <p className="text-center py-12 bg-white rounded-xl shadow-lg text-slate-500 text-lg">
+              No users to display
+            </p>
           )}
         </div>
       </div>

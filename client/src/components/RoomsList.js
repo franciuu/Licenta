@@ -1,5 +1,3 @@
-"use client";
-
 import { FaTrashAlt } from "react-icons/fa";
 
 const RoomsList = ({ rooms, onDeleteRoom }) => {
