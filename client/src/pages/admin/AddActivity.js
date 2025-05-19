@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
@@ -14,21 +14,48 @@ import { getRooms } from "../../services/RoomService.js";
 import Loader from "../../components/Loader.js";
 import styles from "../../styles/AddActivity.module.css";
 
+// Helper pentru comparație ore
+const timeToMinutes = (t) => {
+  if (!t) return 0;
+  const [h, m] = t.split(":").map(Number);
+  return h * 60 + m;
+};
+
 const addActivitySchema = Yup.object().shape({
   name: Yup.string().required("Name is required."),
   idCourse: Yup.string().required("Course is required."),
   idProf: Yup.string().required("Professor is required."),
   idSemester: Yup.string().required("Semester is required."),
   idRoom: Yup.string().required("Room is required."),
-  dayOfWeek: Yup.string().required("Day of week is required."),
-  type: Yup.string().required("Type is required."),
+  dayOfWeek: Yup.number()
+    .typeError("Day of week must be a number.")
+    .transform((value, originalValue) => Number(originalValue))
+    .min(0, "Invalid day.")
+    .max(6, "Invalid day.")
+    .required("Day of week is required."),
+  type: Yup.string()
+    .oneOf(["lecture", "seminar"], "Type must be seminar or lecture.")
+    .required("Type is required."),
   startTime: Yup.string().required("Start time is required."),
-  endTime: Yup.string().required("End time is required."),
+  endTime: Yup.string()
+    .required("End time is required.")
+    .test(
+      "is-after-start",
+      "End time must be after start time.",
+      function (value) {
+        const { startTime } = this.parent;
+        return (
+          !startTime ||
+          !value ||
+          timeToMinutes(value) > timeToMinutes(startTime)
+        );
+      }
+    ),
 });
 
 const AddActivity = () => {
   const [error, setError] = useState(null);
-  const [loadingCount, setLoadingCount] = useState(0);
+  const [loading, setLoading] = useState(true);
   const [courses, setCourses] = useState([]);
   const [profs, setProfs] = useState([]);
   const [semesters, setSemesters] = useState([]);
@@ -36,45 +63,37 @@ const AddActivity = () => {
   const axiosCustom = useAxiosCustom();
   const navigate = useNavigate();
 
+  // Default values doar după ce datele sunt încărcate
+  const defaultValues = useMemo(
+    () => ({
+      name: "",
+      startTime: "",
+      endTime: "",
+      idRoom: rooms[0]?.uuid || "",
+      idCourse: courses[0]?.uuid || "",
+      idProf: profs[0]?.uuid || "",
+      dayOfWeek: "0",
+      idSemester: semesters[0]?.uuid || "",
+      type: "seminar",
+    }),
+    [courses, profs, semesters, rooms]
+  );
+
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm({
     resolver: yupResolver(addActivitySchema),
-    defaultValues: {
-      name: "",
-      startTime: "",
-      endTime: "",
-      idRoom: "",
-      idCourse: "",
-      idProf: "",
-      dayOfWeek: "0",
-      idSemester: "",
-      type: "seminar",
-    },
+    defaultValues,
   });
 
-  const onSubmit = async (data) => {
-    setLoadingCount((prev) => prev + 1);
-    setError(null);
-    try {
-      console.log(data);
-      const activityData = await createActivity(axiosCustom, data);
-      if (activityData) {
-        navigate(`/admin/courses/${data.idCourse}`);
-      }
-    } catch (err) {
-      setError(err.response?.data?.msg || "An unexpected error occurred");
-    } finally {
-      setLoadingCount((prev) => prev - 1);
-    }
-  };
-
+  // Încarcă datele la montare
   useEffect(() => {
+    let isMounted = true;
     const loadAll = async () => {
-      setLoadingCount((prev) => prev + 1);
+      setLoading(true);
       try {
         const [semData, coursesData, profsData, roomsData] = await Promise.all([
           getSemesters(axiosCustom),
@@ -82,12 +101,12 @@ const AddActivity = () => {
           getProfessors(axiosCustom),
           getRooms(axiosCustom),
         ]);
-
+        if (!isMounted) return;
         setSemesters(semData);
         setCourses(coursesData);
         setProfs(profsData);
         setRooms(roomsData);
-
+        // Reset doar după ce ai datele!
         reset({
           name: "",
           startTime: "",
@@ -100,16 +119,35 @@ const AddActivity = () => {
           type: "seminar",
         });
       } catch (err) {
+        if (!isMounted) return;
+        setError("Failed to fetch initial data.");
         console.error("Failed to fetch initial data", err);
       } finally {
-        setLoadingCount((prev) => prev - 1);
+        if (isMounted) setLoading(false);
       }
     };
-
     loadAll();
+    return () => {
+      isMounted = false;
+    };
   }, [axiosCustom, reset]);
 
-  if (loadingCount > 0) {
+  const onSubmit = async (data) => {
+    setError(null);
+    try {
+      await createActivity(axiosCustom, data);
+      navigate(`/admin/courses/${data.idCourse}`);
+    } catch (err) {
+      setError(
+        err.response?.data?.msg ||
+          err.response?.data?.error ||
+          err.response?.data?.errors?.[0]?.msg ||
+          "An unexpected error occurred"
+      );
+    }
+  };
+
+  if (loading) {
     return (
       <Layout>
         <Loader />
@@ -122,7 +160,7 @@ const AddActivity = () => {
       <div className={styles.addActivityContainer}>
         <h2 className={styles.addActivityTitle}>Add Activity</h2>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
           {error && <p className={styles.errorMessage}>{error}</p>}
 
           <div className={styles.formGroupFullWidth}>
@@ -131,6 +169,7 @@ const AddActivity = () => {
               {...register("name")}
               id="name"
               placeholder="e.g. Baze de date, Tip-S, 1092"
+              autoFocus
             />
             {errors.name && (
               <p className={styles.error}>{errors.name.message}</p>
@@ -231,7 +270,7 @@ const AddActivity = () => {
                 <select {...register("idSemester")} id="idSemester">
                   {semesters.map((s) => (
                     <option key={s.uuid} value={s.uuid}>
-                      {s.name} - {s.academic_year.name}
+                      {s.name} - {s.academic_year?.name || ""}
                     </option>
                   ))}
                 </select>
@@ -243,8 +282,12 @@ const AddActivity = () => {
           </div>
 
           <div className={styles.formActions}>
-            <button type="submit" className={styles.submitButton}>
-              Save
+            <button
+              type="submit"
+              className={styles.submitButton}
+              disabled={isSubmitting || loading}
+            >
+              {isSubmitting ? "Saving..." : "Save"}
             </button>
           </div>
         </form>

@@ -9,7 +9,7 @@ const Unauthorized = () => {
 
   const handleOnClick = () => {
     if (auth.role === "admin") {
-      navigate("/admin/academic");
+      navigate("/admin/users");
     } else if (auth.role === "professor") {
       navigate("/professor/dashboard");
     }

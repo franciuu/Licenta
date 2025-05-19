@@ -9,8 +9,8 @@ import {
   FaChalkboardTeacher,
   FaCalendarAlt,
   FaUniversity,
-  FaCamera,
 } from "react-icons/fa";
+import { IoSettingsSharp } from "react-icons/io5";
 import { Avatar } from "@chakra-ui/react";
 import style from "../styles/Sidebar.module.css";
 import useAuth from "../hooks/useAuth";
@@ -47,30 +47,6 @@ const Sidebar = () => {
         <p className={style.menuTitle}>MAIN MENU</p>
         {auth.role === "admin" && (
           <ul className={style.sidebarMenu}>
-            <li className={style.sidebarItem}>
-              <NavLink
-                to="/admin/academic"
-                className={({ isActive }) =>
-                  `${style.itemText} ${isActive ? style.active : ""}`
-                }
-              >
-                <FaUniversity className={style.icon} />
-                <span className={style.label}>Academic</span>
-              </NavLink>
-            </li>
-
-            <li className={style.sidebarItem}>
-              <NavLink
-                to="/admin/rooms"
-                className={({ isActive }) =>
-                  `${style.itemText} ${isActive ? style.active : ""}`
-                }
-              >
-                <FaCamera className={style.icon} />
-                <span className={style.label}>Rooms & Cameras</span>
-              </NavLink>
-            </li>
-
             <li className={style.sidebarItem}>
               <NavLink
                 to="/admin/users"
@@ -116,6 +92,18 @@ const Sidebar = () => {
               >
                 <FaChalkboardTeacher className={style.icon} />
                 <span className={style.label}>Add Activity</span>
+              </NavLink>
+            </li>
+
+            <li className={style.sidebarItem}>
+              <NavLink
+                to="/settings"
+                className={({ isActive }) =>
+                  `${style.itemText} ${isActive ? style.active : ""}`
+                }
+              >
+                <IoSettingsSharp className={style.icon} />
+                <span className={style.label}>Settings</span>
               </NavLink>
             </li>
           </ul>

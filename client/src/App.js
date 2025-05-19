@@ -13,12 +13,11 @@ import AddActivity from "./pages/admin/AddActivity.js";
 import ViewCourse from "./pages/admin/ViewCourse.js";
 import ActivityEnrollment from "./pages/admin/ActivityEnrollment.js";
 import GenerateEmbeddings from "./pages/admin/GenerateEmbeddings.js";
-import AcademicYears from "./pages/admin/AcademicYears.js";
 import AddAcademicYear from "./pages/admin/AddAcademicYear.js";
 import ViewStudent from "./pages/admin/ViewStudent.js";
 import Students from "./pages/admin/Students.js";
 import AddStudent from "./pages/admin/AddStudent.js";
-import RoomsCameras from "./pages/admin/RoomsCameras.js";
+import Settings from "./pages/admin/Settings.js";
 
 import Dashboard from "./pages/professor/Dashboard.js";
 import TakeAttendance from "./pages/professor/TakeAttendance.js";
@@ -68,7 +67,6 @@ function App() {
           </Route>
 
           <Route element={<RequireAuth allowedRoles={["admin"]} />}>
-            <Route path="/admin/academic" element={<AcademicYears />}></Route>
             <Route
               path="/admin/academic/add"
               element={<AddAcademicYear />}
@@ -98,7 +96,7 @@ function App() {
               path="/admin/generate"
               element={<GenerateEmbeddings />}
             ></Route>
-            <Route path="/admin/rooms" element={<RoomsCameras />}></Route>
+            <Route path="/settings" element={<Settings />}></Route>
           </Route>
         </Route>
 

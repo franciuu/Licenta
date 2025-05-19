@@ -27,7 +27,7 @@ const Login = () => {
 
   const [error, setError] = useState(null);
   const redirectByRole = {
-    admin: "/admin/academic",
+    admin: "/admin/users",
     professor: "/professor/dashboard",
   };
 

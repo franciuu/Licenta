@@ -49,7 +49,7 @@ export async function validateAcademicYearInput({ name, startDate, endDate }) {
   });
   if (overlaping) {
     return {
-      code: 400,
+      code: 409,
       message:
         "The academic year interval overlaps with another existing academic year.",
     };
@@ -126,7 +126,7 @@ export async function validateSemesterInput({
   });
   if (overlapping) {
     return {
-      code: 400,
+      code: 409,
       message: "The semester interval overlaps with another existing semester.",
     };
   }
@@ -238,7 +238,7 @@ export async function validateAcademicPeriodInput({
   const overlapping = await Period.findOne({ where });
   if (overlapping) {
     return {
-      code: 400,
+      code: 409,
       message: "The period overlaps with another existing period.",
     };
   }

@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+"use client";
+
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm, useFieldArray } from "react-hook-form";
 import * as Yup from "yup";
@@ -6,7 +8,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 import Layout from "../Layout";
 import useAxiosCustom from "../../hooks/useAxiosCustom";
-import styles from "../../styles/AddAcademicYear.module.css";
 
 const addAcademicYearSchema = Yup.object().shape({
   yearName: Yup.string()
@@ -95,8 +96,8 @@ const AddAcademicYear = () => {
     if (!dateStr) return null;
     const date = new Date(dateStr);
     const offset = date.getTimezoneOffset();
-    date.setMinutes(date.getMinutes() - offset); // compensăm fusul orar local
-    return date.toISOString().split("T")[0]; // păstrăm doar YYYY-MM-DD
+    date.setMinutes(date.getMinutes() - offset);
+    return date.toISOString().split("T")[0];
   };
 
   const {
@@ -176,7 +177,7 @@ const AddAcademicYear = () => {
           periodsPayload.map((period) => axiosCustom.post("/periods", period))
         );
       }
-      navigate("/admin/academic");
+      navigate("/settings");
     } catch (err) {
       setError(err.response?.data?.msg || "An unexpected error occurred");
       console.log(err.response?.data?.msg);
@@ -185,89 +186,88 @@ const AddAcademicYear = () => {
 
   return (
     <Layout>
-      <div className={styles.addAcademicYearContainer}>
-        <h2 className={styles.addAcademicYearTitle}>Add Academic Year</h2>
+      <div className="max-w-[900px] mx-auto my-8 p-6 md:p-8 bg-white/50 backdrop-blur-xl rounded-lg shadow-sm border-2 border-white/60">
+        <h2 className="text-xl text-gray-800 font-semibold mb-6 pb-3 border-b-2 border-purple-500/40 flex items-center">
+          Add Academic Year
+        </h2>
 
         <form onSubmit={handleSubmit(onSubmit)}>
-          {error && <div className={styles.errorMessage}>{error}</div>}
+          {error && (
+            <div className="bg-red-50/80 text-red-500 p-2.5 rounded-md mb-5 border-l-3 border-red-500">
+              {error}
+            </div>
+          )}
 
           <input type="hidden" {...register("firstSemesterName")} />
           <input type="hidden" {...register("secondSemesterName")} />
 
-          <div className={styles.formColumns}>
-            <div className={styles.formColumn}>
-              <div className={styles.formGroup}>
-                <label htmlFor="yearName">Name:</label>
-                <input
-                  id="yearName"
-                  {...register("yearName")}
-                  placeholder="e.g. 2024-2025"
-                />
-                {errors.yearName && (
-                  <p className={styles.error}>{errors.yearName.message}</p>
-                )}
-              </div>
-            </div>
+          <div className="bg-white/60 rounded-lg border border-purple-500/30 p-5 mb-6">
+            <h3 className="text-lg text-purple-600 mb-4 font-medium">
+              Academic Year Details
+            </h3>
 
-            <div className={styles.formColumn}>
-              <div className={styles.formGroup}>
-                <label htmlFor="yearStartDate">Start Date:</label>
-                <input
-                  type="date"
-                  id="yearStartDate"
-                  {...register("yearStartDate")}
-                />
-                {errors.yearStartDate && (
-                  <p className={styles.error}>{errors.yearStartDate.message}</p>
-                )}
-              </div>
-            </div>
-
-            <div className={styles.formColumn}>
-              <div className={styles.formGroup}>
-                <label htmlFor="yearEndDate">End Date:</label>
-                <input
-                  type="date"
-                  id="yearEndDate"
-                  {...register("yearEndDate")}
-                />
-                {errors.yearEndDate && (
-                  <p className={styles.error}>{errors.yearEndDate.message}</p>
-                )}
-              </div>
-            </div>
-          </div>
-
-          <div className={styles.semesterSection}>
-            <h3 className={styles.semesterTitle}>First Semester</h3>
-            <div className={styles.formColumns}>
-              <div className={styles.formColumn}>
-                <div className={styles.formGroup}>
-                  <label htmlFor="firstStartDate">Start Date:</label>
+            <div className="flex flex-col md:flex-row gap-5">
+              <div className="flex-1 min-w-0">
+                <div>
+                  <label
+                    htmlFor="yearName"
+                    className="block font-medium text-gray-700 text-sm mb-1.5"
+                  >
+                    Name:
+                  </label>
                   <input
-                    type="date"
-                    id="firstStartDate"
-                    {...register("firstStartDate")}
+                    id="yearName"
+                    {...register("yearName")}
+                    placeholder="e.g. 2024-2025"
+                    className="w-full px-3 py-2.5 border-2 border-purple-500/40 rounded-md text-sm bg-white/40 transition-all focus:outline-none focus:border-purple-600 focus:bg-white/60 focus:shadow-[0_0_0_2px_rgba(142,68,173,0.2)]"
                   />
-                  {errors.firstStartDate && (
-                    <p className={styles.error}>
-                      {errors.firstStartDate.message}
+                  {errors.yearName && (
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors.yearName.message}
                     </p>
                   )}
                 </div>
               </div>
 
-              <div className={styles.formColumn}>
-                <div className={styles.formGroup}>
-                  <label htmlFor="firstEndDate">End Date:</label>
+              <div className="flex-1 min-w-0">
+                <div>
+                  <label
+                    htmlFor="yearStartDate"
+                    className="block font-medium text-gray-700 text-sm mb-1.5"
+                  >
+                    Start Date:
+                  </label>
                   <input
                     type="date"
-                    id="firstEndDate"
-                    {...register("firstEndDate")}
+                    id="yearStartDate"
+                    {...register("yearStartDate")}
+                    className="w-full px-3 py-2.5 border-2 border-purple-500/40 rounded-md text-sm bg-white/40 transition-all focus:outline-none focus:border-purple-600 focus:bg-white/60 focus:shadow-[0_0_0_2px_rgba(142,68,173,0.2)]"
                   />
-                  {errors.firstEndDate && (
-                    <p className={styles.error}>
-                      {errors.firstEndDate.message}
+                  {errors.yearStartDate && (
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors.yearStartDate.message}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <div className="flex-1 min-w-0">
+                <div>
+                  <label
+                    htmlFor="yearEndDate"
+                    className="block font-medium text-gray-700 text-sm mb-1.5"
+                  >
+                    End Date:
+                  </label>
+                  <input
+                    type="date"
+                    id="yearEndDate"
+                    {...register("yearEndDate")}
+                    className="w-full px-3 py-2.5 border-2 border-purple-500/40 rounded-md text-sm bg-white/40 transition-all focus:outline-none focus:border-purple-600 focus:bg-white/60 focus:shadow-[0_0_0_2px_rgba(142,68,173,0.2)]"
+                  />
+                  {errors.yearEndDate && (
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors.yearEndDate.message}
                     </p>
                   )}
                 </div>
@@ -275,49 +275,115 @@ const AddAcademicYear = () => {
             </div>
           </div>
 
-          <div className={styles.semesterSection}>
-            <h3 className={styles.semesterTitle}>Second Semester</h3>
-            <div className={styles.formColumns}>
-              <div className={styles.formColumn}>
-                <div className={styles.formGroup}>
-                  <label htmlFor="secondStartDate">Start Date:</label>
-                  <input
-                    type="date"
-                    id="secondStartDate"
-                    {...register("secondStartDate")}
-                  />
-                  {errors.secondStartDate && (
-                    <p className={styles.error}>
-                      {errors.secondStartDate.message}
-                    </p>
-                  )}
+          <div className="bg-white/60 rounded-lg border border-purple-500/30 p-5 mb-6">
+            <h3 className="text-lg text-purple-600 mb-4 font-medium">
+              Semesters
+            </h3>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div className="bg-white/50 rounded-md p-4 border border-purple-500/20">
+                <h4 className="text-base text-purple-600 mb-3 font-medium">
+                  First Semester
+                </h4>
+                <div className="space-y-4">
+                  <div>
+                    <label
+                      htmlFor="firstStartDate"
+                      className="block font-medium text-gray-700 text-sm mb-1.5"
+                    >
+                      Start Date:
+                    </label>
+                    <input
+                      type="date"
+                      id="firstStartDate"
+                      {...register("firstStartDate")}
+                      className="w-full px-3 py-2.5 border-2 border-purple-500/40 rounded-md text-sm bg-white/40 transition-all focus:outline-none focus:border-purple-600 focus:bg-white/60 focus:shadow-[0_0_0_2px_rgba(142,68,173,0.2)]"
+                    />
+                    {errors.firstStartDate && (
+                      <p className="text-red-500 text-xs mt-1">
+                        {errors.firstStartDate.message}
+                      </p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="firstEndDate"
+                      className="block font-medium text-gray-700 text-sm mb-1.5"
+                    >
+                      End Date:
+                    </label>
+                    <input
+                      type="date"
+                      id="firstEndDate"
+                      {...register("firstEndDate")}
+                      className="w-full px-3 py-2.5 border-2 border-purple-500/40 rounded-md text-sm bg-white/40 transition-all focus:outline-none focus:border-purple-600 focus:bg-white/60 focus:shadow-[0_0_0_2px_rgba(142,68,173,0.2)]"
+                    />
+                    {errors.firstEndDate && (
+                      <p className="text-red-500 text-xs mt-1">
+                        {errors.firstEndDate.message}
+                      </p>
+                    )}
+                  </div>
                 </div>
               </div>
 
-              <div className={styles.formColumn}>
-                <div className={styles.formGroup}>
-                  <label htmlFor="secondEndDate">End Date:</label>
-                  <input
-                    type="date"
-                    id="secondEndDate"
-                    {...register("secondEndDate")}
-                  />
-                  {errors.secondEndDate && (
-                    <p className={styles.error}>
-                      {errors.secondEndDate.message}
-                    </p>
-                  )}
+              {/* Second Semester */}
+              <div className="bg-white/50 rounded-md p-4 border border-purple-500/20">
+                <h4 className="text-base text-purple-600 mb-3 font-medium">
+                  Second Semester
+                </h4>
+                <div className="space-y-4">
+                  <div>
+                    <label
+                      htmlFor="secondStartDate"
+                      className="block font-medium text-gray-700 text-sm mb-1.5"
+                    >
+                      Start Date:
+                    </label>
+                    <input
+                      type="date"
+                      id="secondStartDate"
+                      {...register("secondStartDate")}
+                      className="w-full px-3 py-2.5 border-2 border-purple-500/40 rounded-md text-sm bg-white/40 transition-all focus:outline-none focus:border-purple-600 focus:bg-white/60 focus:shadow-[0_0_0_2px_rgba(142,68,173,0.2)]"
+                    />
+                    {errors.secondStartDate && (
+                      <p className="text-red-500 text-xs mt-1">
+                        {errors.secondStartDate.message}
+                      </p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="secondEndDate"
+                      className="block font-medium text-gray-700 text-sm mb-1.5"
+                    >
+                      End Date:
+                    </label>
+                    <input
+                      type="date"
+                      id="secondEndDate"
+                      {...register("secondEndDate")}
+                      className="w-full px-3 py-2.5 border-2 border-purple-500/40 rounded-md text-sm bg-white/40 transition-all focus:outline-none focus:border-purple-600 focus:bg-white/60 focus:shadow-[0_0_0_2px_rgba(142,68,173,0.2)]"
+                    />
+                    {errors.secondEndDate && (
+                      <p className="text-red-500 text-xs mt-1">
+                        {errors.secondEndDate.message}
+                      </p>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className={styles.periodsSection}>
-            <div className={styles.periodsSectionHeader}>
-              <h3 className={styles.semesterTitle}>Periods</h3>
+          <div className="bg-white/60 rounded-lg border border-purple-500/30 p-5">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-5">
+              <h3 className="text-lg text-purple-600 font-medium">Periods</h3>
               <button
                 type="button"
-                className={styles.addPeriodButton}
+                className="mt-2 sm:mt-0 bg-purple-600 text-white border-none rounded-md px-4 py-2 text-sm font-medium transition-all hover:bg-purple-700"
                 onClick={() =>
                   append({ type: "vacation", startDate: null, endDate: null })
                 }
@@ -327,13 +393,18 @@ const AddAcademicYear = () => {
             </div>
 
             {fields.map((field, index) => (
-              <div key={field.id} className={styles.periodItem}>
-                <div className={styles.periodHeader}>
-                  <h4 className={styles.periodNumber}>Period {index + 1}</h4>
+              <div
+                key={field.id}
+                className="bg-white/40 border border-purple-500/20 rounded-lg p-4 mb-4"
+              >
+                <div className="flex justify-between items-center mb-4">
+                  <h4 className="text-base text-purple-600 font-medium">
+                    Period {index + 1}
+                  </h4>
                   {index > 0 && (
                     <button
                       type="button"
-                      className={styles.removePeriodButton}
+                      className="bg-red-50 text-red-500 border border-red-300 rounded px-2.5 py-1 text-xs transition-all hover:bg-red-100"
                       onClick={() => remove(index)}
                     >
                       Remove
@@ -341,33 +412,41 @@ const AddAcademicYear = () => {
                   )}
                 </div>
 
-                <div className={styles.formColumns}>
-                  <div className={styles.formColumn}>
-                    <div className={styles.formGroup}>
-                      <label htmlFor={`periods.${index}.type`}>Type:</label>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label
+                        htmlFor={`periods.${index}.type`}
+                        className="block font-medium text-gray-700 text-sm mb-1.5"
+                      >
+                        Type:
+                      </label>
                       <select
                         id={`periods.${index}.type`}
                         {...register(`periods.${index}.type`)}
+                        className="w-full px-3 py-2.5 border-2 border-purple-500/40 rounded-md text-sm bg-white/40 transition-all focus:outline-none focus:border-purple-600 focus:bg-white/60 focus:shadow-[0_0_0_2px_rgba(142,68,173,0.2)]"
                       >
                         <option value="vacation">Vacation</option>
                         <option value="exams">Exams</option>
                       </select>
                       {errors.periods?.[index]?.type && (
-                        <p className={styles.error}>
+                        <p className="text-red-500 text-xs mt-1">
                           {errors.periods[index].type.message}
                         </p>
                       )}
                     </div>
-                  </div>
 
-                  <div className={styles.formColumn}>
-                    <div className={styles.formGroup}>
-                      <label htmlFor={`periods.${index}.semesterRef`}>
+                    <div>
+                      <label
+                        htmlFor={`periods.${index}.semesterRef`}
+                        className="block font-medium text-gray-700 text-sm mb-1.5"
+                      >
                         Associate with:
                       </label>
                       <select
                         id={`periods.${index}.semesterRef`}
                         {...register(`periods.${index}.semesterRef`)}
+                        className="w-full px-3 py-2.5 border-2 border-purple-500/40 rounded-md text-sm bg-white/40 transition-all focus:outline-none focus:border-purple-600 focus:bg-white/60 focus:shadow-[0_0_0_2px_rgba(142,68,173,0.2)]"
                       >
                         <option value="">Intersemestrial</option>
                         <option value="first">Semestrul 1</option>
@@ -376,36 +455,42 @@ const AddAcademicYear = () => {
                     </div>
                   </div>
 
-                  <div className={styles.formColumn}>
-                    <div className={styles.formGroup}>
-                      <label htmlFor={`periods.${index}.startDate`}>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label
+                        htmlFor={`periods.${index}.startDate`}
+                        className="block font-medium text-gray-700 text-sm mb-1.5"
+                      >
                         Start Date:
                       </label>
                       <input
                         type="date"
                         id={`periods.${index}.startDate`}
                         {...register(`periods.${index}.startDate`)}
+                        className="w-full px-3 py-2.5 border-2 border-purple-500/40 rounded-md text-sm bg-white/40 transition-all focus:outline-none focus:border-purple-600 focus:bg-white/60 focus:shadow-[0_0_0_2px_rgba(142,68,173,0.2)]"
                       />
                       {errors.periods?.[index]?.startDate && (
-                        <p className={styles.error}>
+                        <p className="text-red-500 text-xs mt-1">
                           {errors.periods[index].startDate.message}
                         </p>
                       )}
                     </div>
-                  </div>
 
-                  <div className={styles.formColumn}>
-                    <div className={styles.formGroup}>
-                      <label htmlFor={`periods.${index}.endDate`}>
+                    <div>
+                      <label
+                        htmlFor={`periods.${index}.endDate`}
+                        className="block font-medium text-gray-700 text-sm mb-1.5"
+                      >
                         End Date:
                       </label>
                       <input
                         type="date"
                         id={`periods.${index}.endDate`}
                         {...register(`periods.${index}.endDate`)}
+                        className="w-full px-3 py-2.5 border-2 border-purple-500/40 rounded-md text-sm bg-white/40 transition-all focus:outline-none focus:border-purple-600 focus:bg-white/60 focus:shadow-[0_0_0_2px_rgba(142,68,173,0.2)]"
                       />
                       {errors.periods?.[index]?.endDate && (
-                        <p className={styles.error}>
+                        <p className="text-red-500 text-xs mt-1">
                           {errors.periods[index].endDate.message}
                         </p>
                       )}
@@ -416,10 +501,10 @@ const AddAcademicYear = () => {
             ))}
           </div>
 
-          <div className={styles.formActions}>
+          <div className="flex justify-end mt-8">
             <button
               type="submit"
-              className={styles.submitButton}
+              className="bg-purple-600 text-white border-none rounded-md px-6 py-2.5 text-sm font-medium cursor-pointer transition-all shadow-sm shadow-purple-500/10 hover:bg-purple-700 hover:-translate-y-0.5 hover:shadow-md hover:shadow-purple-500/20 active:translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed"
               disabled={isSubmitting}
             >
               {isSubmitting ? "Saving..." : "Save"}

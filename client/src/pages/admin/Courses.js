@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Row, Col } from "react-bootstrap";
+
 import Layout from "../Layout";
 import CourseCard from "../../components/CourseCard.js";
 import FilterBar from "../../components/FilterBar.js";
