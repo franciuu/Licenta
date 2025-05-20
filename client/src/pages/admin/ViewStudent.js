@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
 import Layout from "../Layout";
-import MyCarousel from "../../components/Carousel";
+import MyCarousel from "../../components/professor/Carousel";
 import useAxiosCustom from "../../hooks/useAxiosCustom";
 import { useParams, Link } from "react-router-dom";
 import { getStudentById } from "../../services/StudentService";
-import { useNavigate } from "react-router-dom";
 import Loader from "../../components/Loader";
 import dateFormat from "dateformat";
 import styles from "../../styles/ViewStudent.module.css";

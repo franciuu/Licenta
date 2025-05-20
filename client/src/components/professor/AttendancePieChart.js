@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { PieChart, Pie, Cell, Legend, ResponsiveContainer } from "recharts";
-import { getAttendancePercentageForLecture } from "../services/AttendanceService";
-import useAxiosCustom from "../hooks/useAxiosCustom";
+import { getAttendancePercentageForLecture } from "../../services/AttendanceService";
+import useAxiosCustom from "../../hooks/useAxiosCustom";
 
 const AttendancePieChart = ({
   selectedLecture,

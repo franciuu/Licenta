@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import Card from "react-bootstrap/Card";
-import { generatePatternImage } from "../utils/GeneratePattern.js";
-import styles from "../styles/CourseCard.module.css";
+import { generatePatternImage } from "../../utils/GeneratePattern.js";
+import styles from "../../styles/CourseCard.module.css";
 
 const CourseCard = ({ info }) => {
   return (

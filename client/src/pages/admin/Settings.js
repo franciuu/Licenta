@@ -1,16 +1,14 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { FaGraduationCap, FaTrashCan, FaCalendar } from "react-icons/fa6";
-import { MdOutlineEdit } from "react-icons/md";
 import Swal from "sweetalert2";
 
 import Layout from "../Layout";
 import useAxiosCustom from "../../hooks/useAxiosCustom";
 import { getAcademicYears } from "../../services/AcademicYearService";
 import { createRoom, getRooms, deleteRoom } from "../../services/RoomService";
-import AddRoomForm from "../../components/AddRoomForm";
-import RoomsList from "../../components/RoomsList";
-import AcademicYearsList from "../../components/AcademicYearsList";
+import AddRoomForm from "../../components/admin/AddRoomForm";
+import RoomsList from "../../components/admin/RoomsList";
+import AcademicYearsList from "../../components/admin/AcademicYearsList";
 
 const Settings = () => {
   const [years, setYears] = useState([]);

@@ -9,8 +9,8 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { getSeminarAttendancePercentageForCourse } from "../services/AttendanceService";
-import useAxiosCustom from "../hooks/useAxiosCustom";
+import { getSeminarAttendancePercentageForCourse } from "../../services/AttendanceService";
+import useAxiosCustom from "../../hooks/useAxiosCustom";
 
 const SeminarAttendanceChart = ({
   selectedCourse,

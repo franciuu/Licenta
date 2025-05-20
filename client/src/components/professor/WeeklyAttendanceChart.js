@@ -8,8 +8,8 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { getAttendanceTrendForActivity } from "../services/AttendanceService";
-import useAxiosCustom from "../hooks/useAxiosCustom";
+import { getAttendanceTrendForActivity } from "../../services/AttendanceService";
+import useAxiosCustom from "../../hooks/useAxiosCustom";
 
 const WeeklyAttendanceChart = ({
   selectedActivity,

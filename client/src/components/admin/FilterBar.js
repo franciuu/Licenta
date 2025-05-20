@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Form, Row, Col } from "react-bootstrap";
-import styles from "../styles/FilterBar.module.css";
+import styles from "../../styles/FilterBar.module.css";
 
 const FilterBar = ({ onFilterChange }) => {
   const [filters, setFilters] = useState({

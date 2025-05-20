@@ -7,7 +7,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import useAxiosCustom from "../../hooks/useAxiosCustom";
 import Layout from "../Layout";
 import { createStudent } from "../../services/StudentService";
-import Uploader from "../../components/Uploader";
+import Uploader from "../../components/admin/Uploader";
 import styles from "../../styles/AddStudent.module.css";
 
 const schema = Yup.object().shape({

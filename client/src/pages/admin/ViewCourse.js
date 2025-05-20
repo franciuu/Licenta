@@ -4,7 +4,7 @@ import Swal from "sweetalert2";
 
 import useAxiosCustom from "../../hooks/useAxiosCustom";
 import Layout from "../Layout";
-import ActivityCard from "../../components/ActivityCard.js";
+import ActivityCard from "../../components/admin/ActivityCard.js";
 import { getCourseById } from "../../services/CourseService.js";
 import { getActivitesByCourse } from "../../services/ActivityService.js";
 import Loader from "../../components/Loader.js";

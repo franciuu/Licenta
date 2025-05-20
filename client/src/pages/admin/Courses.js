@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import { Row, Col } from "react-bootstrap";
 
 import Layout from "../Layout";
-import CourseCard from "../../components/CourseCard.js";
-import FilterBar from "../../components/FilterBar.js";
+import CourseCard from "../../components/admin/CourseCard.js";
+import FilterBar from "../../components/admin/FilterBar.js";
 import useAxiosCustom from "../../hooks/useAxiosCustom.js";
 import { getCourses } from "../../services/CourseService.js";
 import Loader from "../../components/Loader.js";

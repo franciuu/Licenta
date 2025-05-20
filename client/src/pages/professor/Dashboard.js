@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useState } from "react";
 import Layout from "../Layout";
 import useAxiosCustom from "../../hooks/useAxiosCustom";
@@ -12,10 +10,10 @@ import {
 import { getCourses } from "../../services/CourseService";
 import useAuth from "../../hooks/useAuth";
 
-import StatsSection from "../../components/StatsSection";
-import AttendancePieChart from "../../components/AttendancePieChart";
-import SeminarAttendanceChart from "../../components/SeminarAttendanceChart";
-import WeeklyAttendanceChart from "../../components/WeeklyAttendanceChart";
+import StatsSection from "../../components/professor/StatsSection";
+import AttendancePieChart from "../../components/professor/AttendancePieChart";
+import SeminarAttendanceChart from "../../components/professor/SeminarAttendanceChart";
+import WeeklyAttendanceChart from "../../components/professor/WeeklyAttendanceChart";
 
 const Dashboard = () => {
   const [studCount, setStudCount] = useState(0);

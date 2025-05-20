@@ -1,5 +1,4 @@
 import { FaGraduationCap, FaTrashCan, FaCalendar } from "react-icons/fa6";
-import { MdOutlineEdit } from "react-icons/md";
 import Swal from "sweetalert2";
 
 const AcademicYearsList = ({ years, onDeleteYear }) => {

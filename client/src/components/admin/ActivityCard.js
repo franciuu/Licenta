@@ -2,10 +2,10 @@ import { Link } from "react-router-dom";
 import Card from "react-bootstrap/Card";
 import Swal from "sweetalert2";
 
-import { generatePatternImage } from "../utils/GeneratePattern.js";
-import useAxiosCustom from "../hooks/useAxiosCustom.js";
-import { deleteActivity } from "../services/ActivityService.js";
-import styles from "../styles/ActivityCard.module.css";
+import { generatePatternImage } from "../../utils/GeneratePattern.js";
+import useAxiosCustom from "../../hooks/useAxiosCustom.js";
+import { deleteActivity } from "../../services/ActivityService.js";
+import styles from "../../styles/ActivityCard.module.css";
 
 const ActivityCard = ({ info, onDeleted }) => {
   const axiosCustom = useAxiosCustom();
