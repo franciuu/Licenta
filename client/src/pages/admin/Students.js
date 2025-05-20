@@ -115,9 +115,7 @@ const Students = () => {
   if (loadingCount > 0)
     return (
       <Layout>
-        <div className="p-4 sm:p-5 h-full flex flex-col overflow-hidden">
-          <Loader />
-        </div>
+        <Loader />
       </Layout>
     );
 

@@ -78,7 +78,7 @@ const ViewCourse = () => {
   const renderActivities = () => {
     if (activities.length === 0) {
       return (
-        <div className="flex flex-col items-center justify-center py-10 text-center">
+        <div className="bg-white rounded-lg shadow-sm p-8 text-center">
           <p className="text-gray-600">
             No activities available for this course yet.
           </p>
@@ -108,10 +108,10 @@ const ViewCourse = () => {
 
   return (
     <Layout>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 pb-4 border-b">
+      <div className="p-4 sm:p-5 h-full flex flex-col overflow-hidden">
+        <div className="flex justify-between items-center mb-4 py-2">
           <div>
-            <h1 className="text-2xl font-bold text-gray-800 mb-1">
+            <h1 className="text-3xl font-bold text-gray-800 mb-2">
               {course.name}
             </h1>
             <p className="text-sm text-purple-600 font-medium">
@@ -119,7 +119,7 @@ const ViewCourse = () => {
             </p>
           </div>
           <button
-            className="mt-3 md:mt-0 px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
+            className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 mb-4 h-10"
             onClick={() => onDelete(course.uuid)}
           >
             Delete course

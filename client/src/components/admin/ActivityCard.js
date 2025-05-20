@@ -1,11 +1,9 @@
 import { Link } from "react-router-dom";
-import Card from "react-bootstrap/Card";
 import Swal from "sweetalert2";
 
 import { generatePatternImage } from "../../utils/GeneratePattern.js";
 import useAxiosCustom from "../../hooks/useAxiosCustom.js";
 import { deleteActivity } from "../../services/ActivityService.js";
-import styles from "../../styles/ActivityCard.module.css";
 
 const ActivityCard = ({ info, onDeleted }) => {
   const axiosCustom = useAxiosCustom();
@@ -39,34 +37,37 @@ const ActivityCard = ({ info, onDeleted }) => {
   };
 
   return (
-    <Card className={styles.activityCard}>
-      <div className={styles.imageContainer}>
-        <Card.Img
-          variant="top"
+    <div className="w-full rounded-lg overflow-hidden shadow-[0_4px_8px_rgba(0,0,0,0.05)] transition-shadow duration-300 border-none h-full flex flex-col hover:shadow-[0_8px_16px_rgba(0,0,0,0.1)]">
+      <div className="relative h-[160px]">
+        <img
           src={generatePatternImage()}
-          alt="Pattern image"
-          className={styles.cardImage}
+          alt="Activity pattern"
+          className="w-full h-full object-cover"
         />
-        <div className={styles.overlay} />
-        <Card.Title className={styles.cardTitle}>{info.name}</Card.Title>
+        <div className="absolute inset-0 bg-black/40" />
+        <h2 className="absolute bottom-3 left-4 text-white text-[1.25rem] font-semibold">
+          {info.name}
+        </h2>
       </div>
-      <Card.Body className={styles.cardBody}>
-        <button className={styles.viewButton}>
+      <div className="bg-[#f8f9fa] p-4 flex gap-2">
+        <button className="border border-[#7e22ce] rounded-md px-4 py-[0.4rem] transition-all duration-300 hover:bg-[#7e22ce] group flex-1">
           <Link
             to={`/admin/activities/${info.uuid}`}
-            className={styles.viewText}
+            className="text-[#7e22ce] no-underline font-medium text-[0.9rem] transition-colors duration-300 group-hover:text-white block text-center"
           >
             View
           </Link>
         </button>
         <button
-          className={styles.viewButton}
+          className="border border-red-500 rounded-md px-4 py-[0.4rem] transition-all duration-300 hover:bg-red-500 group flex-1"
           onClick={() => onDelete(info.uuid)}
         >
-          <span className={styles.viewText}>Delete</span>
+          <span className="text-red-500 no-underline font-medium text-[0.9rem] transition-colors duration-300 group-hover:text-white block text-center">
+            Delete
+          </span>
         </button>
-      </Card.Body>
-    </Card>
+      </div>
+    </div>
   );
 };
 

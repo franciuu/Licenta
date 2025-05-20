@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { Form, Row, Col } from "react-bootstrap";
-import styles from "../../styles/FilterBar.module.css";
+import { FaSearch } from "react-icons/fa";
 
 const FilterBar = ({ onFilterChange }) => {
   const [filters, setFilters] = useState({
@@ -17,42 +16,36 @@ const FilterBar = ({ onFilterChange }) => {
   const levels = ["Bachelor", "Master"];
 
   return (
-    <div className={styles.filterBar}>
-      <Row className="w-100">
-        <Col xs={12} md={7} className="mb-3 mb-md-0">
-          <Form.Group>
-            <div className={styles.inputWrapper}>
-              <i className={`bi bi-search ${styles.searchIcon}`}></i>
-              <Form.Control
-                type="text"
-                placeholder="Search by course name..."
-                value={filters.name}
-                onChange={(e) => handleFilterChange("name", e.target.value)}
-                className={styles.searchInput}
-              />
-            </div>
-          </Form.Group>
-        </Col>
+    <div className="w-full">
+      <div className="flex flex-col md:flex-row gap-4">
+        <div className="w-full md:w-[350px] relative">
+          <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+            <FaSearch className="w-4 h-4" />
+          </div>
+          <input
+            type="text"
+            placeholder="Search by course name..."
+            value={filters.name}
+            onChange={(e) => handleFilterChange("name", e.target.value)}
+            className="w-full px-10 py-2 border border-gray-300 rounded-md text-sm"
+          />
+        </div>
 
-        <Col xs={12} md={5}>
-          <Form.Group>
-            <Form.Select
-              value={filters.programLevel}
-              onChange={(e) =>
-                handleFilterChange("programLevel", e.target.value)
-              }
-              className={styles.selectInput}
-            >
-              <option value="">All Levels</option>
-              {levels.map((level) => (
-                <option key={level} value={level}>
-                  {level}
-                </option>
-              ))}
-            </Form.Select>
-          </Form.Group>
-        </Col>
-      </Row>
+        <div className="w-full md:w-[200px]">
+          <select
+            value={filters.programLevel}
+            onChange={(e) => handleFilterChange("programLevel", e.target.value)}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md text-sm appearance-none bg-white"
+          >
+            <option value="">All Levels</option>
+            {levels.map((level) => (
+              <option key={level} value={level}>
+                {level}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
     </div>
   );
 };
