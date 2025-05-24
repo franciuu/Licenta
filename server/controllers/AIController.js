@@ -26,7 +26,6 @@ export const getRecognize = async (req, res) => {
     });
 
     const results = pyRes.data;
-
     let newRecognized = [];
 
     for (const result of results) {

@@ -2,11 +2,13 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
+
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import Layout from "../Layout";
 import useAxiosCustom from "../../hooks/useAxiosCustom";
 import Loader from "../../components/Loader";
 import { getPersonalActivities } from "../../services/ActivityService";
+import { exportToICS } from "../../utils/ExportICS";
 
 const localizer = momentLocalizer(moment);
 
@@ -71,6 +73,21 @@ const PersonalCalendar = () => {
 
   return (
     <Layout>
+      <button
+        onClick={() => exportToICS(myEvents)}
+        className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 transition"
+      >
+        Descarcă calendar (.ics)
+      </button>
+      <a
+        href="https://calendar.google.com/calendar/u/0/r"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-blue-600 underline"
+      >
+        Importă în Google Calendar
+      </a>
+
       <Calendar
         localizer={localizer}
         events={myEvents}

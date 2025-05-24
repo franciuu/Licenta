@@ -2,22 +2,43 @@ import os
 import pickle
 import numpy as np
 import cv2
-from deepface import DeepFace
-from scipy.spatial.distance import cosine
+from keras_facenet import FaceNet
+from scipy.spatial.distance import cosine, cdist
 
+embedder = FaceNet()
+model = embedder.model
 
-def recognize_faces(imagineStudenti, embedding_threshold=0.3):
+base_dir = os.path.abspath(os.path.dirname(__file__))  
+model_path = os.path.join(base_dir, "..", "face_detection_yunet_2023mar.onnx")
+model_path = os.path.abspath(model_path)  
+detector = cv2.FaceDetectorYN.create(model=model_path, input_size=(320, 320), config="")
+
+def augmentations(face_img):
+    augmented_faces = [face_img]
+    augmented_faces.append(np.fliplr(face_img))
+
+    for angle in [-10, 10]:
+        m = cv2.getRotationMatrix2D((80, 80), angle, 1.0)
+        rotated = cv2.warpAffine(face_img, m, (160, 160), borderMode=cv2.BORDER_REFLECT)
+        augmented_faces.append(rotated)
+
+    blur = cv2.GaussianBlur(face_img, (3, 3), 0)
+    augmented_faces.append(blur)
+
+    bright = np.clip(face_img + 0.08, 0, 1)
+    augmented_faces.append(bright)
+
+    noise = np.clip(face_img + np.random.normal(0, 0.01, face_img.shape), 0, 1)
+    augmented_faces.append(noise.astype(np.float32))
+
+    return augmented_faces
+
+def recognize_faces(imagineStudenti):
     results = []
-
-    base_dir = os.path.abspath(os.path.dirname(__file__))  
-    model_path = os.path.join(base_dir, "..", "face_detection_yunet_2023mar.onnx")
-    model_path = os.path.abspath(model_path)  
-
-    detector = cv2.FaceDetectorYN.create(model=model_path, input_size=(320, 320), config="")
-    h, w, _ = imagineStudenti.shape
+   
+    h, w = imagineStudenti.shape[:2]
     detector.setInputSize((w, h))
-
-    faces = detector.detect(imagineStudenti)
+    _, faces = detector.detect(imagineStudenti)
 
     embedding_file = None
     for file in os.listdir():
@@ -25,53 +46,49 @@ def recognize_faces(imagineStudenti, embedding_threshold=0.3):
             embedding_file = file
             break
 
-    if embedding_file:
-        with open(embedding_file, "rb") as f:
-            saved_embeddings = pickle.load(f)
-        print(f"Loaded embeddings from {embedding_file}")
-    else:
+    if not embedding_file:
         print("Nu am găsit fișierul de embeddings.")
         return results
+    
+    with open(embedding_file, "rb") as f:
+            data = pickle.load(f)
+            saved_embeddings = data["embeddings"]
+            thresholds = data["thresholds"]
+            print(f"Loaded embeddings from {embedding_file}")
 
-    if faces[1] is not None:
-        for i, face in enumerate(faces[1]):
-            x, y, w, h = map(int, face[:4])
-            face_crop = imagineStudenti[y:y+h, x:x+w]
+    if faces is not None:
+        for face in faces:
+            x1, y1, w, h = list(map(int, face[:4]))
+            face_crop = imagineStudenti[y1:y1+h, x1:x1+w]
+            face_resized = cv2.resize(face_crop, (160, 160)).astype('float32') / 255.0
+            aug_imgs = augmentations(face_resized)
 
-            try:
-                embedding_obj = DeepFace.represent(
-                    img_path=face_crop,
-                    model_name="VGG-Face",
-                    enforce_detection=False,
-                    detector_backend="mtcnn"
-                )
+            embeddings_aug = model.predict(np.array(aug_imgs), verbose=0)
+            embeddings_aug = embeddings_aug / np.linalg.norm(embeddings_aug, axis=1, keepdims=True)
+            aggregated_embedding = np.mean(embeddings_aug, axis=0)
+            aggregated_embedding /= np.linalg.norm(aggregated_embedding)
 
-                if len(embedding_obj) != 1:
-                    print(f"Ignorat: {len(embedding_obj)} fețe în crop.")
-                    continue
+            db_embeddings = np.array([np.array(item["embedding"]) for item in saved_embeddings])            
+            db_student_ids = [item["idStudent"] for item in saved_embeddings]
+            dists = cdist([aggregated_embedding], db_embeddings, metric='cosine')[0]
 
-                input_embedding = np.array(embedding_obj[0]["embedding"])
-                best_match = None
-                best_distance = 1.0
+            min_dist_per_student = {}
+            for sid, dist in enumerate(dists):
+                student_id = db_student_ids[sid]
+                if student_id not in min_dist_per_student or dist < min_dist_per_student[student_id]:
+                    min_dist_per_student[student_id] = dist
 
-                for item in saved_embeddings:
-                    distance = cosine(input_embedding, np.array(item["embedding"]))
-                    if distance < best_distance:
-                        best_distance = distance
-                        best_match = item["idStudent"]
-
-                if best_distance < embedding_threshold:
-                    results.append({
-                        "student": best_match,
-                        "distance": round(best_distance, 4)
-                    })
-                else:
-                    results.append({
-                        "student": None,
-                        "distance": round(best_distance, 4)
-                    })
-
-            except Exception as e:
-                print(f"Eroare embedding față: {e}")
+            best_match = None
+            best_distance = 1.0
+            
+            for sid, dist in min_dist_per_student.items():
+                if dist < thresholds.get(sid, 0.4) and dist < best_distance:
+                    best_distance = dist
+                    best_match = sid
+                
+            results.append({
+                "student": best_match,
+                "distance": round(best_distance, 4) 
+            })
 
     return results

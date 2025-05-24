@@ -34,7 +34,7 @@ def face_recognition():
             if image is None:
                 raise ValueError("Imaginea decodificată e None")
         except Exception as decode_err:
-            print(f"❌ Eroare la decodare imagine: {decode_err}")
+            print(f"Eroare la decodare imagine: {decode_err}")
             return jsonify({"error": f"Decoding error: {str(decode_err)}"}), 500
 
         result = recognize_faces(image)

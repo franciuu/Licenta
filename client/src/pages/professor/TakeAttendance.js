@@ -68,7 +68,7 @@ const TakeAttendance = () => {
         video: true,
       });
       videoRef.current.srcObject = streamRef.current;
-      intervalRef.current = setInterval(captureImage, 3000);
+      intervalRef.current = setInterval(captureImage, 2000);
       setRunning(true);
     } catch (error) {
       console.log(error);
