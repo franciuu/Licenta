@@ -36,8 +36,8 @@ export const getLectures = async (axiosCustom) => {
 
 export const getActivitiesCount = async (axiosCustom) => {
   try {
-    const response = await axiosCustom.get("/activities/personal");
-    return response.data.count;
+    const response = await axiosCustom.get("/activities/personal/count");
+    return response.data;
   } catch (error) {
     throw error;
   }

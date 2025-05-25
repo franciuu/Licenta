@@ -7,6 +7,15 @@ export const getCourses = async (axiosCustom) => {
   }
 };
 
+export const getPersonalCourses = async (axiosCustom) => {
+  try {
+    const response = await axiosCustom.get("/courses/personal");
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const getCourseById = async (axiosCustom, id) => {
   try {
     const response = await axiosCustom.get(`/courses/${id}`);

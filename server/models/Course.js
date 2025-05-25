@@ -24,9 +24,6 @@ const Course = db.define(
       type: DataTypes.ENUM("Bachelor", "Master"),
       defaultValue: "Bachelor",
       allowNull: false,
-      validate: {
-        notEmpty: true,
-      },
     },
   },
   {

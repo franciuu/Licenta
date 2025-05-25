@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import styles from "../styles/Unauthorized.module.css";
 import { FaLock } from "react-icons/fa";
 import useAuth from "../hooks/useAuth";
 
@@ -16,17 +15,24 @@ const Unauthorized = () => {
   };
 
   return (
-    <div className={styles.unauthorizedContainer}>
-      <div className={styles.iconWrapper}>
-        <FaLock className={styles.icon} />
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+      <div className="max-w-md w-full text-center">
+        <div className="mb-6">
+          <FaLock className="w-16 h-16 text-purple-600 mx-auto" />
+        </div>
+        <h1 className="text-2xl font-bold text-gray-900 mb-4">
+          Unauthorized Access
+        </h1>
+        <p className="text-gray-600 mb-8">
+          You do not have permission to view this page.
+        </p>
+        <button
+          className="w-full bg-purple-600 text-white px-6 py-3 rounded-lg font-medium transition-all hover:bg-purple-700"
+          onClick={handleOnClick}
+        >
+          Go Back
+        </button>
       </div>
-      <h1 className={styles.title}>Unauthorized Access</h1>
-      <p className={styles.message}>
-        You do not have permission to view this page.
-      </p>
-      <button className={styles.backButton} onClick={handleOnClick}>
-        Go Back
-      </button>
     </div>
   );
 };

@@ -9,6 +9,53 @@ import Period from "../models/Period.js";
 import { getActivityDates } from "../utils/dateUtils.js";
 import { validateActivityInput } from "../validators/ActivityValidator.js";
 
+export const createActivity = async (req, res) => {
+  const {
+    name,
+    startTime,
+    endTime,
+    idRoom,
+    idCourse,
+    idProf,
+    dayOfWeek,
+    idSemester,
+    type,
+  } = req.body;
+  try {
+    const validationError = await validateActivityInput({
+      name,
+      startTime,
+      endTime,
+      idRoom,
+      idCourse,
+      idProf,
+      dayOfWeek,
+      idSemester,
+      type,
+    });
+    if (validationError) {
+      return res
+        .status(validationError.code)
+        .json({ msg: validationError.message });
+    }
+
+    await Activity.create({
+      name,
+      startTime,
+      endTime,
+      idRoom,
+      idCourse,
+      idProf,
+      dayOfWeek,
+      idSemester,
+      type,
+    });
+    res.status(201).json({ msg: "Successful" });
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
+};
+
 export const getCourseActivities = async (req, res) => {
   try {
     const response = await Activity.findAll({
@@ -30,6 +77,20 @@ export const getLectures = async (req, res) => {
         type: "lecture",
       },
     });
+    res.status(200).json(response);
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
+};
+
+export const getPersonalActivitiesCount = async (req, res) => {
+  try {
+    const response = await Activity.count({
+      where: {
+        idProf: req.user,
+      },
+    });
+
     res.status(200).json(response);
   } catch (error) {
     res.status(500).json({ msg: error.message });
@@ -139,53 +200,6 @@ export const getActivityById = async (req, res) => {
     };
 
     return res.status(200).json(formatted);
-  } catch (error) {
-    res.status(500).json({ msg: error.message });
-  }
-};
-
-export const createActivity = async (req, res) => {
-  const {
-    name,
-    startTime,
-    endTime,
-    idRoom,
-    idCourse,
-    idProf,
-    dayOfWeek,
-    idSemester,
-    type,
-  } = req.body;
-  try {
-    const validationError = await validateActivityInput({
-      name,
-      startTime,
-      endTime,
-      idRoom,
-      idCourse,
-      idProf,
-      dayOfWeek,
-      idSemester,
-      type,
-    });
-    if (validationError) {
-      return res
-        .status(validationError.code)
-        .json({ msg: validationError.message });
-    }
-
-    await Activity.create({
-      name,
-      startTime,
-      endTime,
-      idRoom,
-      idCourse,
-      idProf,
-      dayOfWeek,
-      idSemester,
-      type,
-    });
-    res.status(201).json({ msg: "Successful" });
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }

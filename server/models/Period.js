@@ -8,14 +8,15 @@ const Period = db.define(
       type: DataTypes.STRING,
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
     },
     type: {
       type: DataTypes.ENUM("vacation", "exams"),
       allowNull: false,
       defaultValue: "vacation",
-      validate: {
-        isIn: [["vacation", "exams"]],
-      },
     },
     startDate: {
       type: DataTypes.DATEONLY,

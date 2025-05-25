@@ -11,13 +11,11 @@ import useAxiosCustom from "../../hooks/useAxiosCustom";
 
 const addAcademicYearSchema = Yup.object().shape({
   yearName: Yup.string()
-    .required("The name of the academic year is mandatory.")
-    .trim(),
-
+    .trim()
+    .required("The name of the academic year is mandatory."),
   yearStartDate: Yup.date()
     .required("Start date is required.")
     .typeError("The start date must be a valid date."),
-
   yearEndDate: Yup.date()
     .required("End date is required.")
     .typeError("The end date must be a valid date.")
@@ -25,13 +23,10 @@ const addAcademicYearSchema = Yup.object().shape({
       Yup.ref("yearStartDate"),
       "Academic year end must be after start date."
     ),
-
   firstSemesterName: Yup.string().default("Sem I"),
-
   firstStartDate: Yup.date()
     .required("Start date is required.")
     .typeError("The start date must be a valid date."),
-
   firstEndDate: Yup.date()
     .required("The end date is required.")
     .typeError("The end date must be a valid date.")
@@ -39,9 +34,7 @@ const addAcademicYearSchema = Yup.object().shape({
       Yup.ref("firstStartDate"),
       "The end date must be after the start date."
     ),
-
   secondSemesterName: Yup.string().default("Sem II"),
-
   secondStartDate: Yup.date()
     .nullable()
     .min(
@@ -53,7 +46,6 @@ const addAcademicYearSchema = Yup.object().shape({
       "Second semester start must be before its end date"
     )
     .required("Second semester start date is required"),
-
   secondEndDate: Yup.date()
     .nullable()
     .min(
@@ -65,17 +57,14 @@ const addAcademicYearSchema = Yup.object().shape({
       "Second semester end cannot be after academic year end"
     )
     .required("Second semester end date is required"),
-
   periods: Yup.array().of(
     Yup.object().shape({
       type: Yup.string()
         .oneOf(["vacation", "exams"])
         .required("Type is required."),
-
       startDate: Yup.date()
         .required("The start date of the period is mandatory.")
         .typeError("The period start date must be a valid date."),
-
       endDate: Yup.date()
         .required("The end date of the period is mandatory.")
         .typeError("The period end date must be a valid date.")

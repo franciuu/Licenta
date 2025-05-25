@@ -1,7 +1,7 @@
 import Room from "../models/Room.js";
 
 export async function validateRoomInput({ name }) {
-  if (!name) {
+  if (!name || name.trim() === "") {
     return {
       code: 400,
       message: "The name of the room is mandatory.",

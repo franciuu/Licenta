@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import dateFormat from "dateformat";
 import { FiAlertCircle, FiCheck, FiMail } from "react-icons/fi";
 import { toast } from "react-toastify";
+import { ExportAsExcel, ExportAsPdf } from "@siamf/react-export";
 
 import Layout from "../Layout";
 import useAxiosCustom from "../../hooks/useAxiosCustom";
@@ -30,6 +31,25 @@ const ViewAttendance = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const { auth } = useAuth();
+
+  const exportData = useMemo(
+    () =>
+      (attendances || [])
+        .filter((a) => a && typeof a === "object")
+        .map((a) => ({
+          "Student Name": a.name || "",
+          "Arrival Time": a.arrivalTime || "",
+        })),
+    [attendances]
+  );
+  const fileName = useMemo(() => {
+    const safeName = activity?.name
+      ? activity.name.replace(/\s+/g, "_")
+      : "Activity";
+    return `Prezențe_${safeName}_${selectedDate || "Data"}`;
+  }, [activity, selectedDate]);
+  const title = `${activity?.name} - ${dateFormat(selectedDate, "dd-mm-yyyy")}`;
+  const headers = ["Student Name", "Arrival Time"];
 
   const handleSelectAllStudents = () => {
     if (selectedStudents.length === students.length) {
@@ -126,7 +146,6 @@ const ViewAttendance = () => {
     fetchActivity();
     fetchStudents();
     fetchCounts();
-    console.log(students);
   }, [axiosCustom, id]);
 
   useEffect(() => {
@@ -140,7 +159,7 @@ const ViewAttendance = () => {
           id,
           selectedDate
         );
-        setAttendances(attendancesData);
+        setAttendances(attendancesData || []);
       } catch (error) {
         console.error("Failed to fetch attendances data", error);
       } finally {
@@ -149,7 +168,7 @@ const ViewAttendance = () => {
     };
 
     fetchAttendances();
-  }, [selectedDate]);
+  }, [selectedDate, axiosCustom, id]);
 
   useEffect(() => {
     setSelectedStudents([]);
@@ -185,6 +204,33 @@ const ViewAttendance = () => {
                 ? "1 present student"
                 : `${attendances.length} present students`
             }`}</p>
+            <div style={{ display: "flex", gap: "10px", marginBottom: 16 }}>
+              <ExportAsExcel
+                data={exportData}
+                fileName={fileName}
+                headers={headers}
+                disabled={!exportData.length}
+              >
+                {(props) => (
+                  <button {...props} disabled={!exportData.length}>
+                    Export EXCEL
+                  </button>
+                )}
+              </ExportAsExcel>
+              <ExportAsPdf
+                data={exportData}
+                fileName={fileName}
+                title={title}
+                headers={headers}
+                disabled={!exportData.length}
+              >
+                {(props) => (
+                  <button {...props} disabled={!exportData.length}>
+                    Export PDF
+                  </button>
+                )}
+              </ExportAsPdf>
+            </div>
           </div>
 
           <div className={styles.cardContent}>

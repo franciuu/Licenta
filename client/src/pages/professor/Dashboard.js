@@ -7,7 +7,7 @@ import {
   getPersonalActivities,
   getLectures,
 } from "../../services/ActivityService";
-import { getCourses } from "../../services/CourseService";
+import { getPersonalCourses } from "../../services/CourseService";
 import useAuth from "../../hooks/useAuth";
 
 import StatsSection from "../../components/professor/StatsSection";
@@ -71,7 +71,7 @@ const Dashboard = () => {
 
     const fetchCourses = async () => {
       try {
-        const coursesData = await getCourses(axiosCustom);
+        const coursesData = await getPersonalCourses(axiosCustom);
         setCourses(coursesData);
         setSelectedCourse(coursesData[0]?.uuid);
       } catch (error) {
@@ -88,35 +88,35 @@ const Dashboard = () => {
 
   return (
     <Layout>
-      <div className="h-[calc(100vh-7.5rem)] flex flex-col bg-gray-50">
-        <div className="flex-1 grid grid-cols-12 gap-3 p-3">
-          <div className="col-span-4 grid grid-rows-2 gap-3 h-full">
+      <div className="min-h-[calc(100vh-7.5rem)] lg:h-[calc(100vh-7.5rem)] flex flex-col lg:bg-gray-50">
+        <div className="flex-1 flex flex-col lg:grid lg:grid-cols-12 gap-3 p-3">
+          <div className="flex flex-col lg:col-span-4 lg:grid lg:grid-rows-2 gap-3 lg:h-full">
             <StatsSection
               studCount={studCount}
               activCount={activCount}
               auth={auth}
-              className="row-span-1"
+              className="lg:row-span-1"
             />
             <AttendancePieChart
               selectedLecture={selectedLecture}
               setSelectedLecture={setSelectedLecture}
               lectures={lectures}
-              className="row-span-1"
+              className="lg:row-span-1"
             />
           </div>
 
-          <div className="col-span-8 grid grid-rows-2 gap-3 h-full">
+          <div className="flex flex-col lg:col-span-8 lg:grid lg:grid-rows-2 gap-3 lg:h-full">
             <WeeklyAttendanceChart
               selectedActivity={selectedActivity}
               setSelectedActivity={setSelectedActivity}
               activities={activities}
-              className="row-span-1"
+              className="lg:row-span-1"
             />
             <SeminarAttendanceChart
               selectedCourse={selectedCourse}
               setSelectedCourse={setSelectedCourse}
               courses={courses}
-              className="row-span-1"
+              className="lg:row-span-1"
             />
           </div>
         </div>

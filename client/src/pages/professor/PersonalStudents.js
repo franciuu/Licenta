@@ -61,7 +61,7 @@ const PersonalStudents = () => {
     <Layout>
       <div className="p-4 sm:p-5 h-full flex flex-col overflow-hidden">
         <div className="flex justify-between items-center mb-4 py-2">
-          <h1 className="text-2xl font-semibold text-gray-800 m-0 leading-tight self-center">
+          <h1 className="text-3xl font-bold text-gray-800 mb-2">
             Student List
           </h1>
         </div>

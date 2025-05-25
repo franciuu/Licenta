@@ -8,7 +8,7 @@ import Layout from "../Layout";
 import { createCourse } from "../../services/CourseService";
 
 const schema = Yup.object().shape({
-  name: Yup.string().required("Name is required"),
+  name: Yup.string().trim().required("Name is required"),
   program: Yup.mixed()
     .oneOf(["Bachelor", "Master"], "Invalid program")
     .required("Program level is required"),

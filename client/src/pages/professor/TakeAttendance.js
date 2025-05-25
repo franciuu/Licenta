@@ -1,8 +1,10 @@
 import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
+import { FiCameraOff, FiCamera } from "react-icons/fi";
+
+import TimeStatus from "../../components/professor/TimeStatus";
 import useAxiosCustom from "../../hooks/useAxiosCustom";
 import Layout from "../Layout";
-import style from "../../styles/TakeAttendance.module.css";
 import Loader from "../../components/Loader";
 import { getActivityById } from "../../services/ActivityService";
 
@@ -135,68 +137,110 @@ const TakeAttendance = () => {
   return (
     <Layout>
       {activity ? (
-        <div className={style.container}>
-          <div className={style.leftSection}>
-            <h1 className={style.title}>{activity.name}</h1>
-
-            <div
-              className={
-                style.timeStatus +
-                " " +
-                (timeStatus ? style.timeActive : style.timeInactive)
-              }
-            >
-              {timeStatus
-                ? "This activity is currently in progress"
-                : "You are outside the scheduled time for this activity"}
+        <div className="min-h-[calc(100vh-7.5rem)]">
+          <div className="max-w-7xl mx-auto">
+            <div className="mb-2">
+              <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
+                {activity.name}
+              </h1>
+              <TimeStatus timeStatus={timeStatus} />
             </div>
 
-            <div className={style.buttonGroup}>
-              <button
-                className={style.btn}
-                onClick={startCamera}
-                disabled={running || !timeStatus}
-              >
-                Start Attendance
-              </button>
-              <button
-                className={style.btn}
-                onClick={stopCamera}
-                disabled={!running || !timeStatus}
-              >
-                Stop Attendance
-              </button>
-            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="lg:col-span-2 space-y-6">
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <button
+                    onClick={startCamera}
+                    disabled={running || !timeStatus}
+                    className="flex-1 inline-flex items-center justify-center p-3 bg-green-600 text-white rounded-md font-medium hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  >
+                    <FiCamera className="w-5 h-5 mr-2" />
+                    Start Attendance
+                  </button>
+                  <button
+                    onClick={stopCamera}
+                    disabled={!running || !timeStatus}
+                    className="flex-1 inline-flex items-center justify-center p-3 bg-red-600 text-white rounded-md font-medium hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  >
+                    <FiCameraOff className="w-5 h-5 mr-2" />
+                    Stop Attendance
+                  </button>
+                </div>
 
-            <div className={style.videoContainer}>
-              <video
-                ref={videoRef}
-                autoPlay
-                muted
-                className={style.video}
-              ></video>
-            </div>
-          </div>
+                <div className="relative bg-gray-900 rounded-lg overflow-hidden aspect-video">
+                  <video
+                    ref={videoRef}
+                    autoPlay
+                    muted
+                    className="w-full h-full object-cover"
+                  />
+                  {!running && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75">
+                      <div className="text-center text-white">
+                        <FiCamera className="w-12 h-12 mx-auto mb-2 opacity-50" />
+                        <p className="text-sm">Camera not active</p>
+                      </div>
+                    </div>
+                  )}
+                  {running && (
+                    <div className="absolute top-4 right-4">
+                      <div className="flex items-center bg-red-600 text-white px-3 py-1 rounded-full text-sm">
+                        <div className="w-2 h-2 bg-white rounded-full mr-2 animate-pulse" />
+                        Recording
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
 
-          <div className={style.rightSection}>
-            <h3 className={style.resultTitle}>Students marked as present:</h3>
-            {presentStudents.length > 0 ? (
-              <ul className={style.studentList}>
-                {presentStudents.map((student, index) => (
-                  <li key={index} className={style.studentItem}>
-                    {student.name}
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className={style.noStudents}>
-                Marked students will appear here.
-              </p>
-            )}
+              <div className="lg:col-span-1">
+                <div className="bg-white rounded-lg shadow-sm p-6 h-fit">
+                  <div className="flex items-center mb-4">
+                    <h2 className="text-lg font-semibold text-gray-900">
+                      Present Students
+                    </h2>
+                    <span className="ml-auto bg-purple-100 text-purple-800 text-sm font-medium px-2 py-1 rounded-full">
+                      {presentStudents.length}
+                    </span>
+                  </div>
+
+                  {presentStudents.length > 0 ? (
+                    <div className="space-y-2 max-h-96 overflow-y-auto">
+                      {presentStudents.map((student, index) => (
+                        <div
+                          key={index}
+                          className="flex items-center p-3 bg-green-50 border border-green-200 rounded-md"
+                        >
+                          <div className="w-2 h-2 bg-green-500 rounded-full mr-3" />
+                          <span className="text-sm font-medium text-gray-900">
+                            {student.name}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-8">
+                      <p className="text-gray-500 text-sm">
+                        Marked students will appear here
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       ) : (
-        <p>Activity not found.</p>
+        <div className="min-h-[calc(100vh-7.5rem)] flex items-center justify-center">
+          <div className="text-center">
+            <h2 className="text-xl font-semibold text-gray-900 mb-2">
+              Activity not found
+            </h2>
+            <p className="text-gray-600">
+              The requested activity could not be loaded.
+            </p>
+          </div>
+        </div>
       )}
     </Layout>
   );
