@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import rateLimit from 'express-rate-limit';
 import db from "./config/database.js";
 import UserRoute from "./routes/UserRoute.js";
 import AuthRoute from "./routes/AuthRoute.js";
@@ -24,6 +25,18 @@ dotenv.config();
 
 const app = express();
 
+const loginLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, 
+    max: 5, 
+    message: { 
+        status: 429,
+        message: 'Too many login attempts. Please wait.',
+        remainingTime: 15 * 60 * 1000 
+    },
+    standardHeaders: true,
+    legacyHeaders: false,
+});
+
 app.use(
   cors({
     credentials: true,
@@ -39,14 +52,13 @@ app.use(cookieParser());
   try {
     await db.authenticate();
     console.log("Conexiune reușită la baza de date!");
-
-    await db.sync({ alter: true });
-    console.log("Toate tabelele au fost sincronizate.");
   } catch (error) {
     console.error("Eroare la conectarea bazei de date:", error.message);
   }
 })();
 
+// Apply rate limiter to login route
+app.use('/login', loginLimiter);
 app.use(AuthRoute);
 app.use(RefreshRoute);
 

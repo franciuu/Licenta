@@ -35,6 +35,10 @@ def augmentations(face_img):
 
 def recognize_faces(imagineStudenti):
     results = []
+
+    if imagineStudenti is None or imagineStudenti.size == 0:
+        print("Imagine invalida de intrare")
+        return results
    
     h, w = imagineStudenti.shape[:2]
     detector.setInputSize((w, h))
@@ -59,7 +63,12 @@ def recognize_faces(imagineStudenti):
     if faces is not None:
         for face in faces:
             x1, y1, w, h = list(map(int, face[:4]))
+            x1, y1 = max(0, x1), max(0, y1)
+
             face_crop = imagineStudenti[y1:y1+h, x1:x1+w]
+            if face_crop.size == 0:
+                continue
+
             face_resized = cv2.resize(face_crop, (160, 160)).astype('float32') / 255.0
             aug_imgs = augmentations(face_resized)
 

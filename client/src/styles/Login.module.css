@@ -70,10 +70,11 @@
 .right {
   width: 50%;
   background-color: var(--white);
-  padding: clamp(1.5rem, 5vw, 2.5rem);
+  padding: 4rem 2.5rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  box-sizing: border-box;
 }
 
 .headerDiv {
@@ -86,7 +87,6 @@
 .logo {
   width: clamp(60px, 15vw, 80px);
   height: auto;
-  margin-bottom: 1rem;
   transition: transform var(--transition);
 }
 
@@ -160,6 +160,14 @@
   margin-bottom: 0;
 }
 
+.errorMessageContainer {
+  min-height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
 .errorMessage {
   color: var(--error);
   font-size: 0.85rem;
@@ -168,6 +176,17 @@
   padding: 0.75rem;
   border-radius: var(--radius);
   margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.countdown {
+  font-weight: 600;
+  color: var(--primary-purple);
+  background-color: rgba(142, 68, 173, 0.1);
+  padding: 0.5rem;
+  border-radius: var(--radius);
 }
 
 .btn {

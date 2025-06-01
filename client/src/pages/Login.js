@@ -19,6 +19,9 @@ const loginSchema = Yup.object().shape({
   password: Yup.string().required("Password is required"),
 });
 
+const LOCKOUT_KEY = "loginLockoutExpiry";
+const LOCKOUT_MSG = "Too many login attempts. Please wait.";
+
 const Login = () => {
   const { setAuth, persist, setPersist } = useAuth();
   const navigate = useNavigate();
@@ -26,6 +29,7 @@ const Login = () => {
   const from = location.state?.from?.pathname || "/";
 
   const [error, setError] = useState(null);
+  const [countdown, setCountdown] = useState(0);
   const redirectByRole = {
     admin: "/admin/users",
     professor: "/professor/dashboard",
@@ -39,7 +43,51 @@ const Login = () => {
     resolver: yupResolver(loginSchema),
   });
 
+  useEffect(() => {
+    const expiry = localStorage.getItem(LOCKOUT_KEY);
+    if (expiry) {
+      const diff = Math.floor((Number(expiry) - Date.now()) / 1000);
+      if (diff > 0) {
+        setCountdown(diff);
+        setError(LOCKOUT_MSG);
+      } else {
+        localStorage.removeItem(LOCKOUT_KEY);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    let timer;
+    if (countdown > 0) {
+      timer = setInterval(() => {
+        setCountdown((prev) => {
+          if (prev <= 1) {
+            localStorage.removeItem(LOCKOUT_KEY);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    } else if (countdown === 0 && error && error.includes('Too many login attempts')) {
+      setError(null);
+    }
+    return () => clearInterval(timer);
+  }, [countdown, error]);
+
+  const formatTime = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+  };
+
   const onSubmit = async (data) => {
+    const expiry = localStorage.getItem(LOCKOUT_KEY);
+    if (expiry && Number(expiry) > Date.now()) {
+      const diff = Math.floor((Number(expiry) - Date.now()) / 1000);
+      setCountdown(diff);
+      setError(LOCKOUT_MSG);
+      return;
+    }
     setError(null);
     try {
       const response = await axios.post(
@@ -53,19 +101,21 @@ const Login = () => {
           withCredentials: true,
         }
       );
-      const accessToken = response?.data?.accessToken;
-      const role = response?.data?.role;
-      const name = response?.data?.name;
+      const accessToken = response?.data?.data?.accessToken;
+      const role = response?.data?.data?.role;
+      const name = response?.data?.data?.name;
       setAuth({ email: data.email, name, role, accessToken });
       navigate(redirectByRole[role] || from, { replace: true });
     } catch (error) {
       if (!error?.response) {
-        console.log(error.response);
         setError("Server is not responding. Please try again later.");
-      } else if (
-        error.response.status === 401 ||
-        error.response.status === 404
-      ) {
+      } else if (error.response.status === 429) {
+        const waitTime = Math.ceil(error.response.data.remainingTime / 1000);
+        setCountdown(waitTime);
+        setError(error.response.data.message);
+        const expiry = Date.now() + waitTime * 1000;
+        localStorage.setItem(LOCKOUT_KEY, expiry.toString());
+      } else if (error.response.status === 401 || error.response.status === 404) {
         setError("Invalid username or password.");
       } else {
         setError("An unexpected error occurred. Please try again later.");
@@ -102,7 +152,18 @@ const Login = () => {
             <h2 className={style.welcomeText}>Welcome back!</h2>
           </div>
 
-          {error && <div className={style.errorMessage}>{error}</div>}
+          <div className={style.errorMessageContainer}>
+            {error && (
+              <div className={style.errorMessage}>
+                {error}
+                {countdown > 0 && (
+                  <div className={style.countdown}>
+                    Time remaining: {formatTime(countdown)}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
 
           <form onSubmit={handleSubmit(onSubmit)} className={style.form}>
             <div className={style.inputDiv}>
@@ -119,6 +180,7 @@ const Login = () => {
                   autoComplete="off"
                   className={style.inputField}
                   aria-invalid={errors.email ? "true" : "false"}
+                  disabled={countdown > 0}
                 />
               </div>
               {errors.email && (
@@ -142,6 +204,7 @@ const Login = () => {
                   className={style.inputField}
                   autoComplete="off"
                   aria-invalid={errors.password ? "true" : "false"}
+                  disabled={countdown > 0}
                 />
               </div>
               {errors.password && (
@@ -153,14 +216,14 @@ const Login = () => {
 
             <button
               type="submit"
-              disabled={isSubmitting}
+              disabled={isSubmitting || countdown > 0}
               className={style.btn}
               aria-busy={isSubmitting}
             >
               <span className={style.loginText}>
-                {isSubmitting ? "Logging in..." : "Login"}
+                {isSubmitting ? "Logging in..." : countdown > 0 ? "Please wait..." : "Login"}
               </span>
-              {!isSubmitting && (
+              {!isSubmitting && countdown === 0 && (
                 <FaLongArrowAltRight className={style.btnIcon} />
               )}
             </button>
@@ -171,6 +234,7 @@ const Login = () => {
                 id="persist"
                 onChange={handleCheck}
                 checked={persist}
+                disabled={countdown > 0}
               />
               <label htmlFor="persist">Trust this device</label>
             </div>

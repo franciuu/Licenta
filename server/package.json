@@ -21,6 +21,7 @@
     "date-fns": "^4.1.0",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "express-rate-limit": "^7.5.0",
     "express-session": "^1.18.1",
     "filepond": "^4.32.7",
     "filepond-plugin-image-preview": "^4.6.12",

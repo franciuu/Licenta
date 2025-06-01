@@ -6,49 +6,74 @@ import dotenv from "dotenv";
 dotenv.config();
 
 export const login = async (req, res) => {
-  const user = await User.findOne({
-    where: {
-      email: req.body.email,
-    },
-  });
-  if (!user) {
-    return res.status(404).json({ msg: "User not found" });
-  }
-
-  const match = await argon2.verify(user.password, req.body.password);
-  if (!match) return res.status(401).json({ msg: "Wrong Password" });
-  const name = user.name;
-  const role = user.role;
-  const accessToken = jwt.sign(
-    {
-      UserInfo: {
-        userId: user.uuid,
-        role: role,
+  try {
+    const user = await User.findOne({
+      where: {
+        email: req.body.email,
       },
-    },
-    process.env.ACCESS_TOKEN_SECRET,
-    {
-      expiresIn: "30s",
+    });
+    
+    if (!user) {
+      return res.status(404).json({ 
+        status: 404,
+        message: "User not found" 
+      });
     }
-  );
-  const refreshToken = jwt.sign(
-    { userId: user.uuid },
-    process.env.REFRESH_TOKEN_SECRET,
-    {
-      expiresIn: "1d",
+
+    const match = await argon2.verify(user.password, req.body.password);
+    if (!match) {
+      return res.status(401).json({ 
+        status: 401,
+        message: "Incorrect password" 
+      });
     }
-  );
-  await User.update(
-    { refreshToken: refreshToken },
-    { where: { email: req.body.email } }
-  );
-  res.cookie("jwt", refreshToken, {
-    httpOnly: true,
-    maxAge: 24 * 60 * 60 * 1000,
-    sameSite: "None",
-    secure: true,
-  });
-  res.status(200).json({ name, role, accessToken });
+
+    const name = user.name;
+    const role = user.role;
+    const accessToken = jwt.sign(
+      {
+        UserInfo: {
+          userId: user.uuid,
+          role: role,
+        },
+      },
+      process.env.ACCESS_TOKEN_SECRET,
+      {
+        expiresIn: "30s",
+      }
+    );
+    const refreshToken = jwt.sign(
+      { userId: user.uuid },
+      process.env.REFRESH_TOKEN_SECRET,
+      {
+        expiresIn: "1d",
+      }
+    );
+
+    await User.update(
+      { refreshToken: refreshToken },
+      { where: { email: req.body.email } }
+    );
+
+    res.cookie("jwt", refreshToken, {
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000,
+      sameSite: "None",
+      secure: true,
+    });
+
+    res.status(200).json({ 
+      status: 200,
+      message: "Login successful",
+      data: { name, role, accessToken } 
+    });
+  } catch (error) {
+    console.error('Login error:', error);
+    res.status(500).json({ 
+      status: 500,
+      message: "Login error. Please try again." 
+    });
+  }
 };
 
 export const logout = async (req, res) => {
