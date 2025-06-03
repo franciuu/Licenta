@@ -6,53 +6,30 @@ import { parseISO, isBefore, isAfter, addDays, format } from "date-fns";
 
 export async function validateAcademicYearInput({ name, startDate, endDate }) {
   if (!name) {
-    return {
-      code: 400,
-      message: "The name of the academic year is mandatory.",
-    };
+    return { code: 400, message: "The name of the academic year is mandatory."};
   }
   if (!startDate || !endDate) {
-    return {
-      code: 400,
-      message: "Both dates must be specified.",
-    };
+    return { code: 400, message: "Both dates must be specified."};
   }
   if (!isBefore(parseISO(startDate), parseISO(endDate)))
-    return {
-      code: 400,
-      message: "The start date must be before the end date.",
-    };
+    return { code: 400, message: "The start date must be before the end date."};
 
   const existing = await AcademicYear.findOne({ where: { name } });
   if (existing) {
-    return {
-      code: 400,
-      message: "There is already an academic year with this name.",
-    };
+    return { code: 400, message: "There is already an academic year with this name."};
   }
 
   const overlaping = await AcademicYear.findOne({
     where: {
       [Op.or]: [
-        {
-          startDate: { [Op.between]: [startDate, endDate] },
-        },
-        {
-          endDate: { [Op.between]: [startDate, endDate] },
-        },
-        {
-          startDate: { [Op.lte]: startDate },
-          endDate: { [Op.gte]: endDate },
-        },
+        {startDate: { [Op.between]: [startDate, endDate] }},
+        {endDate: { [Op.between]: [startDate, endDate] }},
+        {startDate: { [Op.lte]: startDate }, endDate: { [Op.gte]: endDate }},
       ],
     },
   });
   if (overlaping) {
-    return {
-      code: 409,
-      message:
-        "The academic year interval overlaps with another existing academic year.",
-    };
+    return {code: 409, message: "The academic year interval overlaps with another existing academic year."};
   }
   return null;
 }

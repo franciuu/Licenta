@@ -5,6 +5,7 @@ import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import useAxiosCustom from "../../hooks/useAxiosCustom";
+import useCloudinaryUpload from "../../hooks/useCloudinaryUpload";
 import Layout from "../Layout";
 import { createStudent } from "../../services/StudentService";
 import Uploader from "../../components/admin/Uploader";
@@ -26,6 +27,7 @@ const schema = Yup.object().shape({
 const AddStudent = () => {
   const navigate = useNavigate();
   const axiosCustom = useAxiosCustom();
+  const { uploadImage } = useCloudinaryUpload();
   const [files, setFiles] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -39,44 +41,30 @@ const AddStudent = () => {
   });
 
   const uploadImages = async (files) => {
-    const { data } = await axiosCustom.get("/cloudinary-signature");
-    const uploaded = [];
-
-    for (const pondFile of files) {
-      const file = pondFile.file;
-      if (!file) continue;
-
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("api_key", data.api_key);
-      formData.append("timestamp", data.timestamp);
-      formData.append("signature", data.signature);
-      formData.append("folder", data.folder);
-
-      const response = await fetch(
-        `https://api.cloudinary.com/v1_1/${data.cloud_name}/image/upload`,
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-
-      const fileData = await response.json();
-      uploaded.push(fileData.secure_url);
+    try {
+      const uploaded = await uploadImage(files);
+      if (!uploaded || uploaded.length === 0) {
+        throw new Error("No images were successfully uploaded");
+      }
+      return uploaded;
+    } catch (error) {
+      console.error("Error uploading files:", error);
+      throw new Error(`Failed to upload images: ${error.message}`);
     }
-
-    return uploaded;
   };
 
   const addStudent = async (formData) => {
     try {
       setLoading(true);
       const imageUrls = await uploadImages(files);
+      if (!imageUrls || imageUrls.length === 0) {
+        throw new Error("No images were uploaded");
+      }
       await createStudent(axiosCustom, formData, imageUrls);
       navigate("/admin/students");
     } catch (error) {
-      setError(error.response?.data?.msg);
-      console.error("Failed to create user", error);
+      setError(error.message || "Failed to create student");
+      console.error("Failed to create student:", error);
     } finally {
       setLoading(false);
     }

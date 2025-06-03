@@ -3,9 +3,14 @@ import { FilePond, registerPlugin } from "react-filepond";
 import "filepond/dist/filepond.min.css";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
+import FilePondPluginFileValidateSize from "filepond-plugin-file-validate-size";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 
-registerPlugin(FilePondPluginImagePreview, FilePondPluginFileValidateType);
+registerPlugin(
+  FilePondPluginImagePreview,
+  FilePondPluginFileValidateType,
+  FilePondPluginFileValidateSize
+);
 
 const Uploader = ({ files, setFiles, initialUrls }) => {
   useEffect(() => {
@@ -17,7 +22,6 @@ const Uploader = ({ files, setFiles, initialUrls }) => {
         },
       }));
       setFiles(prepared);
-      console.log(prepared);
     }
   }, [initialUrls]);
 
@@ -37,9 +41,10 @@ const Uploader = ({ files, setFiles, initialUrls }) => {
       required={true}
       credits={false}
       maxFiles={10}
-      acceptedFileTypes={["image/*"]}
-      labelFileTypeNotAllowed="Doar imagini sunt permise"
-      labelIdle="Drag & Drop or Search"
+      maxFileSize="5MB"
+      acceptedFileTypes={["image/jpeg", "image/jpg"]}
+      labelFileTypeNotAllowed="Only JPG/JPEG files are allowed"
+      labelMaxFileSize="The maximum allowed size is 5MB"
     />
   );
 };

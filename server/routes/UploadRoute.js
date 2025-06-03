@@ -1,5 +1,5 @@
 import express from "express";
-import { generateSignedUrl } from "../controllers/CloudinaryController.js";
+import { generateSignedUrl, uploadFiles } from "../controllers/CloudinaryController.js";
 import { verifyRoles } from "../middlewares/verifyRole.js";
 import ROLES_LIST from "../config/rolesList.js";
 
@@ -9,6 +9,12 @@ router.get(
   "/cloudinary-signature",
   verifyRoles(ROLES_LIST[0]),
   generateSignedUrl
+);
+
+router.post(
+  "/upload",
+  verifyRoles(ROLES_LIST[0]),
+  uploadFiles
 );
 
 export default router;

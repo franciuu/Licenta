@@ -1,41 +1,33 @@
-import { useState } from "react";
-import axios from "axios";
-import { axiosCustom } from "../api/axios";
+import useAxiosCustom from "./useAxiosCustom";
 
 const useCloudinaryUpload = () => {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const axiosCustom = useAxiosCustom();
 
-  const uploadImage = async (file) => {
+  const uploadImage = async (files) => {
     try {
-      setLoading(true);
-      const tokenResponse = await axiosCustom.get("/generate-upload-token");
-      const { timestamp, signature, cloudName, apiKey, folder } =
-        tokenResponse.data;
-
       const formData = new FormData();
-      formData.append("file", file);
-      formData.append("api_key", apiKey);
-      formData.append("timestamp", timestamp);
-      formData.append("signature", signature);
-      formData.append("folder", folder);
+      files.forEach((file) => {
+        formData.append("files", file.file);
+      });
 
-      const uploadResponse = await axios.post(
-        `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
-        formData
-      );
+      const response = await axiosCustom.post("/upload", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
-      setLoading(false);
-      return uploadResponse.data.secure_url;
-    } catch (err) {
-      console.error("Cloudinary Upload Error:", err);
-      setError("Upload failed.");
-      setLoading(false);
-      return null;
+      if (!response.data.urls || response.data.urls.length === 0) {
+        throw new Error("No URLs returned from upload");
+      }
+
+      return response.data.urls;
+    } catch (error) {
+      console.error("Upload error:", error);
+      throw new Error(error.response?.data?.msg || "Upload failed");
     }
   };
 
-  return { uploadImage, loading, error };
+  return { uploadImage };
 };
 
 export default useCloudinaryUpload;

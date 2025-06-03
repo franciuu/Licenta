@@ -5,6 +5,7 @@ import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import useAxiosCustom from "../../hooks/useAxiosCustom";
+import useCloudinaryUpload from "../../hooks/useCloudinaryUpload";
 import { updateStudent, getStudentById } from "../../services/StudentService";
 import Layout from "../Layout";
 import Uploader from "../../components/admin/Uploader";
@@ -27,6 +28,7 @@ const EditStudent = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const axiosCustom = useAxiosCustom();
+  const { uploadImage } = useCloudinaryUpload();
   const [files, setFiles] = useState([]);
   const [initialUrls, setInitialUrls] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -61,51 +63,41 @@ const EditStudent = () => {
   }, [id, reset, axiosCustom]);
 
   const uploadImages = async (files) => {
-    const { data } = await axiosCustom.get("/cloudinary-signature");
-    const uploaded = [];
-
-    for (const pondFile of files) {
-      const file = pondFile.file;
-      if (!file) continue;
-
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("api_key", data.api_key);
-      formData.append("timestamp", data.timestamp);
-      formData.append("signature", data.signature);
-      formData.append("folder", data.folder);
-
-      const response = await fetch(
-        `https://api.cloudinary.com/v1_1/${data.cloud_name}/image/upload`,
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-
-      const fileData = await response.json();
-      uploaded.push(fileData.secure_url);
+    try {
+      const uploaded = await uploadImage(files);
+      if (!uploaded || uploaded.length === 0) {
+        throw new Error("No images were successfully uploaded");
+      }
+      return uploaded;
+    } catch (error) {
+      console.error("Error uploading files:", error);
+      throw new Error(`Failed to upload images: ${error.message}`);
     }
-
-    return uploaded;
   };
 
   const onSubmit = async (formData) => {
-    const existingUrls = files
-      .filter(
-        (f) => typeof f.source === "string" && f.source.startsWith("http")
-      )
-      .map((f) => f.source);
-    const deletedImages = initialUrls.filter(
-      (url) => !existingUrls.includes(url)
-    );
-    const newFiles = files.filter(
-      (f) => f?.file && !existingUrls.includes(f.source)
-    );
-    const uploaded = await uploadImages(newFiles);
-
     try {
       setLoading(true);
+      const existingUrls = files
+        .filter(
+          (f) => typeof f.source === "string" && f.source.startsWith("http")
+        )
+        .map((f) => f.source);
+      const deletedImages = initialUrls.filter(
+        (url) => !existingUrls.includes(url)
+      );
+      const newFiles = files.filter(
+        (f) => f?.file && !existingUrls.includes(f.source)
+      );
+
+      let uploaded = [];
+      if (newFiles.length > 0) {
+        uploaded = await uploadImages(newFiles);
+        if (!uploaded || uploaded.length === 0) {
+          throw new Error("No new images were uploaded");
+        }
+      }
+
       await updateStudent(axiosCustom, id, {
         ...formData,
         uploadedImages: uploaded,
@@ -113,8 +105,8 @@ const EditStudent = () => {
       });
       navigate("/admin/students");
     } catch (err) {
-      console.log(err);
-      setError(err.response?.data?.msg || "An unexpected error occurred");
+      console.error(err);
+      setError(err.message || "An unexpected error occurred");
     } finally {
       setLoading(false);
     }
