@@ -48,3 +48,18 @@ export async function sendSummaryEmail(profEmail, profName, activity, summary) {
 
   return transporter.sendMail(mailOptions);
 }
+
+export async function sendPasswordResetEmail(to, name, resetUrl) {
+  const mailOptions = {
+    from: process.env.MAIL_BOT,
+    to,
+    subject: `Resetare parolă Vision Roster`,
+    html: `<p>Bună, ${name}!</p>
+      <p>Ai cerut resetarea parolei. Pentru a seta o parolă nouă, apasă pe linkul de mai jos:</p>
+      <p><a href="${resetUrl}">${resetUrl}</a></p>
+      <p>Dacă nu ai cerut tu acest lucru, ignoră acest email.</p>
+      <p>Linkul este valabil 1 oră.</p>
+      <p>Cu stimă,<br>Echipa Vision Roster</p>`,
+  };
+  return transporter.sendMail(mailOptions);
+}

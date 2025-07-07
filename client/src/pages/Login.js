@@ -241,9 +241,16 @@ const Login = () => {
 
             <div className={style.forgotPassword}>
               Forgot your password?
-              <a href="#reset-password" className={style.forgotPasswordLink}>
+              <span
+                className={style.forgotPasswordLink}
+                onClick={() => navigate("/forgot-password")}
+                style={{ cursor: "pointer" }}
+                tabIndex={0}
+                role="button"
+                onKeyDown={e => { if (e.key === "Enter") navigate("/forgot-password"); }}
+              >
                 Click Here
-              </a>
+              </span>
             </div>
           </form>
         </div>

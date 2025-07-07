@@ -5,7 +5,6 @@ const useCloudinaryUpload = () => {
 
   const uploadImage = async (files) => {
     try {
-      // First get the signature
       const signatureResponse = await axiosCustom.get("/cloudinary-signature");
       const { timestamp, signature, api_key, folder, upload_preset } = signatureResponse.data;
 

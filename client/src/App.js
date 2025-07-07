@@ -2,6 +2,8 @@ import Login from "./pages/Login.js";
 import Unauthorized from "./pages/Unauthorized.js";
 import NotFound from "./pages/NotFound.js";
 import Page404 from "./pages/404.js";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 import Users from "./pages/admin/Users.js";
 import AddUser from "./pages/admin/AddUser.js";
@@ -37,6 +39,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />}></Route>
         <Route path="/unauthorized" element={<Unauthorized />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
 
         <Route element={<PersistLogin />}>
           <Route

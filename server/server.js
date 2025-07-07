@@ -17,6 +17,7 @@ import EnrollmentRoute from "./routes/EnrollmentRoute.js";
 import AcademicYearRoute from "./routes/AcademicYearRoute.js";
 import MailRoute from "./routes/MailRoute.js";
 import RoomRoute from "./routes/RoomRoute.js";
+import passwordResetRoute from "./routes/PasswordResetRoute.js";
 
 import "./models/index.js";
 import { verifyJWT } from "./middlewares/verifyJWT.js";
@@ -56,8 +57,7 @@ app.use(cookieParser());
     console.error("Eroare la conectarea bazei de date:", error.message);
   }
 })();
-
-// Apply rate limiter to login route
+app.use("/password-reset", passwordResetRoute);
 app.use('/login', loginLimiter);
 app.use(AuthRoute);
 app.use(RefreshRoute);
