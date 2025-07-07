@@ -80,6 +80,37 @@ const AttendanceDisplay = ({
     }
   };
 
+  const handleExport = async (type, exportFunc) => {
+    const result = await Swal.fire({
+      title: `Export as ${type}?`,
+      text: `Do you want to export the attendance as ${type}?`,
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: `Yes, export ${type}`,
+      cancelButtonText: "Cancel",
+      width: 350, 
+      customClass: {
+        popup: 'swal2-compact',
+      },
+    });
+    if (result.isConfirmed) {
+      exportFunc();
+      await Swal.fire({
+        title: "Exported!",
+        text: `Attendance exported as ${type}.`,
+        icon: "success",
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        showConfirmButton: true,
+        confirmButtonText: "Close",
+        width: 350,
+        customClass: {
+          popup: 'swal2-compact',
+        },
+      });
+    }
+  };
+
   return (
     <div className="bg-white rounded-lg shadow-sm">
       <div className="p-4 border-b border-gray-100">
@@ -104,16 +135,23 @@ const AttendanceDisplay = ({
               headers={headers}
               disabled={!exportData.length}
             >
-              {(props) => (
-                <button
-                  {...props}
-                  disabled={!exportData.length}
-                  className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-md text-sm font-medium hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                >
-                  <FaFileAlt className="w-4 h-4 mr-2"></FaFileAlt>
-                  Export EXCEL
-                </button>
-              )}
+              {(props) => {
+                const { onClick, ...rest } = props;
+                return (
+                  <button
+                    {...rest}
+                    disabled={!exportData.length}
+                    className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-md text-sm font-medium hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    onClick={async (e) => {
+                      e.preventDefault();
+                      await handleExport("Excel", () => onClick && onClick(e));
+                    }}
+                  >
+                    <FaFileAlt className="w-4 h-4 mr-2"></FaFileAlt>
+                    Export EXCEL
+                  </button>
+                );
+              }}
             </ExportAsExcel>
             <ExportAsPdf
               data={exportData}
@@ -122,16 +160,23 @@ const AttendanceDisplay = ({
               headers={headers}
               disabled={!exportData.length}
             >
-              {(props) => (
-                <button
-                  {...props}
-                  disabled={!exportData.length}
-                  className="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-md text-sm font-medium hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                >
-                  <FaFileDownload className="w-4 h-4 mr-2"></FaFileDownload>
-                  Export PDF
-                </button>
-              )}
+              {(props) => {
+                const { onClick, ...rest } = props;
+                return (
+                  <button
+                    {...rest}
+                    disabled={!exportData.length}
+                    className="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-md text-sm font-medium hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    onClick={async (e) => {
+                      e.preventDefault();
+                      await handleExport("PDF", () => onClick && onClick(e));
+                    }}
+                  >
+                    <FaFileDownload className="w-4 h-4 mr-2"></FaFileDownload>
+                    Export PDF
+                  </button>
+                );
+              }}
             </ExportAsPdf>
           </div>
         </div>

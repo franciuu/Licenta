@@ -370,3 +370,8 @@ html {
 .filepond--image-preview-overlay {
   opacity: 0.8;
 }
+
+.swal2-compact {
+  padding: 1.2em 1.2em 1.2em 1.2em !important;
+  font-size: 0.95rem !important;
+}
