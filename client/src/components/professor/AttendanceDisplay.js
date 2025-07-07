@@ -3,9 +3,10 @@ import dateFormat from "dateformat";
 import { FaFileAlt, FaFileDownload } from "react-icons/fa";
 import { FiCheck, FiAlertCircle } from "react-icons/fi";
 import { ExportAsExcel, ExportAsPdf } from "@siamf/react-export";
+import Swal from "sweetalert2";
 
 import useAxiosCustom from "../../hooks/useAxiosCustom";
-import { getAttendancesByActivityAndDate } from "../../services/AttendanceService";
+import { getAttendancesByActivityAndDate, deleteAttendance } from "../../services/AttendanceService";
 
 const AttendanceDisplay = ({
   activityId,
@@ -58,6 +59,26 @@ const AttendanceDisplay = ({
 
     fetchAttendances();
   }, [selectedDate, axiosCustom, activityId]);
+
+  const handleDelete = async (uuid) => {
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "Do you want to delete this student's attendance?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
+    });
+    if (result.isConfirmed) {
+      try {
+        await deleteAttendance(axiosCustom, uuid);
+        setAttendances(attendances.filter((a) => a.uuid !== uuid));
+        Swal.fire("Deleted!", "Attendance has been deleted.", "success");
+      } catch (error) {
+        Swal.fire("Error!", "Could not delete attendance.", "error");
+      }
+    }
+  };
 
   return (
     <div className="bg-white rounded-lg shadow-sm">
@@ -153,12 +174,16 @@ const AttendanceDisplay = ({
                   <div className="space-y-2 max-h-[240px] overflow-y-auto">
                     {attendances.map((student, index) => (
                       <div
-                        key={index}
+                        key={student.uuid}
                         className="flex items-start p-2 bg-green-50 border border-green-100 rounded-md"
                       >
                         <FiCheck className="w-5 h-5 text-green-500 mr-2 mt-0.5" />
                         <div>
-                          <div className="font-medium text-gray-900">
+                          <div
+                            className="font-medium text-gray-900 cursor-pointer hover:underline"
+                            onClick={() => handleDelete(student.uuid)}
+                            title="Click to delete attendance"
+                          >
                             {student.name}
                           </div>
                           <div className="text-sm text-gray-600">{`Arrival Time: ${student.arrivalTime}`}</div>

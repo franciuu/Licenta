@@ -51,3 +51,11 @@ export const getSeminarAttendancePercentageForCourse = async (
     throw error;
   }
 };
+
+export const deleteAttendance = async (axiosCustom, uuid) => {
+  try {
+    await axiosCustom.delete(`/attendances/${uuid}`);
+  } catch (error) {
+    throw error;
+  }
+};

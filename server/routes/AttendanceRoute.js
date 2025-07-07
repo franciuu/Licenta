@@ -5,6 +5,7 @@ import {
   getAttendancePercentageForLecture,
   getSeminarAttendancePercentageForCourse,
   getAttendanceCount,
+  deleteAttendance,
 } from "../controllers/AttendancesController.js";
 import { verifyRoles } from "../middlewares/verifyRole.js";
 import ROLES_LIST from "../config/rolesList.js";
@@ -35,6 +36,11 @@ router.get(
   "/attendances/counts/:id",
   verifyRoles(ROLES_LIST[1]),
   getAttendanceCount
+);
+router.delete(
+  "/attendances/:uuid",
+  verifyRoles(ROLES_LIST[1]),
+  deleteAttendance
 );
 
 export default router;
