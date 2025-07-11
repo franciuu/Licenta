@@ -27,6 +27,7 @@ export const getActivityAttendances = async (req, res) => {
 
     if (response) {
       const formatted = response.map((e) => ({
+        uuid: e.uuid,
         name: e.student?.name,
         date: e.date,
         arrivalTime: e.arrivalTime,
@@ -217,6 +218,20 @@ export const getAttendanceCount = async (req, res) => {
       countsByStudent[row.idStudent] = row.count;
     });
     res.status(200).json(countsByStudent);
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
+};
+
+export const deleteAttendance = async (req, res) => {
+  try {
+    const { uuid } = req.params;
+    const attendance = await Attendance.findByPk(uuid);
+    if (!attendance) {
+      return res.status(404).json({ msg: "Attendance not found" });
+    }
+    await attendance.destroy();
+    res.status(200).json({ msg: "Attendance deleted successfully" });
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }
