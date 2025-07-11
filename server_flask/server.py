@@ -13,7 +13,7 @@ CORS(app)
 def trigger_embedding_generation():
     try:
         generate_all_embeddings()
-        return jsonify({"message": "✅ Embeddingurile au fost generate cu succes."}), 200
+        return jsonify({"message": "Embeddingurile au fost generate cu succes."}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 

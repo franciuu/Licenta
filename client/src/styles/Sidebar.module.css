@@ -72,7 +72,6 @@
 .itemText.active {
   background: rgba(255, 255, 255, 0.2);
   color: white;
-  font-weight: 500;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
@@ -92,17 +91,18 @@
 }
 
 .label {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
+  word-break: break-word;
 }
 
 .activitiesContainer {
   display: flex;
   flex-direction: column;
   flex: 1;
-  max-height: calc(100vh - 250px); /* adaugă această linie */
-  overflow: hidden; /* adaugă această linie */
+  max-height: calc(100vh - 250px); 
+  overflow: hidden;
 }
 
 .activitiesSection {
@@ -160,6 +160,26 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.searchBar {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  font-size: 0.85rem;
+  outline: none;
+  transition: border 0.2s, background 0.2s;
+}
+.searchBar::placeholder {
+  color: rgba(255,255,255,0.6);
+  font-size: 0.93rem;
+}
+.searchBar:focus {
+  border: 1.5px solid #fff;
+  background: rgba(255,255,255,0.22);
 }
 
 @media (max-width: 768px) {

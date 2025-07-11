@@ -11,7 +11,7 @@ import ROLES_LIST from "../config/rolesList.js";
 
 const router = express.Router();
 router.get("/academic-years", verifyRoles(ROLES_LIST[0]), getAcademicYears);
-router.get("/semesters", verifyRoles(ROLES_LIST[0]), getSemesters);
+router.get("/semesters", verifyRoles(ROLES_LIST[0], ROLES_LIST[1]), getSemesters);
 router.post("/academic-years", verifyRoles(ROLES_LIST[0]), createAcademicYear);
 router.post("/semesters", verifyRoles(ROLES_LIST[0]), createSemester);
 router.post("/periods", verifyRoles(ROLES_LIST[0]), createPeriod);

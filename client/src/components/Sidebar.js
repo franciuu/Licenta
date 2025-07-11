@@ -8,7 +8,6 @@ import {
   FaUsers,
   FaChalkboardTeacher,
   FaCalendarAlt,
-  FaUniversity,
 } from "react-icons/fa";
 import { IoSettingsSharp } from "react-icons/io5";
 import { Avatar } from "@chakra-ui/react";
@@ -16,9 +15,12 @@ import style from "../styles/Sidebar.module.css";
 import useAuth from "../hooks/useAuth";
 import useAxiosCustom from "../hooks/useAxiosCustom";
 import { getPersonalActivities } from "../services/ActivityService";
+import { getSemesters } from "../services/AcademicYearService";
 
 const Sidebar = () => {
   const [activities, setActivities] = useState([]);
+  const [searchYear, setSearchYear] = useState("");
+  const [semesterYearMap, setSemesterYearMap] = useState({});
   const axiosCustom = useAxiosCustom();
   const { auth } = useAuth();
 
@@ -31,11 +33,31 @@ const Sidebar = () => {
         console.error("Failed to fetch activities data:", error);
       }
     };
-
+    const fetchSemesters = async () => {
+      try {
+        const semesters = await getSemesters(axiosCustom);
+        const map = {};
+        semesters.forEach((s) => {
+          map[s.uuid] = s.academic_year?.name || "";
+        });
+        setSemesterYearMap(map);
+      } catch (error) {
+        console.error("Failed to fetch semesters:", error);
+      }
+    };
     if (auth.role === "professor") {
       getActivities();
+      fetchSemesters();
     }
   }, [axiosCustom, auth.role]);
+
+  const filteredActivities = searchYear
+    ? activities.filter((a) =>
+        (semesterYearMap[a.idSemester] || "")
+          .toLowerCase()
+          .includes(searchYear.toLowerCase())
+      )
+    : activities;
 
   return (
     <aside className={style.sidebar}>
@@ -152,9 +174,18 @@ const Sidebar = () => {
       {auth.role === "professor" && (
         <div className={style.activitiesContainer}>
           <p className={style.menuTitle}>MY ACTIVITIES</p>
+          <div style={{ padding: '0 1rem 0.5rem 1rem' }}>
+            <input
+              type="text"
+              placeholder="Search year (e.g. 2025-2026)"
+              value={searchYear}
+              onChange={(e) => setSearchYear(e.target.value)}
+              className={style.searchBar}
+            />
+          </div>
           <div className={style.activitiesSection}>
             <ul className={style.sidebarMenu}>
-              {activities.map((a) => (
+              {filteredActivities.map((a) => (
                 <li key={a.uuid} className={style.sidebarItem}>
                   <NavLink
                     to={`/professor/activities/${a.uuid}`}
