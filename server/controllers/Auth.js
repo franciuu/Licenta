@@ -51,7 +51,7 @@ export const login = async (req, res) => {
 };
 
 export const logout = async (req, res) => {
-  console.log("Cookies received:", req.cookies); // Vezi ce primește backend-ul
+  console.log("Cookies received:", req.cookies);
 
   const cookies = req.cookies;
   if (!cookies?.jwt) {

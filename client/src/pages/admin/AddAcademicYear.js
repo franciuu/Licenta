@@ -317,7 +317,6 @@ const AddAcademicYear = () => {
                 </div>
               </div>
 
-              {/* Second Semester */}
               <div className="bg-white/50 rounded-md p-4 border border-purple-500/20">
                 <h4 className="text-base text-purple-600 mb-3 font-medium">
                   Second Semester

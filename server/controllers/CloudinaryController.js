@@ -9,13 +9,13 @@ const upload = multer({
     fileSize: 5 * 1024 * 1024, // 5MB
   },
   fileFilter: (req, file, cb) => {
-    if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/jpg') {
+    if (file.mimetype === "image/jpeg" || file.mimetype === "image/jpg") {
       cb(null, true);
     } else {
-      cb(new Error('Only JPG/JPEG files are allowed'), false);
+      cb(new Error("Only JPG/JPEG files are allowed"), false);
     }
-  }
-}).array('files', 10); 
+  },
+}).array("files", 10);
 
 export const generateSignedUrl = async (req, res) => {
   try {
@@ -24,7 +24,7 @@ export const generateSignedUrl = async (req, res) => {
       {
         timestamp: timestamp,
         folder: "students",
-        upload_preset: "only_jpeg_5mb"
+        upload_preset: "only_jpeg_5mb",
       },
       process.env.CLOUDINARY_API_SECRET
     );
@@ -35,7 +35,7 @@ export const generateSignedUrl = async (req, res) => {
       cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
       api_key: process.env.CLOUDINARY_API_KEY,
       folder: "students",
-      upload_preset: "only_jpeg_5mb"
+      upload_preset: "only_jpeg_5mb",
     });
   } catch (error) {
     console.error("Error generating signature:", error);
@@ -45,7 +45,7 @@ export const generateSignedUrl = async (req, res) => {
 
 export const uploadFiles = async (req, res) => {
   try {
-    upload(req, res, async function(err) {
+    upload(req, res, async function (err) {
       if (err instanceof multer.MulterError) {
         return res.status(400).json({ msg: err.message });
       } else if (err) {
@@ -57,18 +57,16 @@ export const uploadFiles = async (req, res) => {
       }
 
       const uploadedUrls = [];
-      
+
       for (const file of req.files) {
-        // Convert buffer to base64
-        const b64 = Buffer.from(file.buffer).toString('base64');
+        const b64 = Buffer.from(file.buffer).toString("base64");
         const dataURI = `data:${file.mimetype};base64,${b64}`;
 
-        // Upload to Cloudinary
         const result = await cloudinary.uploader.upload(dataURI, {
           folder: "students",
           upload_preset: "only_jpeg_5mb",
           public_id: `student_${uuidv4()}`,
-          resource_type: "image"
+          resource_type: "image",
         });
 
         uploadedUrls.push(result.secure_url);

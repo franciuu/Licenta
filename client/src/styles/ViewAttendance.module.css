@@ -283,7 +283,7 @@
   align-items: center;
   padding: 1rem;
   border-bottom: 1px solid var(--blue-100);
-  height: 80px; /* Fixed height for each student item */
+  height: 80px;
 }
 
 .studentItem:last-child {

@@ -71,8 +71,6 @@ const Settings = () => {
 
   const handleDeleteYear = async (uuid) => {
     try {
-      // Implement deleteYear service function
-      // await deleteYear(axiosCustom, uuid)
       fetchYearsData();
       Swal.fire({
         title: "Deleted!",

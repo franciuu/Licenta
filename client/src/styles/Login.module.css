@@ -299,7 +299,6 @@ label[for="persist"] {
   transform-origin: bottom left;
 }
 
-/* Responsive design */
 @media (max-width: 900px) {
   .container {
     max-width: 800px;
@@ -312,7 +311,7 @@ label[for="persist"] {
     height: auto;
     width: 95%;
     max-width: 500px;
-    max-height: 90vh; /* Maintain height constraint */
+    max-height: 90vh;
   }
 
   .left,
@@ -321,13 +320,13 @@ label[for="persist"] {
   }
 
   .left {
-    min-height: 120px; /* Reduced height */
+    min-height: 120px;
     padding: 1rem;
   }
 
   .right {
     padding: 1rem;
-    overflow: hidden; /* Prevent scrolling */
+    overflow: hidden;
   }
 
   .title {
@@ -340,7 +339,7 @@ label[for="persist"] {
   }
 
   .headerDiv {
-    margin-bottom: 1rem; /* Reduced margin */
+    margin-bottom: 1rem;
   }
 
   .logo {
@@ -354,11 +353,11 @@ label[for="persist"] {
   }
 
   .form {
-    gap: 0.75rem; /* Reduced gap */
+    gap: 0.75rem;
   }
 
   .inputDiv {
-    gap: 0.25rem; /* Reduced gap */
+    gap: 0.25rem;
   }
 
   .label {
@@ -407,7 +406,7 @@ label[for="persist"] {
   }
 
   .left {
-    min-height: 100px; /* Further reduced height */
+    min-height: 100px;
     padding: 0.75rem;
   }
 
@@ -420,7 +419,7 @@ label[for="persist"] {
   }
 
   .form {
-    gap: 0.5rem; /* Further reduced gap */
+    gap: 0.5rem;
   }
 
   .icon {
@@ -451,14 +450,13 @@ label[for="persist"] {
   }
 }
 
-/* For very small screens */
 @media (max-width: 350px) {
   .container {
     width: 98%;
   }
 
   .left {
-    min-height: 80px; /* Minimal height */
+    min-height: 80px;
   }
 
   .title {
@@ -501,7 +499,6 @@ label[for="persist"] {
   }
 }
 
-/* For landscape orientation on mobile */
 @media (max-height: 600px) and (orientation: landscape) {
   .container {
     flex-direction: row;
@@ -509,12 +506,12 @@ label[for="persist"] {
   }
 
   .left {
-    width: 35%; /* Reduced width */
+    width: 35%;
     min-height: auto;
   }
 
   .right {
-    width: 65%; /* Increased width */
+    width: 65%;
     padding: 0.75rem 1rem;
   }
 
@@ -582,7 +579,6 @@ label[for="persist"] {
   }
 }
 
-/* For high-contrast mode and accessibility */
 @media (prefers-contrast: more) {
   .input {
     border-bottom: 2px solid var(--gray-800);
@@ -601,7 +597,6 @@ label[for="persist"] {
   }
 }
 
-/* For reduced motion preferences */
 @media (prefers-reduced-motion: reduce) {
   .btn,
   .logo,

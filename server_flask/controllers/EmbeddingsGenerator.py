@@ -81,7 +81,7 @@ def generate_all_embeddings():
                     for e2 in other_embs:
                         inter_dists.append(cosine(e1, e2))
             if intra_dists and inter_dists:
-                threshold = (max(intra_dists) + min(inter_dists)) / 2
+                threshold = (max(intra_dists) + min(inter_dists)) / 2 + 0.1
             else:
                 threshold = 0.4
             thresholds[student_id] = threshold
